@@ -17,19 +17,20 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { FaBars, FaTimes } from 'react-icons/fa';
-
+import { useRouter } from 'next/navigation';
 const ClientNav = ({ username, avatarUrl }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+  const router = useRouter()
 
   const NavData = [
-    { id: 1, label: 'Find Lawyer', value: 'findLawyer' },
-    { id: 2, label: 'Legal GPT', value: 'legalgpt' },
-    { id: 3, label: 'History', value: 'history' },
-    { id: 4, label: 'Orders', value: 'orders' },
+    { id: 1, label: 'Find Lawyer', value: 'FindLawyer' },
+    { id: 2, label: 'Legal GPT', value: 'LegalGpt' },
+    { id: 3, label: 'Chats', value: 'Chats' },
+    { id: 4, label: 'Orders', value: 'Orders' },
   ];
 
   return (
@@ -41,7 +42,7 @@ const ClientNav = ({ username, avatarUrl }) => {
           </Box>
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
             {NavData.map((navItem) => (
-              <Button
+              <Button onClick={()=>router.push(navItem.value)}
                 key={navItem.id}
                 variant="ghost"
                 colorScheme="gray"

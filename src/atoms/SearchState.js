@@ -1,8 +1,11 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
-const SearchState = atom({
-    key: 'SearchState', 
-    default: '',
-  });
+export const SearchState = atom({
+  key: 'SearchState',
+  default: '',
+});
 
-  export default SearchState
+export const LawyerTypeState = atom({
+  key: 'LawyerTypeState',
+  default: 'All',
+});
