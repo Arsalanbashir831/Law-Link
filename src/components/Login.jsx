@@ -85,7 +85,7 @@ const Login = ({ setIsLoginPage }) => {
               Login
             </Button>
             <Stack direction={{ base: 'column', sm: 'row' }} align="start" justify="start">
-              <Text colorScheme="red">Don't have an Account?</Text>
+              <Text colorScheme="red">Dont have an Account?</Text>
               <Link color="red.500" onClick={() => setIsLoginPage(false)}>
                 Signup
               </Link>
