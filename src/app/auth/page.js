@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import Login from "@/components/Login";
 import Signup from "@/components/Signup";
 
-// Define enhanced keyframes for animations
+
 const fadeIn = keyframes`
   0% { opacity: 0; }
   50% { opacity: 0.5; }
@@ -21,9 +21,20 @@ const fadeIn = keyframes`
 `;
 
 const slideIn = keyframes`
-  0% { transform: translateY(30px); opacity: 0; }
-  50% { transform: translateY(15px); opacity: 0.5; }
+  0% { transform: translateY(50px); opacity: 0; }
+  50% { transform: translateY(55px); opacity: 0.5; }
   100% { transform: translateY(0); opacity: 1; }
+`;
+
+const slideInRightToLeft = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 `;
 
 const AuthPage = () => {
@@ -61,7 +72,7 @@ const AuthPage = () => {
               color="white"
               textAlign="center"
               p={8}
-              animation={`${slideIn} 1.5s ease-in-out`}
+              animation={`${slideIn} 3s ease-in-out`}
             >
               <Heading as="h1" size="xl" mb={4} whiteSpace="nowrap">
                 Welcome Back!
@@ -88,7 +99,7 @@ const AuthPage = () => {
               w="100%"
               h="100vh"
               opacity="0.9"
-              animation={`${fadeIn} 2s ease-in-out`}
+              animation={`${fadeIn} 3s ease-in-out`}
             />
             <Flex
               position="absolute"
@@ -103,7 +114,7 @@ const AuthPage = () => {
               color="white"
               textAlign="center"
               p={8}
-              animation={`${slideIn} 1.5s ease-in-out`}
+              animation={`${slideIn} 3s ease-in-out`}
             >
               {/* <Box
                 bg="rgba(0,0,0,0.7)"

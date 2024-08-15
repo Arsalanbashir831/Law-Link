@@ -11,7 +11,12 @@ import {
   Checkbox,
   Text,
   Link,
+  InputGroup,
+  InputLeftElement,
+  Icon,
 } from '@chakra-ui/react';
+import { FaUserAlt, FaLock } from 'react-icons/fa';
+import { MdEmail } from 'react-icons/md';
 
 const Login = ({ setIsLoginPage }) => {
   const [formData, setFormData] = useState({
@@ -30,39 +35,58 @@ const Login = ({ setIsLoginPage }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here
     console.log(formData);
   };
 
   return (
-    <Flex align="center" justify="center" p={8} rounded="lg">
-      <Box w={{ base: '100%', md: '400px' }}>
+    <Flex align="center" justify="center" h="75vh">
+      <Box
+        w={{ base: '100%', md: '500px' }}
+        p={8}
+        rounded="lg"
+        boxShadow="lg"
+        bg="white"
+      >
         <Heading as="h2" size="xl" mb={6} textAlign="center" color="red.600">
-          Login
+          Welcome Back
         </Heading>
         <form onSubmit={handleSubmit}>
           <Stack spacing={4}>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                focusBorderColor="red.500"
-                value={formData.email}
-                onChange={handleChange}
-              />
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={MdEmail} color="red.500" />
+                </InputLeftElement>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  focusBorderColor="red.500"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </InputGroup>
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
-              <Input
-                type="password"
-                placeholder="Enter your password"
-                focusBorderColor="red.500"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={FaLock} color="red.500" />
+                </InputLeftElement>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  focusBorderColor="red.500"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </InputGroup>
             </FormControl>
-            <Stack direction={{ base: 'column', sm: 'row' }} align="start" justify="space-between">
+            <Stack
+              direction={{ base: 'column', sm: 'row' }}
+              align="start"
+              justify="space-between"
+            >
               <Checkbox
                 id="rememberMe"
                 colorScheme="red"
@@ -81,13 +105,14 @@ const Login = ({ setIsLoginPage }) => {
               _hover={{ bg: 'red.700' }}
               size="lg"
               type="submit"
+              leftIcon={<FaUserAlt />}
             >
               Login
             </Button>
-            <Stack direction={{ base: 'column', sm: 'row' }} align="start" justify="start">
-              <Text colorScheme="red">Dont have an Account?</Text>
+            <Stack direction={{ base: 'column', sm: 'row' }} align="center">
+              <Text color="gray.600">Don't have an account?</Text>
               <Link color="red.500" onClick={() => setIsLoginPage(false)}>
-                Signup
+                Sign up
               </Link>
             </Stack>
           </Stack>

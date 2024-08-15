@@ -13,7 +13,12 @@ import {
   HStack,
   Text,
   Select,
+  InputGroup,
+  InputLeftElement,
+  Icon,
 } from '@chakra-ui/react';
+import { MdEmail, MdPerson } from 'react-icons/md';
+import { FaLock } from 'react-icons/fa';
 
 const Signup = ({ setIsLoginPage }) => {
   const [formData, setFormData] = useState({
@@ -37,43 +42,65 @@ const Signup = ({ setIsLoginPage }) => {
   };
 
   return (
-    <Flex align="center" justify="center" p={8}>
-      <Box w={{ base: '100%', md: '400px' }}>
+    <Flex align="center" justify="center" h="75vh" bg="white">
+      <Box
+        w={{ base: '100%', md: '500px' }}
+        p={8}
+        rounded="lg"
+        boxShadow="lg"
+        bg="white"
+      >
         <Heading as="h2" size="xl" mb={6} textAlign="center" color="red.600">
-          Sign Up
+          Create Your Account
         </Heading>
         <form onSubmit={handleSubmit}>
           <Stack spacing={4}>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                focusBorderColor="red.500"
-                value={formData.email}
-                onChange={handleChange}
-              />
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={MdEmail} color="red.500" />
+                </InputLeftElement>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  focusBorderColor="red.500"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </InputGroup>
             </FormControl>
             <FormControl id="userType" isRequired>
               <FormLabel>User Type</FormLabel>
-              <Select
-                placeholder="Select user type"
-                value={formData.userType}
-                onChange={handleChange}
-              >
-                <option value="lawyer">Lawyer</option>
-                <option value="client">Client</option>
-              </Select>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={MdPerson} color="red.500" />
+                </InputLeftElement>
+                <Select
+                  placeholder="Select user type"
+                  focusBorderColor="red.500"
+                  value={formData.userType}
+                  onChange={handleChange}
+                >
+                  <option value="lawyer">Lawyer</option>
+                  <option value="client">Client</option>
+                </Select>
+              </InputGroup>
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
-              <Input
-                type="password"
-                placeholder="Create a password"
-                focusBorderColor="red.500"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={FaLock} color="red.500" />
+                </InputLeftElement>
+                <Input
+                  type="password"
+                  placeholder="Create a password"
+                  focusBorderColor="red.500"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </InputGroup>
             </FormControl>
             <Checkbox
               id="termsAccepted"
@@ -81,7 +108,10 @@ const Signup = ({ setIsLoginPage }) => {
               isChecked={formData.termsAccepted}
               onChange={handleChange}
             >
+              <Text fontSize={'sm'}>
+
               I agree to the Terms and Conditions
+              </Text>
             </Checkbox>
             <Button
               mt={4}
@@ -96,8 +126,8 @@ const Signup = ({ setIsLoginPage }) => {
             </Button>
           </Stack>
         </form>
-        <HStack mt={2}>
-          <Text>Already Have an Account?</Text>
+        <HStack mt={4} justify="center">
+          <Text color="gray.600">Already have an account?</Text>
           <Link onClick={() => setIsLoginPage(true)} color="red.500">
             Login
           </Link>
