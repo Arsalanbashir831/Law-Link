@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { Box, Input, Select, HStack, Button } from '@chakra-ui/react';
+import { Box, Input, HStack, Button, IconButton, useDisclosure } from '@chakra-ui/react';
+import { FiFilter } from 'react-icons/fi';
 import { LawyerTypeState, SearchState } from '@/atoms/SearchState';
+import FiltersModal from './FiltersModal'; 
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useRecoilState(SearchState);
   const [lawyerType, setLawyerType] = useRecoilState(LawyerTypeState);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [inputValues, setInputValues] = useState({
     searchQuery,
     lawyerType,
   });
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,44 +27,37 @@ const Search = () => {
   };
 
   return (
-    <Box p={4} boxShadow="md" bg="red.600">
-      <HStack spacing={4}>
+    <Box p={6} boxShadow="lg" bg="white" borderRadius="md" mb={6}>
+      <HStack spacing={4} width="full">
         <Input
           name="searchQuery"
-          background="white"
           placeholder="Search for lawyers..."
           value={inputValues.searchQuery}
           onChange={handleChange}
-          focusBorderColor="white"
+          focusBorderColor="red.500"
+          bg="gray.100"
+          borderRadius="md"
         />
-        <Select
-          name="lawyerType"
-          width={300}
-          placeholder="Select lawyer type"
-          value={inputValues.lawyerType}
-          onChange={handleChange}
-          focusBorderColor="white"
-          background="white"
-        >
-          <option value="All">All</option>
-          <option value="Criminal">Criminal</option>
-          <option value="Corporate">Corporate</option>
-          <option value="Family">Family</option>
-          <option value="Immigration">Immigration</option>
-          <option value="Intellectual Property">Intellectual Property</option>
-          <option value="Labor">Labor</option>
-          <option value="Real Estate">Real Estate</option>
-        </Select>
+        <IconButton
+          icon={<FiFilter />}
+          aria-label="Filters"
+          onClick={onOpen}
+          colorScheme="red"
+          variant="outline"
+          borderRadius="md"
+        />
         <Button
-          bg="white"
-          color="red.500"
+          colorScheme="red"
           onClick={handleSearch}
-          width={100}
-          padding={5}
+          width={120}
+          padding={6}
+          borderRadius="md"
         >
           Search
         </Button>
       </HStack>
+
+      <FiltersModal isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };

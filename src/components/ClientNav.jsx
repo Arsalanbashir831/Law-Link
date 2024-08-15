@@ -6,25 +6,22 @@ import {
   HStack,
   IconButton,
   Stack,
-  Button,
   Collapse,
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
+  Text,
+  Button,
+  Link as ChakraLink,
   useColorModeValue,
+  Center,
 } from '@chakra-ui/react';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { GoLaw } from 'react-icons/go';
 import { useRouter } from 'next/navigation';
-const ClientNav = ({ username, avatarUrl }) => {
-  const [isOpen, setIsOpen] = useState(false);
+import MenuAvatar from './MenuAvatar'; 
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-  const router = useRouter()
+const ClientNav = ({ username = 'Arsalan Bashir', avatarUrl }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const router = useRouter();
 
   const NavData = [
     { id: 1, label: 'Find Lawyer', value: 'FindLawyer' },
@@ -34,49 +31,72 @@ const ClientNav = ({ username, avatarUrl }) => {
   ];
 
   return (
-    <Box bg="transparent" px={4} color="red.600" boxShadow={'xl'}>
-      <Flex h={16} alignItems="center" justifyContent="space-between">
+    <Box
+      bg={useColorModeValue('white', 'gray.800')}
+      px={4}
+      boxShadow="md"
+      zIndex={10}
+      position="sticky"
+      top={0}
+      w="100%"
+    >
+      <Flex
+        h={16}
+        alignItems="center"
+        justifyContent="space-between"
+        maxW="1200px"
+        mx="auto"
+      >
         <Flex alignItems="center">
-          <Box fontWeight="bold" fontSize="xl" mr={8}>
-            LawLink.pk
-          </Box>
-          <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
+          <HStack
+            spacing={2}
+            cursor="pointer"
+            onClick={() => router.push('/')}
+            transition="all 0.2s"
+            _hover={{ color: 'red.600', transform: 'scale(1.05)' }}
+          >
+            <GoLaw size="32px" color="red.600" />
+            <Text
+              fontWeight="bold"
+              fontSize="2xl"
+              color="red.600"
+            >
+              LawLink.pk
+            </Text>
+          </HStack>
+          <HStack
+            as="nav"
+            spacing={6}
+            ml={10}
+            display={{ base: 'none', md: 'flex' }}
+          >
             {NavData.map((navItem) => (
-              <Button onClick={()=>router.push(navItem.value)}
+              <ChakraLink
                 key={navItem.id}
-                variant="ghost"
-                colorScheme="gray"
-                _hover={{ bg: 'gray.300' }}
+                onClick={() => router.push(navItem.value)}
+                fontSize="md"
+                fontWeight="semibold"
+                color={useColorModeValue('gray.600', 'gray.300')}
+                px={3}
+                py={2}
+                rounded="md"
+                transition="all 0.3s"
+                _hover={{
+                  textDecoration: 'none',
+                  bg: useColorModeValue('red.100', 'gray.600'),
+                  color: 'red.600',
+                  boxShadow: 'lg',
+                }}
               >
                 {navItem.label}
-              </Button>
+              </ChakraLink>
             ))}
           </HStack>
         </Flex>
-        <HStack display={{ base: 'none', md: 'flex' }} spacing={4}>
-          <Menu>
-            <MenuButton
-              as={Button}
-              rounded="full"
-              variant="link"
-              cursor="pointer"
-              minW={0}
-            >
-              <Avatar size="sm" name='Arsalan' />
-            </MenuButton>
-            <MenuList>
-              <Box px={4} py={2} textAlign="center">
-                <strong>Arsalan Bashir</strong>
-              </Box>
-              <MenuDivider />
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Logout</MenuItem>
-            </MenuList>
-          </Menu>
+        <HStack display={{ base: 'none', md: 'flex' }} spacing={6}>
+          <MenuAvatar username={username} avatarUrl={avatarUrl} />
         </HStack>
         <IconButton
-          pl={3}
           size="md"
           icon={isOpen ? <FaTimes /> : <FaBars />}
           aria-label="Open Menu"
@@ -87,38 +107,26 @@ const ClientNav = ({ username, avatarUrl }) => {
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
-        <Box pb={4} display={{ md: 'none' }} boxShadow={'lg'}>
+        <Box pb={4} display={{ md: 'none' }} boxShadow="md">
           <Stack as="nav" spacing={4}>
             {NavData.map((navItem) => (
               <Button
                 key={navItem.id}
                 variant="ghost"
                 colorScheme="red"
-                _hover={{ bg: 'gray.300' }}
+                onClick={() => {
+                  router.push(navItem.value);
+                  setIsOpen(false);
+                }}
+                _hover={{ bg: useColorModeValue('red.100', 'gray.600'), color: 'red.600' }}
                 width="full"
               >
                 {navItem.label}
               </Button>
             ))}
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded="full"
-                variant="link"
-                cursor="pointer"
-                minW={0}
-                width="full"
-                textAlign="left"
-              >
-                <Avatar size="sm" name='Arsalan' mr={2} />
-                Arsalan
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>Settings</MenuItem>
-                <MenuItem>Logout</MenuItem>
-              </MenuList>
-            </Menu>
+            <Center>
+              <MenuAvatar username={username} avatarUrl={avatarUrl} />
+            </Center>
           </Stack>
         </Box>
       </Collapse>

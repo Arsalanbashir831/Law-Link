@@ -20,7 +20,7 @@ const page = () => {
           services: ['Divorce', 'Child Custody', 'Adoption'],
           description: 'Compassionate family lawyer dedicated to helping families in need.',
         },
-        // Add more lawyer objects here...
+
       ];
   return (
     <>

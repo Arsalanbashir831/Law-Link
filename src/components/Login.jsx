@@ -17,6 +17,8 @@ import {
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
+import { ForgotPasswordModal } from './ForgotPasswordModal';
+
 
 const Login = ({ setIsLoginPage }) => {
   const [formData, setFormData] = useState({
@@ -95,7 +97,7 @@ const Login = ({ setIsLoginPage }) => {
               >
                 Remember me
               </Checkbox>
-              <Link color="red.500">Forgot password?</Link>
+              <ForgotPasswordModal />
             </Stack>
             <Button
               mt={4}

@@ -1,26 +1,9 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
-import {
-  Box,
-  Heading,
-  VStack,
-  Text,
-  Divider,
-  HStack,
-  Avatar,
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-  IconButton,
-} from '@chakra-ui/react';
+import { Box, VStack, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, HStack, IconButton, useDisclosure } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 import ClientNav from '@/components/ClientNav';
+import OrderCard from '@/components/OrderCard';
 
 const orders = [
   {
@@ -81,36 +64,7 @@ const OrderPage = () => {
       <Box p={4} maxW="900px" mx="auto">
         <VStack spacing={4} align="stretch">
           {orders.map((order) => (
-            <Box key={order.id} p={4} bg="white" borderRadius="md" boxShadow="md">
-              <HStack spacing={4}>
-                <Avatar size="md" src={order.avatar} />
-                <VStack align="start" spacing={1} width="full">
-                  <HStack justifyContent="space-between" width="full">
-                    <Text fontWeight="bold">{order.lawyerName}</Text>
-                    <Text color="gray.500" fontSize="sm">
-                      {new Date(order.date).toLocaleDateString()}
-                    </Text>
-                  </HStack>
-                  <Text color="gray.600">{order.description}</Text>
-                  <HStack justifyContent="space-between" width="full" mt={2}>
-                    <Text color="gray.600">Amount Paid: ${order.amount}</Text>
-                    <VStack align="end" spacing={0}>
-                      <Text color="gray.600">Booking Date: {new Date(order.bookingDate).toLocaleDateString()}</Text>
-                      <Text color="gray.600">Booking Time: {order.bookingTime}</Text>
-                    </VStack>
-                  </HStack>
-                  <Button
-                    colorScheme="blue"
-                    size="sm"
-                    onClick={() => handleReviewClick(order)}
-                    mt={2}
-                  >
-                    Add Review
-                  </Button>
-                </VStack>
-              </HStack>
-              <Divider mt={4} />
-            </Box>
+            <OrderCard key={order.id} order={order} onReviewClick={handleReviewClick} />
           ))}
         </VStack>
       </Box>
@@ -141,7 +95,7 @@ const OrderPage = () => {
             </HStack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSubmitReview}>
+            <Button colorScheme="red" onClick={handleSubmitReview}>
               Submit Review
             </Button>
           </ModalFooter>
