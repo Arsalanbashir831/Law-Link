@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Box, Input, VStack, HStack, Text, Button, Flex, Avatar, IconButton, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { FaPaperPlane, FaPlus } from 'react-icons/fa';
-import CreateOrderModal from './CreateOrderModal'; // Import the CreateOrderModal component
+import CreateOrderModal from './CreateOrderModal'; 
 
 const ChatBox = () => {
   const [messages, setMessages] = useState([
@@ -25,10 +25,20 @@ const ChatBox = () => {
     }, 1000);
   };
 
+  const scrollbarTrackColor = useColorModeValue('gray.200', 'gray.600');
+  const scrollbarThumbColor = useColorModeValue('red.500', 'red.300');
+  const messageBgColorYou = 'red.500';
+  const messageTextColorYou = 'white';
+  const messageBgColorOther = useColorModeValue('gray.200', 'gray.600');
+  const messageTextColorOther = useColorModeValue('black', 'white');
+  const chatBoxBgColor = useColorModeValue('gray.100', 'gray.800');
+  const messageContainerBgColor = useColorModeValue('white', 'gray.700');
+  const inputBgColor = useColorModeValue('white', 'gray.700');
+
   return (
     <Flex
       direction="column"
-      bg={useColorModeValue('gray.100', 'gray.800')}
+      bg={chatBoxBgColor}
       p={4}
       borderRadius="md"
       boxShadow="lg"
@@ -37,14 +47,13 @@ const ChatBox = () => {
       maxW="1200px"
       mx="auto"
     >
-    
       <VStack
         flex={1}
         spacing={4}
         overflowY="auto"
         width="full"
         p={4}
-        bg={useColorModeValue('white', 'gray.700')}
+        bg={messageContainerBgColor}
         borderRadius="md"
         boxShadow="md"
         sx={{
@@ -52,10 +61,10 @@ const ChatBox = () => {
             width: '8px',
           },
           '::-webkit-scrollbar-track': {
-            background: useColorModeValue('gray.200', 'gray.600'),
+            background: scrollbarTrackColor,
           },
           '::-webkit-scrollbar-thumb': {
-            background: useColorModeValue('red.500', 'red.300'),
+            background: scrollbarThumbColor,
             borderRadius: '8px',
           },
         }}
@@ -64,8 +73,8 @@ const ChatBox = () => {
           <HStack
             key={index}
             alignSelf={message.sender === 'You' ? 'flex-end' : 'flex-start'}
-            bg={message.sender === 'You' ? 'red.500' : useColorModeValue('gray.200', 'gray.600')}
-            color={message.sender === 'You' ? 'white' : useColorModeValue('black', 'white')}
+            bg={message.sender === 'You' ? messageBgColorYou : messageBgColorOther}
+            color={message.sender === 'You' ? messageTextColorYou : messageTextColorOther}
             borderRadius="lg"
             p={4}
             maxWidth="75%"
@@ -79,7 +88,6 @@ const ChatBox = () => {
         ))}
       </VStack>
 
-      
       <Box mt={4} width="full">
         <HStack spacing={3}>
           <Input
@@ -88,7 +96,7 @@ const ChatBox = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             focusBorderColor="red.500"
-            bg={useColorModeValue('white', 'gray.700')}
+            bg={inputBgColor}
             borderRadius="full"
             boxShadow="sm"
           />
@@ -109,7 +117,6 @@ const ChatBox = () => {
         </HStack>
       </Box>
 
-      
       <CreateOrderModal isOpen={isOpen} onClose={onClose} />
     </Flex>
   );

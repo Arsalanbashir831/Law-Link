@@ -19,7 +19,6 @@ import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
 
-
 const Login = ({ setIsLoginPage }) => {
   const [formData, setFormData] = useState({
     email: '',
@@ -112,7 +111,7 @@ const Login = ({ setIsLoginPage }) => {
               Login
             </Button>
             <Stack direction={{ base: 'column', sm: 'row' }} align="center">
-              <Text color="gray.600">Don't have an account?</Text>
+            <Text color="gray.600">Don&#39;t have an account?</Text>
               <Link color="red.500" onClick={() => setIsLoginPage(false)}>
                 Sign up
               </Link>

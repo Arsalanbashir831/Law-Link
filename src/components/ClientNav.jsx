@@ -29,10 +29,16 @@ const ClientNav = ({ username = 'Arsalan Bashir', avatarUrl }) => {
     { id: 3, label: 'Chats', value: 'Chats' },
     { id: 4, label: 'Orders', value: 'Orders' },
   ];
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const textColor = useColorModeValue('gray.600', 'gray.300');
+  const hoverBgColor = useColorModeValue('red.100', 'gray.600');
+  const hoverTextColor = 'red.600';
+  const mobileBgColor = useColorModeValue('red.100', 'gray.600');
+  const mobileTextColor = 'red.600';
 
   return (
     <Box
-      bg={useColorModeValue('white', 'gray.800')}
+      bg={bgColor}
       px={4}
       boxShadow="md"
       zIndex={10}
@@ -53,7 +59,7 @@ const ClientNav = ({ username = 'Arsalan Bashir', avatarUrl }) => {
             cursor="pointer"
             onClick={() => router.push('/')}
             transition="all 0.2s"
-            _hover={{ color: 'red.600', transform: 'scale(1.05)' }}
+            _hover={{ color: hoverTextColor, transform: 'scale(1.05)' }}
           >
             <GoLaw size="32px" color="red.600" />
             <Text
@@ -76,15 +82,15 @@ const ClientNav = ({ username = 'Arsalan Bashir', avatarUrl }) => {
                 onClick={() => router.push(navItem.value)}
                 fontSize="md"
                 fontWeight="semibold"
-                color={useColorModeValue('gray.600', 'gray.300')}
+                color={textColor}
                 px={3}
                 py={2}
                 rounded="md"
                 transition="all 0.3s"
                 _hover={{
                   textDecoration: 'none',
-                  bg: useColorModeValue('red.100', 'gray.600'),
-                  color: 'red.600',
+                  bg: hoverBgColor,
+                  color: hoverTextColor,
                   boxShadow: 'lg',
                 }}
               >
@@ -118,7 +124,7 @@ const ClientNav = ({ username = 'Arsalan Bashir', avatarUrl }) => {
                   router.push(navItem.value);
                   setIsOpen(false);
                 }}
-                _hover={{ bg: useColorModeValue('red.100', 'gray.600'), color: 'red.600' }}
+                _hover={{ bg: mobileBgColor, color: mobileTextColor }}
                 width="full"
               >
                 {navItem.label}

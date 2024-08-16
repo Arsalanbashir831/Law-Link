@@ -63,7 +63,6 @@ const LawyerCard = ({ lawyer }) => {
         </Flex>
       </Box>
 
-      {/* View Profile Modal */}
       <ViewProfileModal isOpen={isOpen} onClose={onClose} lawyer={lawyer} />
     </>
   );
