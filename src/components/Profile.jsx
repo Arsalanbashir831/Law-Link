@@ -18,8 +18,9 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
+  HStack,
   Icon,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { FaUser, FaCalendar, FaIdCard, FaPhone, FaEdit, FaSignOutAlt } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
@@ -47,10 +48,16 @@ const Profile = ({ user }) => {
       maxW="2xl"
       mx="auto"
       mt={8}
-      p={6}
-      boxShadow="lg"
-      bg={useColorModeValue('white', 'gray.800')}
-      borderRadius="lg"
+      p={8}
+      boxShadow="2xl"
+      bg={useColorModeValue('white', 'gray.900')}
+      borderRadius="2xl"
+      transition="transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out"
+      bgGradient="linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(66,26,26,1) 35%)"
+      _hover={{
+        boxShadow: "xl",
+        transform: "translateY(-8px)",
+      }}
     >
       <Flex direction="column" alignItems="center" mb={6}>
         <Avatar
@@ -59,9 +66,14 @@ const Profile = ({ user }) => {
           src={editableUser.avatarUrl}
           mb={4}
           boxShadow="lg"
+          border="4px solid"
+          borderColor="red.600"
+          _hover={{ transform: "scale(1.05)", boxShadow: "lg" }}
         />
-        <Heading mb={2}>{editableUser.name}</Heading>
-        <Text fontSize="lg" color="gray.500" mb={4}>
+        <Heading color="white" mb={2}>
+          {editableUser.name}
+        </Heading>
+        <Text fontSize="lg" color="gray.300" mb={4}>
           @{editableUser.username}
         </Text>
       </Flex>
@@ -70,19 +82,29 @@ const Profile = ({ user }) => {
         <ProfileDetail icon={FaIdCard} label="CNIC Number" value={editableUser.cnic} />
         <ProfileDetail icon={FaPhone} label="Contact Number" value={editableUser.contactNumber} />
       </Stack>
-      <Stack direction="row" spacing={4} mt={8} justify="center">
-        <Button leftIcon={<FaEdit />} colorScheme="red" onClick={onOpen}>
+      <HStack spacing={4} mt={8} justify="center">
+        <Button
+          size="md"
+          colorScheme="red"
+          borderRadius="full"
+          onClick={onOpen}
+          _hover={{ bg: "red.700" }}
+          leftIcon={<FaEdit />}
+        >
           Edit Profile
         </Button>
         <Button
-          leftIcon={<FaSignOutAlt />}
-          colorScheme="red"
+          size="md"
+          colorScheme="blue"
           variant="outline"
+          borderRadius="full"
           onClick={() => router.push('/logout')}
+          _hover={{ bg: "blue.700", color: "white" }}
+          leftIcon={<FaSignOutAlt />}
         >
           Logout
         </Button>
-      </Stack>
+      </HStack>
 
       {/* Modal for editing profile */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -150,13 +172,13 @@ const Profile = ({ user }) => {
 };
 
 const ProfileDetail = ({ label, value, icon }) => (
-  <Flex align="center">
-    <Icon as={icon} color="red.600" mr={2} />
+  <Flex align="center" mb={4}>
+    <Icon as={icon} color="red.600" mr={3} boxSize={5} />
     <Box>
-      <Text fontWeight="bold" color={useColorModeValue('gray.700', 'gray.300')}>
+      <Text fontWeight="bold" color="gray.300">
         {label}:
       </Text>
-      <Text color={useColorModeValue('gray.600', 'gray.400')}>{value}</Text>
+      <Text color="gray.300">{value}</Text>
     </Box>
   </Flex>
 );
