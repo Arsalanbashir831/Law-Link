@@ -16,9 +16,12 @@ import {
   InputGroup,
   InputLeftElement,
   Icon,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { MdEmail, MdPerson } from 'react-icons/md';
 import { FaLock } from 'react-icons/fa';
+import UploadButton from './UploadButton';
+import DocumentUploadModal from './DocumentUploadModal';
 
 const Signup = ({ setIsLoginPage }) => {
   const [formData, setFormData] = useState({
@@ -26,13 +29,35 @@ const Signup = ({ setIsLoginPage }) => {
     userType: '',
     password: '',
     termsAccepted: false,
+    documentUploaded: false,
+    uploadedFile: null,
   });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [id]: type === 'checkbox' ? checked : value,
+    });
+  };
+
+  const handleFileUpload = (e) => {
+    if (e.target.files.length > 0) {
+      setFormData({
+        ...formData,
+        documentUploaded: true,
+        uploadedFile: e.target.files[0],
+      });
+    }
+  };
+
+  const handleDelete = () => {
+    setFormData({
+      ...formData,
+      documentUploaded: false,
+      uploadedFile: null,
     });
   };
 
@@ -87,6 +112,19 @@ const Signup = ({ setIsLoginPage }) => {
                 </Select>
               </InputGroup>
             </FormControl>
+            {formData.userType === 'lawyer' && (
+              <Flex justifyContent="space-between" alignItems="center">
+                <FormLabel>Upload Degree</FormLabel>
+                <UploadButton onClick={onOpen} hasFile={formData.documentUploaded} />
+                <DocumentUploadModal
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  handleFileUpload={handleFileUpload}
+                  uploadedFile={formData.uploadedFile}
+                  handleDelete={handleDelete}
+                />
+              </Flex>
+            )}
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
@@ -109,8 +147,7 @@ const Signup = ({ setIsLoginPage }) => {
               onChange={handleChange}
             >
               <Text fontSize={'sm'}>
-
-              I agree to the Terms and Conditions
+                I agree to the Terms and Conditions
               </Text>
             </Checkbox>
             <Button

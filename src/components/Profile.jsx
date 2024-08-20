@@ -39,7 +39,7 @@ const Profile = ({ user }) => {
   };
 
   const handleSave = () => {
-    // Handle saving the updated user details
+   
     onClose();
   };
 
