@@ -30,7 +30,9 @@ const Signup = ({ setIsLoginPage }) => {
     password: '',
     termsAccepted: false,
     documentUploaded: false,
-    uploadedFile: null,
+    profilePicUploaded: false,
+    uploadedDegree: null,
+    uploadedProfilePic: null,
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,16 +50,34 @@ const Signup = ({ setIsLoginPage }) => {
       setFormData({
         ...formData,
         documentUploaded: true,
-        uploadedFile: e.target.files[0],
+        uploadedDegree: e.target.files[0],
       });
     }
   };
 
-  const handleDelete = () => {
+  const handleProfilePicUpload = (e) => {
+    if (e.target.files.length > 0) {
+      setFormData({
+        ...formData,
+        profilePicUploaded: true,
+        uploadedProfilePic: e.target.files[0],
+      });
+    }
+  };
+
+  const handleDeleteDegree = () => {
     setFormData({
       ...formData,
       documentUploaded: false,
-      uploadedFile: null,
+      uploadedDegree: null,
+    });
+  };
+
+  const handleDeleteProfilePic = () => {
+    setFormData({
+      ...formData,
+      profilePicUploaded: false,
+      uploadedProfilePic: null,
     });
   };
 
@@ -106,6 +126,7 @@ const Signup = ({ setIsLoginPage }) => {
                   focusBorderColor="red.500"
                   value={formData.userType}
                   onChange={handleChange}
+                  pl="2.5rem" 
                 >
                   <option value="lawyer">Lawyer</option>
                   <option value="client">Client</option>
@@ -114,14 +135,18 @@ const Signup = ({ setIsLoginPage }) => {
             </FormControl>
             {formData.userType === 'lawyer' && (
               <Flex justifyContent="space-between" alignItems="center">
-                <FormLabel>Upload Degree</FormLabel>
-                <UploadButton onClick={onOpen} hasFile={formData.documentUploaded} />
+                <FormLabel>Upload Documents</FormLabel>
+                <UploadButton onClick={onOpen} hasFile={formData.documentUploaded || formData.profilePicUploaded} />
                 <DocumentUploadModal
+                
                   isOpen={isOpen}
                   onClose={onClose}
                   handleFileUpload={handleFileUpload}
-                  uploadedFile={formData.uploadedFile}
-                  handleDelete={handleDelete}
+                  handleProfilePicUpload={handleProfilePicUpload}
+                  uploadedDegree={formData.uploadedDegree}
+                  uploadedProfilePic={formData.uploadedProfilePic}
+                  handleDeleteDegree={handleDeleteDegree}
+                  handleDeleteProfilePic={handleDeleteProfilePic}
                 />
               </Flex>
             )}

@@ -54,6 +54,7 @@ const Profile = ({ user }) => {
       borderRadius="2xl"
       transition="transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out"
       bgGradient="linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(66,26,26,1) 35%)"
+      // bgGradient="linear-gradient(90deg, rgba(191,156,156,1) 0%, rgba(175,82,82,1) 35%);"
       _hover={{
         boxShadow: "xl",
         transform: "translateY(-8px)",
@@ -106,7 +107,6 @@ const Profile = ({ user }) => {
         </Button>
       </HStack>
 
-      {/* Modal for editing profile */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

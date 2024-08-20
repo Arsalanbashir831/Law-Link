@@ -135,7 +135,7 @@ const AuthPage = () => {
                 whiteSpace="nowrap"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 1.8, delay: 0.5 }} // Added delay
+                transition={{ duration: 1.8, delay: 0.5 }} 
               >
                 {images[currentSlide].text}
               </MotionText>
@@ -144,7 +144,7 @@ const AuthPage = () => {
                 whiteSpace="nowrap"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 2, delay: 0.8 }} // Added delay
+                transition={{ duration: 2, delay: 0.8 }} 
               >
                 {images[currentSlide].subtext}
               </MotionText>
@@ -213,7 +213,7 @@ const AuthPage = () => {
                 whiteSpace="nowrap"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 1.8, delay: 0.5 }} // Added delay
+                transition={{ duration: 1.8, delay: 0.5 }} 
               >
                 {images[currentSlide].text}
               </MotionText>
