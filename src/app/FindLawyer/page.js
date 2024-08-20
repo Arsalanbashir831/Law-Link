@@ -3,15 +3,38 @@ import LawyerCard from "@/components/client/LawyerCard";
 import ClientNav from "@/components/ClientNav";
 import NavbarGlobal from "@/components/NavbarGlobal";
 import Search from "@/components/Search";
-import React from "react";
+import { BASE_URL } from "@/Constants";
+import React, { useEffect } from "react";
 
-const page = () => {
+const Page = () => {
   const clientNavData = [
     { id: 1, label: 'Find Lawyer', value: '/FindLawyer' },
     { id: 2, label: 'Legal GPT', value: '/LegalGpt' },
     { id: 3, label: 'Chats', value: '/Chats' },
     { id: 4, label: 'Orders', value: '/Orders' },
   ];
+  useEffect(()=>{
+    const fetchPost = async ()=>{
+      try {
+      const token = localStorage.getItem('userToken')
+        const response = await fetch(`${BASE_URL}/api/v1/lawyer/posts`,{
+          method:"GET",
+          headers: {
+            'Authorization': `Bearer ${token}`, // Pass the token in the Authorization header
+            'Content-Type': 'application/json'  // Set the Content-Type header
+          }
+        })
+        const data = response.json()
+        if(response.ok){
+          console.log(data);
+        }
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    fetchPost()
+  },[])
     const lawyers = [
         {
           name: 'John Doe',
@@ -44,4 +67,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

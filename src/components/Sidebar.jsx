@@ -35,10 +35,10 @@ const SidebarItem = ({ label, icon, selected, onClick }) => (
     align="center"
     p={3}
     bg={selected ? 'red.600' : 'transparent'}
-    color={selected ? 'white' : useColorModeValue('gray.600', 'gray.300')}
+    color={selected ? 'white' : 'gray.600'}
     borderRadius="lg"
     cursor="pointer"
-    _hover={{ bg: selected ? 'red.700' : useColorModeValue('gray.200', 'gray.700') }}
+    _hover={{ bg: selected ? 'red.700' : 'gray.700' }}
     onClick={onClick}
   >
     <Icon as={icon} mr={3} />

@@ -19,26 +19,80 @@ import {
 } from '@chakra-ui/react';
 import { MdEmail, MdPerson } from 'react-icons/md';
 import { FaLock } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+import { BASE_URL } from '@/Constants';
 
 const Signup = ({ setIsLoginPage }) => {
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     userType: '',
     password: '',
+    confirmPassword: '',
+    profilePic: null,
+    degreePic: null, // Added field for degreePic
     termsAccepted: false,
   });
 
+  const router = useRouter();
+
   const handleChange = (e) => {
-    const { id, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [id]: type === 'checkbox' ? checked : value,
-    });
+    const { id, value, type, checked, files } = e.target;
+    if (files) {
+      setFormData({
+        ...formData,
+        [id]: files[0], // Store file object for profile picture and degree picture
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [id]: type === 'checkbox' ? checked : value,
+      });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    try {
+      const form = new FormData();
+      form.append('username', formData.username);
+      form.append('email', formData.email);
+      form.append('type', formData.userType);
+      form.append('password', formData.password);
+      form.append('profilePic', formData.profilePic);
+      if (formData.userType === 'lawyer') {
+        form.append('degreePic', formData.degreePic); // Append degree picture if user is a lawyer
+      }
+
+      const response = await fetch(`${BASE_URL}/api/v1/users/signup`, {
+        method: 'POST',
+        body: form,
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data);
+        // Handle successful signup (e.g., navigate to a different page)
+        localStorage.setItem('userToken', data.token)
+        if(data.user.type==='lawyer'){
+          router.push('/Lawyer')
+        }else{
+          router.push('/FindLawyer')
+        }
+       
+      } else {
+        // Handle signup failure (e.g., display an error message)
+        console.log('Signup failed', data);
+      }
+    } catch (error) {
+      console.error('Error during signup', error);
+    }
   };
 
   return (
@@ -55,6 +109,21 @@ const Signup = ({ setIsLoginPage }) => {
         </Heading>
         <form onSubmit={handleSubmit}>
           <Stack spacing={4}>
+            <FormControl id="username" isRequired>
+              <FormLabel>Username</FormLabel>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={MdPerson} color="red.500" />
+                </InputLeftElement>
+                <Input
+                  type="text"
+                  placeholder="Enter your username"
+                  focusBorderColor="red.500"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </InputGroup>
+            </FormControl>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
               <InputGroup>
@@ -73,9 +142,6 @@ const Signup = ({ setIsLoginPage }) => {
             <FormControl id="userType" isRequired>
               <FormLabel>User Type</FormLabel>
               <InputGroup>
-                <InputLeftElement pointerEvents="none">
-                  <Icon as={MdPerson} color="red.500" />
-                </InputLeftElement>
                 <Select
                   placeholder="Select user type"
                   focusBorderColor="red.500"
@@ -87,6 +153,17 @@ const Signup = ({ setIsLoginPage }) => {
                 </Select>
               </InputGroup>
             </FormControl>
+            {formData.userType === 'lawyer' && (
+              <FormControl id="degreePic" isRequired>
+                <FormLabel>Degree Picture</FormLabel>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  focusBorderColor="red.500"
+                  onChange={handleChange}
+                />
+              </FormControl>
+            )}
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
@@ -102,16 +179,37 @@ const Signup = ({ setIsLoginPage }) => {
                 />
               </InputGroup>
             </FormControl>
+            <FormControl id="confirmPassword" isRequired>
+              <FormLabel>Confirm Password</FormLabel>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={FaLock} color="red.500" />
+                </InputLeftElement>
+                <Input
+                  type="password"
+                  placeholder="Confirm your password"
+                  focusBorderColor="red.500"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+              </InputGroup>
+            </FormControl>
+            <FormControl id="profilePic">
+              <FormLabel>Profile Picture</FormLabel>
+              <Input
+                type="file"
+                accept="image/*"
+                focusBorderColor="red.500"
+                onChange={handleChange}
+              />
+            </FormControl>
             <Checkbox
               id="termsAccepted"
               colorScheme="red"
               isChecked={formData.termsAccepted}
               onChange={handleChange}
             >
-              <Text fontSize={'sm'}>
-
-              I agree to the Terms and Conditions
-              </Text>
+              <Text fontSize={'sm'}>I agree to the Terms and Conditions</Text>
             </Checkbox>
             <Button
               mt={4}
