@@ -16,7 +16,7 @@ import { FiFilter, FiSearch, FiX } from 'react-icons/fi';
 import { LawyerTypeState, SearchState } from '@/atoms/SearchState';
 import FiltersModal from './FiltersModal'; 
 
-const Search = () => {
+const Search = ({ userType }) => {
   const [searchQuery, setSearchQuery] = useRecoilState(SearchState);
   const [lawyerType, setLawyerType] = useRecoilState(LawyerTypeState);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -61,7 +61,7 @@ const Search = () => {
           </InputLeftElement>
           <Input
             name="searchQuery"
-            placeholder="Search for lawyers, services..."
+            placeholder={`Search for ${userType === 'lawyer' ? 'lawyers' : 'clients'}, services...`}
             value={inputValues.searchQuery}
             onChange={handleChange}
             focusBorderColor="red.500"
@@ -104,7 +104,7 @@ const Search = () => {
         </Button>
       </HStack>
 
-      <FiltersModal isOpen={isOpen} onClose={onClose} />
+      <FiltersModal isOpen={isOpen} onClose={onClose} userType={userType} />
     </Box>
   );
 };

@@ -32,7 +32,7 @@ const Counter = ({ end, duration }) => {
   }, [end, duration]);
 
   return (
-    <Text fontSize="3xl" fontWeight="bold" color="brand.600">
+    <Text fontSize="3xl" fontWeight="bold" color="red.600">
       {Math.round(count)}
     </Text>
   );
@@ -55,17 +55,18 @@ const PersonalData = () => {
 
   return (
     <Box
-      p={6}
+      p={8}
       bg="white"
-      borderRadius="lg"
-      boxShadow="2xl"
+      borderRadius="xl"
+      boxShadow="lg"
       maxW="5xl"
       mx="auto"
-      mt={5}
+      mt={10}
     >
-      <Flex justify="space-between" align="center" mb={8}>
-        <Box>
-          <Heading size="lg" mb={4} color="red.600">
+      {/* Section 1: Profile and Degree */}
+      <Flex justify="space-between" align="center" mb={8} direction={{ base: "column", md: "row" }}>
+        <Box textAlign={{ base: "center", md: "left" }}>
+          <Heading size="lg" mb={4} color="red.700">
             Degree
           </Heading>
           <Image
@@ -74,19 +75,19 @@ const PersonalData = () => {
             boxSize="200px"
             borderRadius="lg"
             objectFit="cover"
-            boxShadow="lg"
+            boxShadow="md"
           />
         </Box>
-        <VStack align="center" spacing={5}>
+        <VStack align="center" spacing={4} mt={{ base: 5, md: 0 }}>
           <Avatar
             size="2xl"
             src="/path-to-profile-picture.jpg"
             name="Lawyer's Name"
             borderRadius="full"
-            boxShadow="lg"
+            boxShadow="md"
           />
           <VStack align="center">
-            <Heading size="xl" color="brand.700">
+            <Heading size="xl" color="gray.800">
               Muhammad Hamza
             </Heading>
             <Text fontSize="lg" color="gray.600">
@@ -97,24 +98,26 @@ const PersonalData = () => {
       </Flex>
 
       <Divider my={8} borderColor="gray.300" />
-      <SimpleGrid columns={3} spacing={10} mb={8}>
+
+      {/* Section 2: Cases and Clients */}
+      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} mb={8}>
         <Box textAlign="center">
-          <Icon as={FaBriefcase} boxSize={6} color="brand.700" mb={2} />
-          <Heading size="md" color="red.600" mb={2}>
+          <Icon as={FaBriefcase} boxSize={8} color="red.600" mb={3} />
+          <Heading size="md" color="red.700" mb={2}>
             Cases Completed
           </Heading>
           <Counter end={50} duration={2} />
         </Box>
         <Box textAlign="center">
-          <Icon as={FaGavel} boxSize={6} color="brand.700" mb={2} />
-          <Heading size="md" color="red.600" mb={2}>
+          <Icon as={FaGavel} boxSize={8} color="red.600" mb={3} />
+          <Heading size="md" color="red.700" mb={2}>
             Cases Won
           </Heading>
           <Counter end={45} duration={2} />
         </Box>
         <Box textAlign="center">
-          <Icon as={FaUsers} boxSize={6} color="brand.700" mb={2} />
-          <Heading size="md" color="red.600" mb={2}>
+          <Icon as={FaUsers} boxSize={8} color="red.600" mb={3} />
+          <Heading size="md" color="red.700" mb={2}>
             Satisfied Clients
           </Heading>
           <SatisfiedClients clients={clients} extraCount={11} />
@@ -122,12 +125,14 @@ const PersonalData = () => {
       </SimpleGrid>
 
       <Divider my={8} borderColor="gray.300" />
+
+      {/* Section 3: Achievements */}
       <Box textAlign="center" mb={5}>
         <Button
           colorScheme="red"
           onClick={() => setIsModalOpen(true)}
           size="lg"
-          boxShadow="lg"
+          boxShadow="md"
         >
           Add Career Achievement
         </Button>
