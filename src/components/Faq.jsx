@@ -31,7 +31,7 @@ const faqs = [
 
 const Faq = () => {
   return (
-    <Box py={12} px={6} maxW="900px" mx="auto">
+    <Box py={12} px={6} maxW="900px" mx="auto" mb={4}>
       <Heading as="h2" size="xl" mb={8} fontWeight="bold" color="red.600">
         Frequently Asked Questions
       </Heading>
