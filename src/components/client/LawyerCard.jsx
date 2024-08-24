@@ -24,8 +24,8 @@ const LawyerCard = ({ lawyer }) => {
           <Image
             borderRadius="full"
             boxSize="120px"
-            src={lawyer.image}
-            alt={lawyer.name}
+            src={lawyer.user.profile_pic}
+            // alt={lawyer.user.username}
             objectFit="cover"
             border="3px solid"
             borderColor="red.600"
@@ -34,20 +34,25 @@ const LawyerCard = ({ lawyer }) => {
           <VStack align="start" spacing={3} flex={1}>
             <HStack justifyContent="space-between" width="full">
               <Text fontWeight="bold" fontSize="2xl" color={useColorModeValue('gray.800', 'white')}>
-                {lawyer.name}
+                {lawyer.user.username}
               </Text>
+           
+             
               <Button size="sm" colorScheme="red" onClick={onOpen}>
                 View Profile
               </Button>
+             
+             
+             
             </HStack>
             <HStack spacing={2} alignItems="center">
               <Icon as={FaUserTie} color="red.600" />
               <Text fontSize="md" color={useColorModeValue('gray.600', 'gray.300')}>
-                {lawyer.specialization}
+                {lawyer.post_title}
               </Text>
             </HStack>
             <HStack spacing={2} wrap="wrap">
-              {lawyer.services.map((service, index) => (
+              {lawyer.lawType.map((service, index) => (
                 <Badge key={index} colorScheme="red" borderRadius="full" px={3} py={1}>
                   {service}
                 </Badge>
@@ -56,7 +61,7 @@ const LawyerCard = ({ lawyer }) => {
             <HStack spacing={2} alignItems="center">
               <Icon as={FaGavel} color="gray.500" />
               <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')}>
-                {lawyer.description}
+                {lawyer.post_description}
               </Text>
             </HStack>
           </VStack>

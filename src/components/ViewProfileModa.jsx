@@ -16,6 +16,7 @@ import {
   Badge,
   Icon,
   useColorModeValue,
+  Flex,
 } from '@chakra-ui/react';
 import { FaUserTie, FaGavel, FaBriefcase } from 'react-icons/fa';
 
@@ -26,15 +27,15 @@ const ViewProfileModal = ({ isOpen, onClose, lawyer }) => {
       <ModalContent>
         <ModalHeader>
           <HStack spacing={4}>
-            <Avatar size="lg" src={lawyer.image} />
+            <Avatar size="lg" src={lawyer.user.profile_pic} />
             <VStack align="start" spacing={0}>
               <Text fontWeight="bold" fontSize="xl" color={useColorModeValue('gray.800', 'white')}>
-                {lawyer.name}
+                {lawyer.user.username}
               </Text>
               <HStack spacing={2} alignItems="center">
                 <Icon as={FaUserTie} color="red.600" />
                 <Text fontSize="md" color={useColorModeValue('gray.600', 'gray.300')}>
-                  {lawyer.specialization}
+                  {lawyer.post_title}
                 </Text>
               </HStack>
             </VStack>
@@ -48,7 +49,7 @@ const ViewProfileModal = ({ isOpen, onClose, lawyer }) => {
                 Services:
               </Text>
               <HStack spacing={2} wrap="wrap">
-                {lawyer.services.map((service, index) => (
+                {lawyer.lawType.map((service, index) => (
                   <Badge key={index} colorScheme="red" borderRadius="full" px={3} py={1}>
                     {service}
                   </Badge>
@@ -63,15 +64,21 @@ const ViewProfileModal = ({ isOpen, onClose, lawyer }) => {
                 </Text>
               </HStack>
               <Text mt={2} color={useColorModeValue('gray.600', 'gray.400')}>
-                {lawyer.description}
+                {lawyer.post_description}
               </Text>
             </Box>
           </VStack>
         </ModalBody>
         <ModalFooter>
+        <Flex gap={5}>
+        <Button colorScheme="green" >
+               Chat
+              </Button>
           <Button colorScheme="blue" onClick={onClose}>
             Close
           </Button>
+        </Flex>
+       
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -10,27 +10,91 @@ import {
   Flex,
   Icon,
   useColorModeValue,
+  Spinner,
 } from "@chakra-ui/react";
 import { FaPaperPlane, FaBalanceScale } from "react-icons/fa";
+import { BASE_URL } from "@/Constants";
+
+// Function to format the AI response text
+const formatText = (text) => {
+  const lines = text.split("\n").map((line, index) => {
+    // Convert headings (##)
+    if (line.startsWith("## ")) {
+      const heading = line.replace("## ", "");
+      return (
+        <Text as="h2" fontSize="2xl" fontWeight="bold" key={index} mt={4}>
+          {heading}
+        </Text>
+      );
+    }
+
+    // Convert bold (**)
+    const boldLine = line.replace(/\*\*(.*?)\*\*/g, (match, p1) => {
+      return `<strong>${p1}</strong>`;
+    });
+
+    // Render regular paragraph
+    return (
+      <Text
+        as="p"
+        fontSize="md"
+        key={index}
+        dangerouslySetInnerHTML={{ __html: boldLine }}
+        mt={2}
+      />
+    );
+  });
+
+  return lines;
+};
 
 const LegalGpt = () => {
   const [messages, setMessages] = useState([
     { sender: "ai", text: "Hello! How can I assist you today?" },
   ]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (input.trim() === "") return;
 
     const newMessage = { sender: "user", text: input };
     setMessages([...messages, newMessage]);
-
     setInput("");
 
-    setTimeout(() => {
-      const aiResponse = { sender: "ai", text: `You said: ${input}` };
-      setMessages((prevMessages) => [...prevMessages, aiResponse]);
-    }, 1000);
+    // Show loading animation by adding a loading message from AI
+    setLoading(true);
+    const loadingMessage = { sender: "ai", text: "loading" };
+    setMessages((prevMessages) => [...prevMessages, loadingMessage]);
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/v1/users/legalGPT`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ textPrompt: input }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data);
+
+        // Remove the loading message
+        setMessages((prevMessages) => prevMessages.slice(0, -1));
+
+        // Add the AI's response
+        const aiResponse = { sender: "ai", text: ` ${data.response}` };
+        setMessages((prevMessages) => [...prevMessages, aiResponse]);
+      }
+    } catch (error) {
+      console.log(error);
+      // Remove the loading message
+      setMessages((prevMessages) => prevMessages.slice(0, -1));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -117,7 +181,17 @@ const LegalGpt = () => {
             transition="transform 0.3s ease-in-out"
             _hover={{ transform: "scale(1.02)" }}
           >
-            <Text fontSize="md">{message.text}</Text>
+            <Box>
+              {message.sender === "ai" && message.text === "loading" ? (
+                <Spinner size="sm" color="white" />
+              ) : message.sender === "ai" ? (
+                formatText(message.text).map((line, lineIndex) => (
+                  <React.Fragment key={lineIndex}>{line}</React.Fragment>
+                ))
+              ) : (
+                message.text
+              )}
+            </Box>
           </HStack>
         ))}
       </VStack>
@@ -141,6 +215,7 @@ const LegalGpt = () => {
             onClick={handleSendMessage}
             borderRadius="full"
             rightIcon={<FaPaperPlane />}
+            isLoading={loading}
           >
             Send
           </Button>
