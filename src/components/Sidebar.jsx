@@ -30,20 +30,26 @@ const Sidebar = ({ selectedOption, setSelectedOption }) => {
   );
 };
 
-const SidebarItem = ({ label, icon, selected, onClick }) => (
-  <Flex
-    align="center"
-    p={3}
-    bg={selected ? 'red.600' : 'transparent'}
-    color={selected ? 'white' : 'gray.600'}
-    borderRadius="lg"
-    cursor="pointer"
-    _hover={{ bg: selected ? 'red.700' : 'gray.700' }}
-    onClick={onClick}
-  >
-    <Icon as={icon} mr={3} />
-    <Text fontWeight="bold">{label}</Text>
-  </Flex>
-);
+const SidebarItem = ({ label, icon, selected, onClick }) => {
+  const bg = selected ? 'red.600' : 'transparent';
+  const hoverBg = useColorModeValue(selected ? 'red.700' : 'gray.200', selected ? 'red.700' : 'gray.700');
+  const color = useColorModeValue(selected ? 'white' : 'gray.600', selected ? 'white' : 'gray.300');
+
+  return (
+    <Flex
+      align="center"
+      p={3}
+      bg={bg}
+      color={color}
+      borderRadius="lg"
+      cursor="pointer"
+      _hover={{ bg: hoverBg }}
+      onClick={onClick}
+    >
+      <Icon as={icon} mr={3} />
+      <Text fontWeight="bold">{label}</Text>
+    </Flex>
+  );
+};
 
 export default Sidebar;

@@ -16,11 +16,14 @@ import {
   InputGroup,
   InputLeftElement,
   Icon,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { MdEmail, MdPerson } from 'react-icons/md';
 import { FaLock } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { BASE_URL } from '@/Constants';
+import UploadButton from './UploadButton';
+import DocumentUploadModal from './DocumentUploadModal';
 
 const Signup = ({ setIsLoginPage }) => {
   const [formData, setFormData] = useState({
@@ -32,23 +35,58 @@ const Signup = ({ setIsLoginPage }) => {
     profilePic: null,
     degreePic: null, // Added field for degreePic
     termsAccepted: false,
+    documentUploaded: false,
+    profilePicUploaded: false,
+    uploadedDegree: null,
+    uploadedProfilePic: null,
   });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
 
   const handleChange = (e) => {
-    const { id, value, type, checked, files } = e.target;
-    if (files) {
+    const { id, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [id]: type === 'checkbox' ? checked : value,
+    });
+  };
+
+  const handleFileUpload = (e) => {
+    if (e.target.files.length > 0) {
       setFormData({
         ...formData,
-        [id]: files[0], // Store file object for profile picture and degree picture
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [id]: type === 'checkbox' ? checked : value,
+        documentUploaded: true,
+        uploadedDegree: e.target.files[0],
       });
     }
+  };
+
+  const handleProfilePicUpload = (e) => {
+    if (e.target.files.length > 0) {
+      setFormData({
+        ...formData,
+        profilePicUploaded: true,
+        uploadedProfilePic: e.target.files[0],
+      });
+    }
+  };
+
+  const handleDeleteDegree = () => {
+    setFormData({
+      ...formData,
+      documentUploaded: false,
+      uploadedDegree: null,
+    });
+  };
+
+  const handleDeleteProfilePic = () => {
+    setFormData({
+      ...formData,
+      profilePicUploaded: false,
+      uploadedProfilePic: null,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -147,6 +185,7 @@ const Signup = ({ setIsLoginPage }) => {
                   focusBorderColor="red.500"
                   value={formData.userType}
                   onChange={handleChange}
+                  pl="2.5rem" 
                 >
                   <option value="lawyer">Lawyer</option>
                   <option value="client">Client</option>
@@ -154,15 +193,21 @@ const Signup = ({ setIsLoginPage }) => {
               </InputGroup>
             </FormControl>
             {formData.userType === 'lawyer' && (
-              <FormControl id="degreePic" isRequired>
-                <FormLabel>Degree Picture</FormLabel>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  focusBorderColor="red.500"
-                  onChange={handleChange}
+              <Flex justifyContent="space-between" alignItems="center">
+                <FormLabel>Upload Documents</FormLabel>
+                <UploadButton onClick={onOpen} hasFile={formData.documentUploaded || formData.profilePicUploaded} />
+                <DocumentUploadModal
+                
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  handleFileUpload={handleFileUpload}
+                  handleProfilePicUpload={handleProfilePicUpload}
+                  uploadedDegree={formData.uploadedDegree}
+                  uploadedProfilePic={formData.uploadedProfilePic}
+                  handleDeleteDegree={handleDeleteDegree}
+                  handleDeleteProfilePic={handleDeleteProfilePic}
                 />
-              </FormControl>
+              </Flex>
             )}
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
@@ -209,7 +254,9 @@ const Signup = ({ setIsLoginPage }) => {
               isChecked={formData.termsAccepted}
               onChange={handleChange}
             >
-              <Text fontSize={'sm'}>I agree to the Terms and Conditions</Text>
+              <Text fontSize={'sm'}>
+                I agree to the Terms and Conditions
+              </Text>
             </Checkbox>
             <Button
               mt={4}

@@ -5,6 +5,7 @@ import Search from "@/components/Search";
 import { BASE_URL } from "@/Constants";
 import { Flex, Spinner } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import { SimpleGrid, Box } from "@chakra-ui/react";
 
 const Page = () => {
   const [lawyerData, setLawyerData] = useState([]);
@@ -44,34 +45,15 @@ const Page = () => {
 
   return (
     <>
-      <NavbarGlobal
-        navData={clientNavData}
-        username="Arsalan Bashir"
-        avatarUrl=""
-      />
-      <Search />
-      {loading ? (
-        <>
-          <Flex
-            flex={1}
-            h={"100vh"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            <Spinner colorScheme={'red'}></Spinner>
-          </Flex>
-        </>
-      ) : (
-        <>
-          {lawyerData.map((data, index) => {
-            return (
-              <>
-                <LawyerCard lawyer={data} />
-              </>
-            );
-          })}
-        </>
-      )}
+      <NavbarGlobal navData={clientNavData} username="Arsalan Bashir" avatarUrl="path-to-avatar.jpg" />
+      <Search  userType={userType}/>
+      <Box p={4}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+          {lawyers.map((data, index) => (
+            <LawyerCard key={index} lawyer={data} />
+          ))}
+        </SimpleGrid>
+      </Box>
     </>
   );
 };

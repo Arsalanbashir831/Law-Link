@@ -1,35 +1,122 @@
-import { Box, Flex, Image, Text, Button, VStack } from '@chakra-ui/react';
-import React from 'react';
+"use client";
+
+import {
+  Box,
+  Flex,
+  Text,
+  VStack,
+  HStack,
+  Button,
+  Image,
+  Heading,
+  Icon,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { FaHeart, FaStar } from "react-icons/fa";
+import CountUp from "react-countup";
+import { useInView } from "react-intersection-observer";
 
 const LegalGPTSection = () => {
+  const bgColor = useColorModeValue("white", "gray.800");
+  const textColor = useColorModeValue("gray.600", "gray.300");
+  const headingColor = useColorModeValue("#1A202C", "#1A202C");
+  const highlightColor = useColorModeValue("#B08968", "#B08968");
+  const statTextColor = useColorModeValue("gray.700", "white");
+  const buttonHoverBgColor = useColorModeValue("red.600", "#9d7e61");
+
+  const { ref, inView } = useInView({
+    triggerOnce: true, 
+    threshold: 0.5,
+  });
+
   return (
-    <Box py={12} px={6} bg="gray.50">
-      <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="center">
-        <Box flex="1" maxW="lg" mb={{ base: 8, md: 0 }}>
+    <Box
+      bg={bgColor}
+      p={{ base: 6, md: 10 }}
+      maxW="100%"
+      mx="auto"
+      boxShadow="lg"
+      ref={ref}
+      mb={4}
+    >
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        align="center"
+        justify="space-between"
+      >
+        <Box
+          textAlign="center"
+          mb={{ base: 6, md: 0 }}
+          w={{ base: "100%", md: "45%" }}
+        >
           <Image
-            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Legal GPT"
-            borderRadius="lg"
-            boxShadow="lg"
-            height={500}
-            width={500}
+            src="https://plus.unsplash.com/premium_photo-1677094310919-d0361465d3be?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="About Us Image"
+            objectFit="cover"
+            borderRadius="md"
+            w="full"
+            h="auto"
+            maxH="360px"
           />
+
+          <HStack spacing={8} mt={6} justify="center">
+            <VStack align="center" spacing={0}>
+              <Icon as={FaHeart} color={highlightColor} boxSize={5} />
+              <Text fontWeight="bold" fontSize="lg" color={statTextColor}>
+                {inView && (
+                  <CountUp start={0} end={2700} duration={2.5} separator="," />
+                )}
+              </Text>
+              <Text fontSize="sm" color={statTextColor}>
+                Trusted Clients
+              </Text>
+              <Text fontSize="xs" color={textColor}>
+                Individual and Commercial
+              </Text>
+            </VStack>
+            <VStack align="center" spacing={0}>
+              <Icon as={FaStar} color={highlightColor} boxSize={5} />
+              <Text fontWeight="bold" fontSize="lg" color={statTextColor}>
+                {inView && <CountUp start={0} end={84} duration={2.5} suffix="%" />}
+              </Text>
+              <Text fontSize="sm" color={statTextColor}>
+                Win Rate
+              </Text>
+              <Text fontSize="xs" color={textColor}>
+                Current Case Win Rate
+              </Text>
+            </VStack>
+          </HStack>
         </Box>
-        <Box flex="1" maxW="lg" ml={{ md: 10 }}>
-          <VStack align="start" spacing={6}>
-            <Text fontSize="4xl" fontWeight="bold" color="red.600">
-              Legal GPT
-            </Text>
-            <Text fontSize="lg" color="gray.600">
-              Add your case study and get AI-powered legal advice tailored to your specific situation.
-              Our advanced AI system analyzes your case details and provides you with reliable and accurate
-              legal guidance.
-            </Text>
-            <Button colorScheme="red" size="lg" variant="solid">
-              Try Now
-            </Button>
-          </VStack>
-        </Box>
+
+        <VStack
+          align="flex-start"
+          spacing={4}
+          w={{ base: "100%", md: "50%" }}
+          pl={{ md: 10 }}
+        >
+          <Text fontSize="xl" color={"red.600"} fontWeight="bold">
+            Legal GPT
+          </Text>
+          <Heading as="h2" size="xl" color={headingColor} lineHeight="1.2">
+            Legal Assistance Just a Click Away!
+          </Heading>
+          <Text fontSize="md" color={textColor} lineHeight="1.6">
+            Add your case study and get AI-powered legal advice tailored to your
+            specific situation. Our advanced AI system analyzes your case
+            details and provides you with reliable and accurate legal
+            guidance.
+          </Text>
+          <Button
+            bg={highlightColor}
+            color="white"
+            size="md"
+            _hover={{ bg: buttonHoverBgColor }}
+            rightIcon={<FaStar />}
+          >
+            Learn More
+          </Button>
+        </VStack>
       </Flex>
     </Box>
   );

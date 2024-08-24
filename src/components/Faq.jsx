@@ -12,46 +12,68 @@ import {
 
 const faqs = [
   {
-    question: "What is Legal AI and how does it work?",
-    answer: "Legal AI uses advanced machine learning algorithms to analyze legal documents, case studies, and other pertinent information. It provides insights, predictions, and guidance based on vast datasets, making it easier for users to understand their legal standing and possible outcomes."
+    question: "How can I schedule an appointment with my doctor?",
+    answer: "You can schedule an appointment by logging into our portal and selecting the available time slots. Alternatively, you can contact our clinic directly via phone or email."
   },
   {
-    question: "How can Legal AI assist with my case?",
-    answer: "Legal AI can review the details of your case, compare them with similar cases in the database, and offer advice on potential strategies and outcomes. This can help you make informed decisions and prepare more effectively for legal proceedings."
+    question: "Can I reschedule or cancel my appointment?",
+    answer: "Yes, you can reschedule or cancel your appointment through our portal or by contacting the clinic directly. Please do so at least 24 hours before your scheduled time."
   },
   {
-    question: "Why should I hire a lawyer online?",
-    answer: "Hiring a lawyer online offers convenience, a broader selection of professionals, and often faster service. You can easily compare different lawyers, read reviews, and find the best fit for your needs without leaving your home or office."
+    question: "Is it possible to schedule virtual or telemedicine appointments?",
+    answer: "Yes, we offer virtual and telemedicine appointments for your convenience. You can select this option when scheduling your appointment online."
   },
   {
-    question: "Is online legal advice reliable?",
-    answer: "Yes, online legal advice from certified professionals is reliable. Our platform ensures that all listed lawyers are verified and experienced in their fields, providing you with trustworthy and competent legal support."
-  },
-  {
-    question: "How do I get started with hiring a lawyer online?",
-    answer: "Getting started is simple. Just sign up on our platform, browse through the profiles of available lawyers, and select the one that best suits your needs. You can then schedule a consultation and begin your legal journey with expert guidance."
+    question: "How can I contact the clinic for further assistance or questions about my appointment?",
+    answer: "You can contact our clinic through the contact page on our website, or by calling our customer support team directly."
   }
 ];
 
 const Faq = () => {
   return (
-    <Box py={12} px={6} bg="gray.50">
-      <Heading as="h2" size="xl" mb={6} textAlign="center" color="red.600">
+    <Box py={12} px={6} maxW="900px" mx="auto" mb={4}>
+      <Heading as="h2" size="xl" mb={8} fontWeight="bold" color="red.600">
         Frequently Asked Questions
       </Heading>
       <Accordion allowToggle>
         {faqs.map((faq, index) => (
-          <AccordionItem key={index} borderBottomWidth="1px" borderColor="gray.200">
+          <AccordionItem
+            key={index}
+            borderBottom="1px solid"
+            borderColor="gray.300"
+            _hover={{ borderColor: 'red.400' }}
+          >
             <h2>
-              <AccordionButton _expanded={{ bg: 'red.600', color: 'white' }} _hover={{ bg: 'red.500' , color:'white' }}>
-                <Box flex="1" textAlign="left" fontWeight="medium" fontSize="lg">
+              <AccordionButton
+                _expanded={{ bg: 'red.100', color: 'red.600' }}
+                paddingX="0"
+                paddingY="16px"
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                fontSize="lg"
+                fontWeight="normal"
+                _hover={{ bg: 'red.50', color: 'red.600' }}
+              >
+                <Box textAlign="left" fontWeight="medium" fontSize="lg" flex="1">
                   {faq.question}
                 </Box>
                 <AccordionIcon />
               </AccordionButton>
             </h2>
-            <AccordionPanel pb={4} fontSize="md" color="gray.700">
+            <AccordionPanel
+              pb={4}
+              fontSize="md"
+              color="gray.700"
+              mt="-12px"
+              ml="30px"
+              bg="red.50"
+              borderRadius="md"
+            >
+              <Text mt={3}>
+
               {faq.answer}
+              </Text>
             </AccordionPanel>
           </AccordionItem>
         ))}

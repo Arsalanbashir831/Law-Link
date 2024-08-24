@@ -15,13 +15,11 @@ import {
 } from '@chakra-ui/react';
 import { FaBars, FaTimes, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 import { GoLaw } from 'react-icons/go';
-import { useRouter } from 'next/navigation';
 import MenuAvatar from './MenuAvatar';
 
 const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
-  const router = useRouter();
 
   const bgColor = useColorModeValue('white', 'gray.800');
   const textColor = useColorModeValue('gray.600', 'gray.300');
@@ -29,6 +27,14 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
   const hoverTextColor = 'red.600';
   const mobileBgColor = useColorModeValue('red.100', 'gray.600');
   const mobileTextColor = 'red.600';
+
+  const handleScroll = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsOpen(false); // Close the menu after scrolling (for mobile)
+  };
 
   return (
     <Box
@@ -51,7 +57,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
           <HStack
             spacing={2}
             cursor="pointer"
-            onClick={() => router.push('/')}
+            onClick={() => handleScroll('hero-section')}
             transition="all 0.2s"
             _hover={{ color: hoverTextColor, transform: 'scale(1.05)' }}
           >
@@ -64,7 +70,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
             {navData.map((navItem) => (
               <ChakraLink
                 key={navItem.id}
-                onClick={() => router.push(navItem.value)}
+                onClick={() => handleScroll(navItem.value)}
                 fontSize="md"
                 fontWeight="semibold"
                 color={textColor}
@@ -92,7 +98,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
                 variant="outline"
                 colorScheme="red"
                 _hover={{ bg: 'red.600', color: 'white' }}
-                onClick={() => router.push('/login')}
+                onClick={() => handleScroll('hero-section')}
               >
                 Login
               </Button>
@@ -101,7 +107,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
                 colorScheme="red"
                 variant="solid"
                 _hover={{ bg: 'red.600' }}
-                onClick={() => router.push('/signup')}
+                onClick={() => handleScroll('hero-section')}
               >
                 Sign Up
               </Button>
@@ -128,10 +134,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
                 key={navItem.id}
                 variant="ghost"
                 colorScheme="red"
-                onClick={() => {
-                  router.push(navItem.value);
-                  setIsOpen(false);
-                }}
+                onClick={() => handleScroll(navItem.value)}
                 _hover={{ bg: mobileBgColor, color: mobileTextColor }}
                 width="full"
               >
@@ -146,7 +149,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
                   colorScheme="red"
                   _hover={{ bg: 'gray.300' }}
                   width="full"
-                  onClick={() => router.push('/login')}
+                  onClick={() => handleScroll('hero-section')}
                 >
                   Login
                 </Button>
@@ -156,7 +159,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
                   variant="solid"
                   _hover={{ bg: 'gray.300' }}
                   width="full"
-                  onClick={() => router.push('/signup')}
+                  onClick={() => handleScroll('hero-section')}
                 >
                   Sign Up
                 </Button>
