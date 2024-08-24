@@ -16,8 +16,9 @@ import {
 import { FaBars, FaTimes, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 import { GoLaw } from 'react-icons/go';
 import MenuAvatar from './MenuAvatar';
+import { useRouter } from 'next/navigation';
 
-const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl }) => {
+const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl , isLanding}) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -27,7 +28,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
   const hoverTextColor = 'red.600';
   const mobileBgColor = useColorModeValue('red.100', 'gray.600');
   const mobileTextColor = 'red.600';
-
+const router = useRouter()
   const handleScroll = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -35,6 +36,13 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
     }
     setIsOpen(false); // Close the menu after scrolling (for mobile)
   };
+  const handleButtonClick =(link)=>{
+if(isLanding){
+  handleScroll(link)
+}else{
+router.push(link)
+}
+  }
 
   return (
     <Box
@@ -44,13 +52,13 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
       zIndex={10}
       position="sticky"
       top={0}
-      w="100%"
+      // w="100%"
     >
       <Flex
         h={16}
         alignItems="center"
         justifyContent="space-between"
-        maxW="1200px"
+      
         mx="auto"
       >
         <Flex alignItems="center">
@@ -70,7 +78,7 @@ const NavbarGlobal = ({ navData, showAuthButtons = false, username, avatarUrl })
             {navData.map((navItem) => (
               <ChakraLink
                 key={navItem.id}
-                onClick={() => handleScroll(navItem.value)}
+                onClick={() => handleButtonClick(navItem.value)}
                 fontSize="md"
                 fontWeight="semibold"
                 color={textColor}

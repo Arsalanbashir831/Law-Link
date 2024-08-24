@@ -50,7 +50,7 @@ const ClientNav = ({ username = 'Arsalan Bashir', avatarUrl }) => {
         h={16}
         alignItems="center"
         justifyContent="space-between"
-        maxW="1200px"
+      
         mx="auto"
       >
         <Flex alignItems="center">

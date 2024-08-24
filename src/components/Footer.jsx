@@ -27,7 +27,7 @@ const Footer = () => {
   return (
     <Box bg="gray.900" color="#9d9d9d" py={10}>
       <Flex
-        maxW="1200px"
+     
         mx="auto"
         justify="space-between"
         flexWrap="wrap"

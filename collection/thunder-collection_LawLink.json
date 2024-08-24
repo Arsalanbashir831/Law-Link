@@ -1,0 +1,287 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "LawLink",
+    "collectionId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+    "dateExported": "2024-08-24T16:38:30.416Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "593ce85a-fce2-4d42-8d6e-cb831e5f964e",
+            "name": "Lawyer",
+            "containerId": "",
+            "created": "2024-08-14T11:47:39.455Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "55f631f0-fe92-446c-ad75-c7d763c6d98c",
+            "name": "Posts",
+            "containerId": "593ce85a-fce2-4d42-8d6e-cb831e5f964e",
+            "created": "2024-08-14T11:47:54.870Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "5557f651-ac2d-4773-8ac8-bc44dc006dce",
+            "name": "Ratings",
+            "containerId": "",
+            "created": "2024-08-14T14:15:39.701Z",
+            "sortNum": 30000
+        },
+        {
+            "_id": "9a2950e1-7c2b-4926-8e65-ab555c4a3436",
+            "name": "Booking",
+            "containerId": "",
+            "created": "2024-08-14T15:02:09.425Z",
+            "sortNum": 40000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "9536235d-9257-4d94-bf75-c3eb3b9a32e3",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "",
+            "name": "Signup",
+            "url": "https://lawlinkbackend-e3lj.onrender.com/api/v1/users/signup",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-08-11T11:11:30.102Z",
+            "modified": "2024-08-15T13:46:37.982Z",
+            "headers": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "username",
+                        "value": "Ahmed"
+                    },
+                    {
+                        "name": "email",
+                        "value": "lawyer@gmail.com"
+                    },
+                    {
+                        "name": "password",
+                        "value": "12345678"
+                    },
+                    {
+                        "name": "type",
+                        "value": "lawyer"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "degreePic",
+                        "value": "c:\\Users\\arsal\\OneDrive\\Pictures\\Screenshot 2022-01-30 015051.png"
+                    }
+                ]
+            }
+        },
+        {
+            "_id": "aa1843b0-5f05-4f76-a6e3-ff4a113c70d3",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "",
+            "name": "Login",
+            "url": "http://localhost:8000/api/v1/users/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-08-11T11:24:54.900Z",
+            "modified": "2024-08-20T03:37:33.189Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\" :\"client@gmail.com\",\"password\":\"12345678\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "1a729ebb-48d5-44ef-af0d-b82f4808a36c",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "",
+            "name": "LEGAL GPT",
+            "url": "http://localhost:8000/api/v1/users/legalGPT",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2024-08-14T10:00:06.784Z",
+            "modified": "2024-08-14T10:03:11.751Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"textPrompt\":\"law for cats\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "2117860e-6ee7-41af-a59e-bf9a9f3cb33a",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "55f631f0-fe92-446c-ad75-c7d763c6d98c",
+            "name": "Create Post",
+            "url": "http://localhost:8000/api/v1/lawyer/posts",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2024-08-14T11:48:09.696Z",
+            "modified": "2024-08-20T03:34:27.137Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJlMDZiZDBkOGIzZDIxMGIwZjA2ZDYiLCJ0eXBlIjoibGF3eWVyIiwiaWF0IjoxNzI0MTI0ODQwfQ.z5uLeDb21zSB1fRp-sj6e7hEYvs-Lm-d6BK69NLfcqo"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n \"post_title\":\"test2\",\n \"post_description\":\"test2 desc\",\n \"lawType\":[\"legal\",\"cooperate\"]\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "180c86a7-c8ff-4b95-91d8-86b63ce4afbc",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "55f631f0-fe92-446c-ad75-c7d763c6d98c",
+            "name": "Get All Post",
+            "url": "http://localhost:8000/api/v1/lawyer/posts",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2024-08-14T13:32:57.157Z",
+            "modified": "2024-08-20T03:37:56.747Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJlMDY0NzBkOGIzZDIxMGIwZjA2ZDEiLCJ0eXBlIjoiY2xpZW50IiwiaWF0IjoxNzI0MTI1MDUyfQ.NnbrkUzVgZtp92AjcpgTqmeErrl9zKynSDwReBXluOo"
+                }
+            ]
+        },
+        {
+            "_id": "23b467d5-77eb-43f9-8340-d246495f172a",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "55f631f0-fe92-446c-ad75-c7d763c6d98c",
+            "name": "Update Post",
+            "url": "http://localhost:8000/api/v1/lawyer/posts/66bca67c75396152e84fc562",
+            "method": "PUT",
+            "sortNum": 70000,
+            "created": "2024-08-14T13:38:14.865Z",
+            "modified": "2024-08-14T13:44:44.368Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJjYTUwN2M2N2Q2MGY5MmZlMGE2ZmYiLCJ0eXBlIjoibGF3eWVyIiwiaWF0IjoxNzIzNjQzMDM3fQ.k7qdgMl6wXK9APA5iJOeJUhfMd8KKCCnCL3YzaaDOLc"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n \"post_title\":\"test\",\n \"post_description\":\"test_update desc\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "424db376-e005-4150-9c08-c5eaf239863a",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "55f631f0-fe92-446c-ad75-c7d763c6d98c",
+            "name": "Delete Post",
+            "url": "http://localhost:8000/api/v1/lawyer/posts/66bca67c75396152e84fc562",
+            "method": "DELETE",
+            "sortNum": 80000,
+            "created": "2024-08-14T13:45:03.443Z",
+            "modified": "2024-08-14T13:45:50.200Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJjYTUwN2M2N2Q2MGY5MmZlMGE2ZmYiLCJ0eXBlIjoibGF3eWVyIiwiaWF0IjoxNzIzNjQzMDM3fQ.k7qdgMl6wXK9APA5iJOeJUhfMd8KKCCnCL3YzaaDOLc"
+                }
+            ]
+        },
+        {
+            "_id": "777c8b54-e900-4ca9-a3ab-ab147add77d2",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "55f631f0-fe92-446c-ad75-c7d763c6d98c",
+            "name": "Get By Id",
+            "url": "http://localhost:8000/api/v1/lawyer/posts/66bcb09730e5512783d94076",
+            "method": "GET",
+            "sortNum": 90000,
+            "created": "2024-08-14T13:48:33.795Z",
+            "modified": "2024-08-14T13:49:25.262Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJjYjFiYjIwY2Y0NWE3MzBmMjdmNzgiLCJ0eXBlIjoibGF3eWVyIiwiaWF0IjoxNzIzNjQyMjk5fQ.1NQ_l6CsND0gyHIzT3ixvYWIfDbZs-9dKYDiVKYHlIc"
+                }
+            ]
+        },
+        {
+            "_id": "47adde6f-b094-4ec6-8640-73433bffd74d",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "5557f651-ac2d-4773-8ac8-bc44dc006dce",
+            "name": "Post Ratings",
+            "url": "http://localhost:8000/api/v1/ratings/post",
+            "method": "POST",
+            "sortNum": 110000,
+            "created": "2024-08-14T14:16:07.878Z",
+            "modified": "2024-08-14T14:33:24.459Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJjYmQzZDZjYzJkNjA4NWMyMjEwZjUiLCJ0eXBlIjoiY2xpZW50IiwiaWF0IjoxNzIzNjQ1MjQ1fQ.WweRKzYWSrKioeNi1qbSw02Y0VRArTAnz0-W9fhiduc"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"lawyerId\":\"66bca507c67d60f92fe0a6ff\",\n  \"rating\":4\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "181d5288-c347-47ec-9817-ed5c177a1cdf",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "9a2950e1-7c2b-4926-8e65-ab555c4a3436",
+            "name": "Add Bookings",
+            "url": "http://localhost:8000/api/v1/bookings/addBookings",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2024-08-14T15:18:54.464Z",
+            "modified": "2024-08-14T15:30:58.285Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJjYmQzZDZjYzJkNjA4NWMyMjEwZjUiLCJ0eXBlIjoiY2xpZW50IiwiaWF0IjoxNzIzNjQ5MDI1fQ.AzbG-yybB7esepl6jJV1CCiyuN2j32maANUmdZ9j37E"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\r\n    \"lawyerId\": \"66bcb1bb20cf45a730f27f78\",\r\n    \"contractPrice\": 120,\r\n    \"dateOfAppointment\": \"2024-04-20\"\r\n}\r\n",
+                "form": []
+            }
+        },
+        {
+            "_id": "c4b80ff8-5e71-4954-aff6-acd71ae1446e",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "9a2950e1-7c2b-4926-8e65-ab555c4a3436",
+            "name": "Get All Client Bookings",
+            "url": "http://localhost:8000/api/v1/bookings/getClientBookings",
+            "method": "GET",
+            "sortNum": 130000,
+            "created": "2024-08-14T15:31:43.471Z",
+            "modified": "2024-08-14T15:33:06.693Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJjYmQzZDZjYzJkNjA4NWMyMjEwZjUiLCJ0eXBlIjoiY2xpZW50IiwiaWF0IjoxNzIzNjQ5MDI1fQ.AzbG-yybB7esepl6jJV1CCiyuN2j32maANUmdZ9j37E"
+                }
+            ]
+        },
+        {
+            "_id": "1d4720b6-faec-4ee4-86e5-ad1f4ecf05c8",
+            "colId": "f820f4c1-4de9-4374-aae6-72f5f1970493",
+            "containerId": "9a2950e1-7c2b-4926-8e65-ab555c4a3436",
+            "name": "Get All Lawyer Bookings",
+            "url": "http://localhost:8000/api/v1/bookings/getLawyerBookings",
+            "method": "GET",
+            "sortNum": 140000,
+            "created": "2024-08-14T15:33:41.868Z",
+            "modified": "2024-08-14T15:35:32.183Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmJjYjFiYjIwY2Y0NWE3MzBmMjdmNzgiLCJ0eXBlIjoibGF3eWVyIiwiaWF0IjoxNzIzNjQ5NjYxfQ.EdZqYqM5w4nJH-uhm99PbIHmhd-shlglhFuuVw8ttJc"
+                }
+            ]
+        }
+    ],
+    "ref": "7m52kSpCvLvQ-9Bk4FYNB_gErYxFbD7a-pfqoxttJgu-aMjWvBghX_tUhrFlWu62gIQZLKrICYVQRO-KtVEG-w"
+}

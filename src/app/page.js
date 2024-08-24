@@ -21,7 +21,7 @@ const LandingPage = () => {
 
   return (
     <>
-      <NavbarGlobal navData={landingNavData} showAuthButtons />
+      <NavbarGlobal navData={landingNavData} isLanding={true} showAuthButtons />
       <div id="hero-section">
         <Hero />
       </div>

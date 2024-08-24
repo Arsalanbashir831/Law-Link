@@ -44,7 +44,7 @@ const ChatBox = () => {
       boxShadow="lg"
       height="90vh"
       width="100%"
-      maxW="1200px"
+  
       mx="auto"
     >
       <VStack

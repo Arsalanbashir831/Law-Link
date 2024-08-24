@@ -18,12 +18,8 @@ import {
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
-import { BASE_URL } from '@/Constants';
-import { useRouter } from 'next/navigation';
-
 
 const Login = ({ setIsLoginPage }) => {
-const router  = useRouter()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -38,25 +34,8 @@ const router  = useRouter()
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const response = await fetch(`${BASE_URL}/api/v1/users/login`,{
-      method:'POST',
-      headers: {
-        'Content-Type': 'application/json', // Ensure the server understands the JSON format
-      },
-      body:JSON.stringify(formData)
-    }) 
-    const data = await response.json()
-    if(response.ok){
-      console.log(data)
-      localStorage.setItem('userToken', data.token)
-      if(data.user.type ==='client'){
-        router.push('FindLawyer')
-      }else{
-        router.push('Lawyer')
-      }
-    }
     console.log(formData);
   };
 

@@ -10,6 +10,7 @@ import { SimpleGrid, Box } from "@chakra-ui/react";
 const Page = () => {
   const [lawyerData, setLawyerData] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const clientNavData = [
     { id: 1, label: "Find Lawyer", value: "/FindLawyer" },
     { id: 2, label: "Legal GPT", value: "/LegalGpt" },
@@ -45,11 +46,11 @@ const Page = () => {
 
   return (
     <>
-      <NavbarGlobal navData={clientNavData} username="Arsalan Bashir" avatarUrl="path-to-avatar.jpg" />
-      <Search  userType={userType}/>
+      <NavbarGlobal navData={clientNavData} username="Arsalan Bashir" avatarUrl="path-to-avatar.jpg" isLanding={false} />
+      <Search  userType={'client'}/>
       <Box p={4}>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-          {lawyers.map((data, index) => (
+          {lawyerData.map((data, index) => (
             <LawyerCard key={index} lawyer={data} />
           ))}
         </SimpleGrid>
