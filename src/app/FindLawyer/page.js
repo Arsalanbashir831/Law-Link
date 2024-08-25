@@ -25,8 +25,8 @@ const Page = () => {
         const response = await fetch(`${BASE_URL}/api/v1/lawyer/posts`, {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`, // Pass the token in the Authorization header
-            "Content-Type": "application/json", // Set the Content-Type header
+            Authorization: `Bearer ${token}`, 
+            "Content-Type": "application/json",
           },
         });
         const data = await response.json();

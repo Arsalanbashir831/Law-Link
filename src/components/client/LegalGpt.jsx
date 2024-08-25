@@ -15,10 +15,10 @@ import {
 import { FaPaperPlane, FaBalanceScale } from "react-icons/fa";
 import { BASE_URL } from "@/Constants";
 
-// Function to format the AI response text
+
 const formatText = (text) => {
   const lines = text.split("\n").map((line, index) => {
-    // Convert headings (##)
+   
     if (line.startsWith("## ")) {
       const heading = line.replace("## ", "");
       return (
@@ -28,12 +28,12 @@ const formatText = (text) => {
       );
     }
 
-    // Convert bold (**)
+    
     const boldLine = line.replace(/\*\*(.*?)\*\*/g, (match, p1) => {
       return `<strong>${p1}</strong>`;
     });
 
-    // Render regular paragraph
+    
     return (
       <Text
         as="p"
@@ -62,7 +62,7 @@ const LegalGpt = () => {
     setMessages([...messages, newMessage]);
     setInput("");
 
-    // Show loading animation by adding a loading message from AI
+
     setLoading(true);
     const loadingMessage = { sender: "ai", text: "loading" };
     setMessages((prevMessages) => [...prevMessages, loadingMessage]);
