@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Flex,
@@ -20,12 +20,16 @@ import axios from "axios";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { ForgotPasswordModal } from "./ForgotPasswordModal";
-import { Trykker } from "next/font/google";
 import { BASE_URL } from "@/Constants";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/services/AuthProvider";
+
+
 const Login = ({ setIsLoginPage }) => {
+  const { login } = useContext(AuthContext);
   const navigate = useRouter();
   const toast = useToast();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -42,14 +46,11 @@ const Login = ({ setIsLoginPage }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     const data = {
       email: formData.email,
       password: formData.password,
     };
-    console.log(data);
-    
 
     try {
       const res = await axios.post(
@@ -62,8 +63,10 @@ const Login = ({ setIsLoginPage }) => {
           },
         }
       );
-      console.log(res);
+
       if(res.status === 200){
+        const { user, token } = res.data;
+        login(user, token);
         
         toast({
           title: "Login Successful",

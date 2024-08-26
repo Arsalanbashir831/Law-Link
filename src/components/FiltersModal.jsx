@@ -22,7 +22,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-const FiltersModal = ({ isOpen, onClose, userType }) => {
+const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
   const [cost, setCost] = useState(0);
   const [selectedServices, setSelectedServices] = useState([]);
   const [lawyerType, setLawyerType] = useState('');
@@ -71,7 +71,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
       time: selectedTime,
       severity,
     };
-    console.log('Applied filters:', filters);
+    applyFilters(filters); 
     onClose();
   };
 

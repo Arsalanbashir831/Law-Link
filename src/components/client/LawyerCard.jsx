@@ -15,6 +15,7 @@ import {
 import { FaUserTie, FaGavel, FaPhone } from "react-icons/fa";
 import ViewProfileModal from "../ViewProfileModa";
 
+
 const LawyerCard = ({ lawyer }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -41,8 +42,8 @@ const LawyerCard = ({ lawyer }) => {
             <Image
               borderRadius="full"
               boxSize="130px"
-              src={lawyer.user.profile_pic}
-              // alt={lawyer.user.username}
+              src={lawyer.user?.profile_pic} 
+              alt={lawyer.user?.username} 
               objectFit="cover"
               border="4px solid"
               borderColor="red.600"
@@ -58,24 +59,16 @@ const LawyerCard = ({ lawyer }) => {
                 fontSize="3xl"
                 color="white"
               >
-                {lawyer.user.username}
+                {lawyer.user?.username}
               </Text>
-           
-             
-              <Button size="sm" colorScheme="red" onClick={onOpen}>
+              {/* <Button size="sm" colorScheme="red" onClick={onOpen}>
                 View Profile
-              </Button>
-             
-             
-             
+              </Button> */}
             </HStack>
             <HStack spacing={3} alignItems="center">
               <Icon as={FaUserTie} color="red.600" boxSize={6} />
-              <Text
-                fontSize="lg"
-                color="white"
-              >
-                {lawyer.post_title}
+              <Text fontSize="lg" color="white">
+                {lawyer?.post_title}
               </Text>
             </HStack>
             <HStack spacing={3} wrap="wrap">
@@ -94,11 +87,8 @@ const LawyerCard = ({ lawyer }) => {
             </HStack>
             <HStack spacing={3} alignItems="center">
               <Icon as={FaGavel} color="gray.300" boxSize={5} />
-              <Text
-                fontSize="md"
-                color="gray.300"
-              >
-                {lawyer.post_description}
+              <Text fontSize="md" color="gray.300">
+                {lawyer?.post_description}
               </Text>
             </HStack>
             <HStack spacing={3} width="full" justifyContent="space-between" mt={4}>
@@ -118,7 +108,7 @@ const LawyerCard = ({ lawyer }) => {
                 borderRadius="full"
                 _hover={{ bg: "blue.700" }}
                 leftIcon={<Icon as={FaPhone} />}
-                onClick={() => alert(`Contacting ${lawyer.name}`)}
+                onClick={() => alert(`Contacting ${lawyer.user?.username}`)}
               >
                 Contact Lawyer
               </Button>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Avatar,
   Menu,
@@ -12,10 +12,12 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { AuthContext } from '@/services/AuthProvider';
 
 const MenuAvatar = ({ username = 'Muhammad', avatarUrl }) => {
   const router = useRouter();
-
+  const {user} = useContext(AuthContext);
+  console.log(user);
   return (
     <Menu>
       <MenuButton

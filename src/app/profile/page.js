@@ -3,8 +3,9 @@ import NavbarGlobal from "@/components/NavbarGlobal";
 import Profile from "@/components/Profile";
 import Sidebar from "@/components/Sidebar";
 import ChangePassword from "@/components/ChangePassword";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
+import { AuthContext } from "@/services/AuthProvider";
 
 const ProfilePage = () => {
   const [selectedOption, setSelectedOption] = useState("profile");
@@ -16,15 +17,18 @@ const ProfilePage = () => {
     { id: 4, label: 'Orders', value: '/Orders' },
   ];
 
-  const user = {
-    name: "Arsalan Bashir",
-    username: "arsalan.bashir",
-    dob: "1990-05-15",
-    cnic: "12345-6789012-3",
-    contactNumber: "+92 300 1234567",
-    avatarUrl: "https://example.com/path-to-avatar.jpg",
-  };
+  // const user = {
+  //   name: "Arsalan Bashir",
+  //   username: "arsalan.bashir",
+  //   dob: "1990-05-15",
+  //   cnic: "12345-6789012-3",
+  //   contactNumber: "+92 300 1234567",
+  //   avatarUrl: "https://example.com/path-to-avatar.jpg",
+  // };
 
+  const { user } = useContext(AuthContext);
+  console.log(user);
+  
   return (
     <>
       <NavbarGlobal
