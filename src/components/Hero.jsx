@@ -1,61 +1,3 @@
-// import { Box, Image, Flex, Text, Button, Stack, VStack } from '@chakra-ui/react';
-// import React from 'react';
-
-// const Hero = () => {
-//   return (
-//     <Box position="relative" h="100vh" w="full" overflow="hidden">
-//       <Image
-//         src="https://plus.unsplash.com/premium_photo-1661769577787-9811af17f98d?q=80&w=1953&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D0"
-//         alt="Hero Image"
-//         objectFit="cover"
-//         w="full"
-//         h="full"
-//       />
-//       <Flex
-//         position="absolute"
-//         top="0"
-//         left="0"
-//         right="0"
-//         bottom="0"
-//         bg="rgba(0, 0, 0, 0.7)"
-//         align="center"
-//         justify="center"
-//         p={4}
-//       >
-//         <VStack spacing={8} textAlign="center" color="white" maxW="lg">
-//           <Text fontSize={{ base: '3xl', md: '5xl' }} fontWeight="bold">
-//             Get the Justice You Deserve
-//           </Text>
-//           <Text fontSize={{ base: 'md', md: 'xl' }}>
-//             Hire experienced lawyers to solve your case with the utmost professionalism and care.
-//           </Text>
-
-//           <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
-//             <Button
-//               size="lg"
-//               colorScheme="red"
-//               bg="red.500"
-//               _hover={{ bg: 'red.600' }}
-//             >
-//              Hire Lawyer
-//             </Button>
-//             <Button
-//               size="lg"
-//               colorScheme="teal"
-//               variant="outline"
-//               _hover={{ bg: 'teal.600', color: 'white' }}
-//             >
-//               Learn More
-//             </Button>
-//           </Stack>
-//         </VStack>
-//       </Flex>
-//     </Box>
-//   );
-// };
-
-// export default Hero;
-
 "use client";
 import React, { useState, useEffect } from "react";
 import {
@@ -69,8 +11,8 @@ import {
   SlideFade,
   ScaleFade,
 } from "@chakra-ui/react";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
-import { FaAngleRight, FaChevronLeft } from "react-icons/fa6";
+import { FaChevronLeft } from "react-icons/fa6";
+import { FaAngleRight } from "react-icons/fa6";
 
 const images = [
   {
@@ -92,11 +34,17 @@ const images = [
     id: 4,
     src: "https://images.unsplash.com/photo-1436450412740-6b988f486c6b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Image 4",
-  }
+  },
 ];
+
 const Hero = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const pxValue = useBreakpointValue({ base: 4, md: 8 });
+  const plValue = useBreakpointValue({ base: 4, md: 16 });
+  const headingFontSize = useBreakpointValue({ base: "2xl", md: "4xl" });
+  const descriptionFontSize = useBreakpointValue({ base: "md", md: "md" });
 
   const handleNext = () => {
     setIsTransitioning(true);
@@ -186,43 +134,24 @@ const Hero = () => {
                 p={4}
                 ml={"100px"}
                 bg="rgba(0, 0, 0, 0.5)"
-                px={useBreakpointValue({ base: 4, md: 8 })}
+                px={pxValue}
                 textAlign="left"
-                pl={useBreakpointValue({ base: 4, md: 16 })}
+                pl={plValue}
               >
-                <Text
-                  fontSize={useBreakpointValue({ base: "2xl", md: "4xl" })}
-                  fontWeight="500"
-                  color="white"
-                  mb={4}
-                >
+                <Text fontSize={headingFontSize} fontWeight="500" color="white" mb={4}>
                   {text.heading}
                 </Text>
-                <Text
-                  fontSize={useBreakpointValue({ base: "md", md: "md" })}
-                  color="white"
-                  mb={6}
-                >
+                <Text fontSize={descriptionFontSize} color="white" mb={6}>
                   {text.description}
                 </Text>
                 <Stack direction="row" spacing={4}>
                   <ScaleFade in={true} initialScale={0.8}>
-                    <Button
-                      bg="#9D152D"
-                      color="white"
-                      _hover={{ bg: "red.700" }}
-                      size="md"
-                    >
+                    <Button bg="#9D152D" color="white" _hover={{ bg: "red.700" }} size="md">
                       HIRE NOW
                     </Button>
                   </ScaleFade>
                   <ScaleFade in={true} initialScale={0.8}>
-                    <Button
-                      bg="black"
-                      color="white"
-                      _hover={{ bg: "gray.800" }}
-                      size="md"
-                    >
+                    <Button bg="black" color="white" _hover={{ bg: "gray.800" }} size="md">
                       LEARN MORE
                     </Button>
                   </ScaleFade>

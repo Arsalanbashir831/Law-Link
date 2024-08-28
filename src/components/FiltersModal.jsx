@@ -31,6 +31,12 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
 
+  
+  const labelColor = useColorModeValue('gray.700', 'gray.300');
+  const selectBg = useColorModeValue('gray.100', 'gray.700');
+  const focusBorderColor = 'red.500';
+  const sliderThumbColor = 'red.500';
+
   const servicesOptions = [
     "Contract Drafting",
     "Business Formation",
@@ -86,15 +92,15 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
             {userType === 'client' && (
               <>
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={labelColor}>
                     Lawyer Type
                   </Text>
                   <Select
                     placeholder="Select lawyer type"
                     value={lawyerType}
                     onChange={(e) => setLawyerType(e.target.value)}
-                    focusBorderColor="red.500"
-                    bg={useColorModeValue('gray.100', 'gray.700')}
+                    focusBorderColor={focusBorderColor}
+                    bg={selectBg}
                     borderRadius="md"
                   >
                     <option value="All">All</option>
@@ -109,7 +115,7 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
                 </Box>
 
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={labelColor}>
                     Cost (Max)
                   </Text>
                   <Slider
@@ -125,13 +131,13 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
                       <SliderFilledTrack />
                     </SliderTrack>
                     <SliderThumb boxSize={6}>
-                      <Box color="red.500">${cost}</Box>
+                      <Box color={sliderThumbColor}>${cost}</Box>
                     </SliderThumb>
                   </Slider>
                 </Box>
 
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={labelColor}>
                     Services
                   </Text>
                   <VStack spacing={2} align="start">
@@ -153,15 +159,15 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
             {userType === 'lawyer' && (
               <>
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={labelColor}>
                     Case Type
                   </Text>
                   <Select
                     placeholder="Select case type"
                     value={clientCaseType}
                     onChange={(e) => setClientCaseType(e.target.value)}
-                    focusBorderColor="red.500"
-                    bg={useColorModeValue('gray.100', 'gray.700')}
+                    focusBorderColor={focusBorderColor}
+                    bg={selectBg}
                     borderRadius="md"
                   >
                     {clientCaseTypes.map((type) => (
@@ -173,7 +179,7 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
                 </Box>
 
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={labelColor}>
                     Severity of Case
                   </Text>
                   <Slider
@@ -189,7 +195,7 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
                       <SliderFilledTrack />
                     </SliderTrack>
                     <SliderThumb boxSize={6}>
-                      <Box color="red.500">{severity}</Box>
+                      <Box color={sliderThumbColor}>{severity}</Box>
                     </SliderThumb>
                   </Slider>
                 </Box>
@@ -197,28 +203,28 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
                 <Box width="full">
                   <HStack spacing={4} width="full">
                     <Box width="full">
-                      <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                      <Text fontWeight="bold" mb={2} color={labelColor}>
                         Date
                       </Text>
                       <Input
                         type="date"
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        focusBorderColor="red.500"
-                        bg={useColorModeValue('gray.100', 'gray.700')}
+                        focusBorderColor={focusBorderColor}
+                        bg={selectBg}
                         borderRadius="md"
                       />
                     </Box>
                     <Box width="full">
-                      <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                      <Text fontWeight="bold" mb={2} color={labelColor}>
                         Time
                       </Text>
                       <Input
                         type="time"
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
-                        focusBorderColor="red.500"
-                        bg={useColorModeValue('gray.100', 'gray.700')}
+                        focusBorderColor={focusBorderColor}
+                        bg={selectBg}
                         borderRadius="md"
                       />
                     </Box>

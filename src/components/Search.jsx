@@ -26,6 +26,12 @@ const Search = ({ userType, setFilteredPosts }) => {
     searchQuery: "",
   });
 
+  // Move useColorModeValue hook calls to the top level
+  const bg = useColorModeValue("gray.50", "gray.800");
+  const inputBg = useColorModeValue("white", "gray.700");
+  const iconColor = useColorModeValue("gray.500", "gray.300");
+  const placeholderColor = useColorModeValue("gray.500", "gray.400");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputValues((prev) => ({ ...prev, [name]: value }));
@@ -71,21 +77,21 @@ const Search = ({ userType, setFilteredPosts }) => {
 
       const data = await response.json();
       console.log("Filter results:", data);
-      setFilteredPosts(data.posts); // Update filtered posts in Page component
+      setFilteredPosts(data.posts); 
     } catch (error) {
       console.error("Error during filter:", error);
     }
   };
 
   const handleClear = () => {
-    setFilteredPosts(null); // Clear filters and show all posts
+    setFilteredPosts(null); 
     setInputValues({
       searchQuery: "",
     });
   };
 
   return (
-    <Box p={6} boxShadow="lg" bg={useColorModeValue("gray.50", "gray.800")} borderRadius="lg" mb={6}>
+    <Box p={6} boxShadow="lg" bg={bg} borderRadius="lg" mb={6}>
       <HStack spacing={4} width="full">
         <InputGroup>
           <InputLeftElement pointerEvents="none">
@@ -95,7 +101,7 @@ const Search = ({ userType, setFilteredPosts }) => {
               aria-label="Search icon"
               variant="unstyled"
               fontSize="lg"
-              color={useColorModeValue("gray.500", "gray.300")}
+              color={iconColor}
               pointerEvents="none"
             />
           </InputLeftElement>
@@ -105,12 +111,12 @@ const Search = ({ userType, setFilteredPosts }) => {
             value={inputValues.searchQuery}
             onChange={handleChange}
             focusBorderColor="red.500"
-            bg={useColorModeValue("white", "gray.700")}
+            bg={inputBg}
             borderRadius="full"
             pl={10}
             pr={10}
             fontSize="lg"
-            _placeholder={{ color: useColorModeValue("gray.500", "gray.400") }}
+            _placeholder={{ color: placeholderColor }}
           />
           <InputRightElement>
             {inputValues.searchQuery && (
@@ -119,7 +125,7 @@ const Search = ({ userType, setFilteredPosts }) => {
                 aria-label="Clear search"
                 variant="unstyled"
                 onClick={handleClear}
-                color={useColorModeValue("gray.500", "gray.300")}
+                color={iconColor}
               />
             )}
           </InputRightElement>
