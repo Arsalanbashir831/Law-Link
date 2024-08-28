@@ -17,9 +17,13 @@ export const AuthProvider = ({ children }) => {
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
+      console.log(user);
+      console.log(token);
+      
+      
     }
   }, []);
-
+  //to call when user navigates without to token these routes
   useEffect(() => {
     const protectedRoutes = [
       '/FindLawyer',
@@ -50,7 +54,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
     setToken(userToken);
-
+    console.log(user.username);
+    console.log(userData);
+    
   
     if (userData.type === 'lawyer') {
       router.push('/dashboard');

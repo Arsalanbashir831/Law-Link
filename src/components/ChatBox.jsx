@@ -1,39 +1,75 @@
-'use client'
-import React, { useState } from 'react';
-import { Box, Input, VStack, HStack, Text, Button, Flex, Avatar, IconButton, useColorModeValue, useDisclosure } from '@chakra-ui/react';
-import { FaPaperPlane, FaPlus } from 'react-icons/fa';
-import CreateOrderModal from './CreateOrderModal'; 
+"use client";
+import React, { useState } from "react";
+import {
+  Box,
+  Input,
+  VStack,
+  HStack,
+  Text,
+  Button,
+  Flex,
+  Avatar,
+  IconButton,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { FaPaperPlane, FaPlus } from "react-icons/fa";
+import CreateOrderModal from "./CreateOrderModal";
+import BookingCard from "./BookingCard";
 
-const ChatBox = () => {
+const ChatBox = ({ selectedLawyer }) => {
+  console.log(selectedLawyer);
+
   const [messages, setMessages] = useState([
-    { sender: 'John Doe', text: 'Hi there! How can I help you?', avatar: 'https://bit.ly/dan-abramov' },
-    { sender: 'You', text: 'I need assistance with my order.', avatar: 'https://bit.ly/code-beast' },
+    {
+      sender: "John Doe",
+      text: "Hi there! How can I help you?",
+      avatar: "https://bit.ly/dan-abramov",
+    },
+    {
+      sender: "You",
+      text: "I need assistance with my order.",
+      avatar: "https://bit.ly/code-beast",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [bookings, setBookings] = useState([]);
+  const [input, setInput] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSendMessage = () => {
-    if (input.trim() === '') return;
+    if (input.trim() === "") return;
 
-    const newMessage = { sender: 'You', text: input, avatar: 'https://bit.ly/prosper-baba' };
+    const newMessage = {
+      sender: "You",
+      text: input,
+      avatar: "https://bit.ly/prosper-baba",
+    };
     setMessages([...messages, newMessage]);
 
-    setInput('');
+    setInput("");
     setTimeout(() => {
-      const response = { sender: 'John Doe', text: `I'm here to help you with ${input}`, avatar: 'https://bit.ly/dan-abramov' };
+      const response = {
+        sender: "John Doe",
+        text: `I'm here to help you with ${input}`,
+        avatar: "https://bit.ly/dan-abramov",
+      };
       setMessages((prevMessages) => [...prevMessages, response]);
     }, 1000);
   };
 
-  const scrollbarTrackColor = useColorModeValue('gray.200', 'gray.600');
-  const scrollbarThumbColor = useColorModeValue('red.500', 'red.300');
-  const messageBgColorYou = 'red.500';
-  const messageTextColorYou = 'white';
-  const messageBgColorOther = useColorModeValue('gray.200', 'gray.600');
-  const messageTextColorOther = useColorModeValue('black', 'white');
-  const chatBoxBgColor = useColorModeValue('gray.100', 'gray.800');
-  const messageContainerBgColor = useColorModeValue('white', 'gray.700');
-  const inputBgColor = useColorModeValue('white', 'gray.700');
+  const handleAddBooking = (booking) => {
+    setBookings([...bookings, booking]);
+  };
+
+  const scrollbarTrackColor = useColorModeValue("gray.200", "gray.600");
+  const scrollbarThumbColor = useColorModeValue("red.500", "red.300");
+  const messageBgColorYou = "red.500";
+  const messageTextColorYou = "white";
+  const messageBgColorOther = useColorModeValue("gray.200", "gray.600");
+  const messageTextColorOther = useColorModeValue("black", "white");
+  const chatBoxBgColor = useColorModeValue("gray.100", "gray.800");
+  const messageContainerBgColor = useColorModeValue("white", "gray.700");
+  const inputBgColor = useColorModeValue("white", "gray.700");
 
   return (
     <Flex
@@ -44,7 +80,6 @@ const ChatBox = () => {
       boxShadow="lg"
       height="90vh"
       width="100%"
-  
       mx="auto"
     >
       <VStack
@@ -57,35 +92,50 @@ const ChatBox = () => {
         borderRadius="md"
         boxShadow="md"
         sx={{
-          '::-webkit-scrollbar': {
-            width: '8px',
+          "::-webkit-scrollbar": {
+            width: "8px",
           },
-          '::-webkit-scrollbar-track': {
+          "::-webkit-scrollbar-track": {
             background: scrollbarTrackColor,
           },
-          '::-webkit-scrollbar-thumb': {
+          "::-webkit-scrollbar-thumb": {
             background: scrollbarThumbColor,
-            borderRadius: '8px',
+            borderRadius: "8px",
           },
         }}
       >
         {messages.map((message, index) => (
           <HStack
             key={index}
-            alignSelf={message.sender === 'You' ? 'flex-end' : 'flex-start'}
-            bg={message.sender === 'You' ? messageBgColorYou : messageBgColorOther}
-            color={message.sender === 'You' ? messageTextColorYou : messageTextColorOther}
+            alignSelf={message.sender === "You" ? "flex-end" : "flex-start"}
+            bg={
+              message.sender === "You" ? messageBgColorYou : messageBgColorOther
+            }
+            color={
+              message.sender === "You"
+                ? messageTextColorYou
+                : messageTextColorOther
+            }
             borderRadius="lg"
             p={4}
             maxWidth="75%"
             spacing={4}
             boxShadow="sm"
           >
-            {message.sender !== 'You' && <Avatar size="sm" src={message.avatar} />}
+            {message.sender !== "You" && (
+              <Avatar size="sm" src={message.avatar} />
+            )}
             <Text fontSize="md">{message.text}</Text>
-            {message.sender === 'You' && <Avatar size="sm" src={message.avatar} />}
+            {message.sender === "You" && (
+              <Avatar size="sm" src={message.avatar} />
+            )}
           </HStack>
         ))}
+        <HStack>
+          {bookings.map((booking, index) => (
+            <BookingCard key={index} booking={booking} />
+          ))}
+        </HStack>
       </VStack>
 
       <Box mt={4} width="full">
@@ -117,7 +167,12 @@ const ChatBox = () => {
         </HStack>
       </Box>
 
-      <CreateOrderModal isOpen={isOpen} onClose={onClose} />
+      <CreateOrderModal
+        selectedLawyer={selectedLawyer}
+        isOpen={isOpen}
+        onClose={onClose}
+        onAddBooking={handleAddBooking}
+      />
     </Flex>
   );
 };

@@ -19,10 +19,11 @@ import {
 import { FaDollarSign, FaMapMarkerAlt, FaInfoCircle, FaBookmark, FaStar } from 'react-icons/fa';
 import ReviewModal from './ReviewModal'; 
 
-const BookingCard = ({ booking, buttonType = 'Review' }) => {
+const BookingCard = ({ booking, buttonType = 'Details' }) => {
   const bgColor = useColorModeValue('orange.50', 'gray.700');
   const textColor = useColorModeValue('black', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();
+  
   const handleButtonClick = () => {
     if (buttonType === 'Review') {
       onOpen();
@@ -44,7 +45,6 @@ const BookingCard = ({ booking, buttonType = 'Review' }) => {
         m={4}
       >
         <VStack align="start" spacing={3} w="full">
-          
           <HStack justify="space-between" w="full">
             <Text fontSize="sm" color="gray.500">
               {new Date(booking?.bookingDate).toLocaleDateString('en-US', {
@@ -53,38 +53,31 @@ const BookingCard = ({ booking, buttonType = 'Review' }) => {
                 year: 'numeric',
               })}
             </Text>
-            <IconButton
-              aria-label="Bookmark"
-              icon={<FaBookmark />}
-              variant="ghost"
-              color="gray.500"
-              size="sm"
-            />
-          </HStack>
-
-          
-          <HStack spacing={3} w="full">
-            <VStack align="start" spacing={0} flex={1}>
-              <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-                {booking.lawyerName}
-              </Text>
-              <Text fontSize="sm" fontWeight="bold" color={textColor}>
-                {booking.description || 'Law Firm Name'}
-              </Text>
-            </VStack>
             <Avatar
-              src="https://bit.ly/dan-abramov"
-              name={booking.lawyerName}
+              src={booking?.profile || "https://bit.ly/dan-abramov"}
+              name={booking?.lawyerName}
               size="lg"
               border="2px solid"
               borderColor="white"
             />
           </HStack>
 
+          <HStack spacing={3} w="full">
+            <VStack align="start" spacing={0} flex={1}>
+              <Text fontSize="md" fontWeight="bold" color={textColor}>
+                {booking?.lawyerName}
+              </Text>
+              <Text fontSize="sm" fontWeight="bold" color={textColor}>
+                {booking?.description || 'Law Firm Name'}
+              </Text>
+            </VStack>
+            
+          </HStack>
+
           <Divider />
 
           <HStack spacing={2} w="full" wrap="wrap">
-            {booking.tags.map((tag, index) => (
+            {booking?.tags.map((tag, index) => (
               <Badge key={index} colorScheme="gray" borderRadius="md" px={2} py={1}>
                 {tag}
               </Badge>
@@ -93,20 +86,18 @@ const BookingCard = ({ booking, buttonType = 'Review' }) => {
 
           <Divider />
 
-         
           <Flex align="center" w="full" mt={4}>
             <Text fontSize="lg" fontWeight="bold" color={textColor}>
               <Icon as={FaDollarSign} color="gray.500" mr={1} />
-              {booking.amount}/hr
+              {booking?.amount}/hr
             </Text>
             <Spacer />
             <Text fontSize="sm" color="gray.500">
               <Icon as={FaMapMarkerAlt} color="gray.500" mr={1} />
-              {booking.location || 'San Francisco, CA'}
+              {booking?.location || 'San Francisco, CA'}
             </Text>
           </Flex>
 
-         
           <Button
             colorScheme="red"
             size="sm"
@@ -119,7 +110,7 @@ const BookingCard = ({ booking, buttonType = 'Review' }) => {
           </Button>
         </VStack>
       </Box>
-      <ReviewModal  isOpen={isOpen} onClose={onClose} />
+      <ReviewModal isOpen={isOpen} onClose={onClose} lawyerId={booking.lawyerId} />
     </>
   );
 };

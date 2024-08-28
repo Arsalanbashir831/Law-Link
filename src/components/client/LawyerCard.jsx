@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Image,
@@ -14,11 +14,24 @@ import {
 } from "@chakra-ui/react";
 import { FaUserTie, FaGavel, FaPhone } from "react-icons/fa";
 import ViewProfileModal from "../ViewProfileModa";
+import { useRouter } from "next/navigation";
+import { useChatContext } from "@/services/ChatProvider";
+
 
 
 const LawyerCard = ({ lawyer }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
+  console.log(lawyer);
+  const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {setSelectedLawyer} = useChatContext();
+
+  const handleContactClick = (path) => {
+    setSelectedLawyer(lawyer);
+    router.push(path);
+    console.log("throwing you to chat box");
+    
+  };
   return (
     <>
       <Box
@@ -61,9 +74,6 @@ const LawyerCard = ({ lawyer }) => {
               >
                 {lawyer.user?.username}
               </Text>
-              {/* <Button size="sm" colorScheme="red" onClick={onOpen}>
-                View Profile
-              </Button> */}
             </HStack>
             <HStack spacing={3} alignItems="center">
               <Icon as={FaUserTie} color="red.600" boxSize={6} />
@@ -108,7 +118,8 @@ const LawyerCard = ({ lawyer }) => {
                 borderRadius="full"
                 _hover={{ bg: "blue.700" }}
                 leftIcon={<Icon as={FaPhone} />}
-                onClick={() => alert(`Contacting ${lawyer.user?.username}`)}
+                onClick={() => handleContactClick('/Chats')}
+              
               >
                 Contact Lawyer
               </Button>

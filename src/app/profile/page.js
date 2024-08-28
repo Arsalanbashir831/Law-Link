@@ -14,7 +14,7 @@ const ProfilePage = () => {
     { id: 1, label: 'Find Lawyer', value: '/FindLawyer' },
     { id: 2, label: 'Legal GPT', value: '/LegalGpt' },
     { id: 3, label: 'Chats', value: '/Chats' },
-    { id: 4, label: 'Orders', value: '/Orders' },
+    { id: 4, label: 'Orders', value: '/bookings' },
   ];
 
   // const user = {
@@ -34,6 +34,7 @@ const ProfilePage = () => {
       <NavbarGlobal
         navData={clientNavData}
         username="Arsalan Bashir"
+        user={user}
         avatarUrl="path-to-avatar.jpg"
       />
       <Flex>

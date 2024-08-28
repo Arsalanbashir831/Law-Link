@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Flex,
@@ -15,16 +15,17 @@ import {
 } from "@chakra-ui/react";
 import { FaBars, FaTimes, FaSignInAlt, FaUserPlus } from "react-icons/fa";
 import { GoLaw } from "react-icons/go";
-import MenuAvatar from "./MenuAvatar"; // Import existing avatar component
+import MenuAvatar from "./MenuAvatar";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/services/AuthProvider";
 
 const NavbarGlobal = ({
   navData,
-  showAuthButtons = true,
   username,
   avatarUrl,
   isLanding,
 }) => {
+  const { user } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -32,7 +33,7 @@ const NavbarGlobal = ({
   const textColor = useColorModeValue("gray.600", "gray.300");
   const hoverBgColor = useColorModeValue("red.100", "gray.600");
   const hoverTextColor = "red.600";
-  const buttonColorScheme = useColorModeValue("brown", "teal"); // Updated button color
+  const buttonColorScheme = useColorModeValue("brown", "teal");
   const router = useRouter();
 
   const handleScroll = (sectionId) => {
@@ -51,22 +52,13 @@ const NavbarGlobal = ({
     }
   };
 
+  const handleAuthNavigation = (path) => {
+    router.push(path);
+  };
+
   return (
-    <Box
-      bg={bgColor}
-      px={6}
-      boxShadow="md"
-      zIndex={10}
-      position="sticky"
-      top={0}
-    >
-      <Flex
-        h={16}
-        alignItems="center"
-        justifyContent="space-between"
-        mx="auto"
-        maxW="1200px"
-      >
+    <Box bg={bgColor} px={4} boxShadow="md" zIndex={10} position="sticky" top={0}>
+      <Flex h={16} alignItems="center" justifyContent="space-between" mx="auto" w={"100%"}>
         <HStack
           spacing={4}
           cursor="pointer"
@@ -105,29 +97,30 @@ const NavbarGlobal = ({
         </HStack>
 
         <HStack display={{ base: 'none', md: 'flex' }} spacing={6}>
-          {showAuthButtons ? (
+          {user ? (
+            <MenuAvatar username={username} avatarUrl={avatarUrl} />
+          ) : (
             <>
               <Button
                 leftIcon={<FaSignInAlt />}
                 variant="outline"
-                colorScheme="red"
-                _hover={{ bg: 'red.600', color: 'white' }}
-                onClick={() => handleButtonClick('/login')}
+                colorScheme="red.600"
+                _hover={{ bg: 'red', color: 'white' }}
+                onClick={() => handleAuthNavigation('/login')}
               >
                 Login
               </Button>
               <Button
                 leftIcon={<FaUserPlus />}
-                colorScheme="red"
+                bg="red.600"
+                color={'white'}
                 variant="solid"
-                _hover={{ bg: 'red.600' }}
-                onClick={() => handleButtonClick('/signup')}
+                _hover={{ bg: 'red', color: 'white' }}
+                onClick={() => handleAuthNavigation('/signup')}
               >
                 Sign Up
               </Button>
             </>
-          ) : (
-            <MenuAvatar username={username} avatarUrl={avatarUrl} />
           )}
         </HStack>
 
@@ -156,7 +149,11 @@ const NavbarGlobal = ({
                 {navItem.label}
               </Button>
             ))}
-            {showAuthButtons ? (
+            {user ? (
+              <Center>
+                <MenuAvatar username={username} avatarUrl={avatarUrl} />
+              </Center>
+            ) : (
               <>
                 <Button
                   leftIcon={<FaSignInAlt />}
@@ -179,10 +176,6 @@ const NavbarGlobal = ({
                   Sign Up
                 </Button>
               </>
-            ) : (
-              <Center>
-                <MenuAvatar username={username} avatarUrl={avatarUrl} />
-              </Center>
             )}
           </Stack>
         </Box>
