@@ -31,6 +31,10 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
 
+  // Use useColorModeValue unconditionally
+  const textColor = useColorModeValue('gray.700', 'gray.300');
+  const bgColor = useColorModeValue('gray.100', 'gray.700');
+
   const servicesOptions = [
     "Contract Drafting",
     "Business Formation",
@@ -86,7 +90,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
             {userType === 'client' && (
               <>
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={textColor}>
                     Lawyer Type
                   </Text>
                   <Select
@@ -94,7 +98,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
                     value={lawyerType}
                     onChange={(e) => setLawyerType(e.target.value)}
                     focusBorderColor="red.500"
-                    bg={useColorModeValue('gray.100', 'gray.700')}
+                    bg={bgColor}
                     borderRadius="md"
                   >
                     <option value="All">All</option>
@@ -109,7 +113,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
                 </Box>
 
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={textColor}>
                     Cost (Max)
                   </Text>
                   <Slider
@@ -131,7 +135,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
                 </Box>
 
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={textColor}>
                     Services
                   </Text>
                   <VStack spacing={2} align="start">
@@ -153,7 +157,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
             {userType === 'lawyer' && (
               <>
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={textColor}>
                     Case Type
                   </Text>
                   <Select
@@ -161,7 +165,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
                     value={clientCaseType}
                     onChange={(e) => setClientCaseType(e.target.value)}
                     focusBorderColor="red.500"
-                    bg={useColorModeValue('gray.100', 'gray.700')}
+                    bg={bgColor}
                     borderRadius="md"
                   >
                     {clientCaseTypes.map((type) => (
@@ -173,7 +177,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
                 </Box>
 
                 <Box width="full">
-                  <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                  <Text fontWeight="bold" mb={2} color={textColor}>
                     Severity of Case
                   </Text>
                   <Slider
@@ -197,7 +201,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
                 <Box width="full">
                   <HStack spacing={4} width="full">
                     <Box width="full">
-                      <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                      <Text fontWeight="bold" mb={2} color={textColor}>
                         Date
                       </Text>
                       <Input
@@ -205,12 +209,12 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
                         focusBorderColor="red.500"
-                        bg={useColorModeValue('gray.100', 'gray.700')}
+                        bg={bgColor}
                         borderRadius="md"
                       />
                     </Box>
                     <Box width="full">
-                      <Text fontWeight="bold" mb={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                      <Text fontWeight="bold" mb={2} color={textColor}>
                         Time
                       </Text>
                       <Input
@@ -218,7 +222,7 @@ const FiltersModal = ({ isOpen, onClose, userType }) => {
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
                         focusBorderColor="red.500"
-                        bg={useColorModeValue('gray.100', 'gray.700')}
+                        bg={bgColor}
                         borderRadius="md"
                       />
                     </Box>

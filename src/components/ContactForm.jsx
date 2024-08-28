@@ -39,14 +39,14 @@ const ContactUs = () => {
           <Box w="450px" h="2px" bg={underlineColor} mt={1} mb={6} right={0} />
           <Text mb={4}>
             Our platform offers a seamless and secure way to get legal
-            assistance from experienced professionals. Whether you're dealing
+            assistance from experienced professionals. Whether youre dealing
             with a complex legal issue or need straightforward advice, our
             experts are here to help.
           </Text>
           <Text mb={4}>
             With our online service, you can connect with top-rated lawyers,
             receive personalized advice, and handle your legal matters with
-            confidence. Don’t wait—take control of your legal needs today!
+            confidence. Dont wait—take control of your legal needs today!
           </Text>
         </GridItem>
 

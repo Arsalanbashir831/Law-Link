@@ -26,6 +26,12 @@ const Search = ({ userType }) => {
     lawyerType,
   });
 
+  const searchIconColor = useColorModeValue("gray.500", "gray.300");
+  const inputBgColor = useColorModeValue("white", "gray.700");
+  const placeholderColor = useColorModeValue("gray.500", "gray.400");
+  const clearIconColor = useColorModeValue("gray.500", "gray.300");
+  const boxBgColor = useColorModeValue("gray.50", "gray.800");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputValues((prev) => ({ ...prev, [name]: value }));
@@ -45,17 +51,17 @@ const Search = ({ userType }) => {
   };
 
   return (
-    <Box p={6} boxShadow="lg" bg={useColorModeValue("gray.50", "gray.800")} borderRadius="lg" mb={6}>
+    <Box p={6} boxShadow="lg" bg={boxBgColor} borderRadius="lg" mb={6}>
       <HStack spacing={4} width="full">
         <InputGroup>
           <InputLeftElement pointerEvents="none">
             <IconButton
-            ml={6}
+              ml={6}
               icon={<FiSearch />}
               aria-label="Search icon"
               variant="unstyled"
               fontSize="lg"
-              color={useColorModeValue("gray.500", "gray.300")}
+              color={searchIconColor}
               pointerEvents="none"
             />
           </InputLeftElement>
@@ -65,12 +71,12 @@ const Search = ({ userType }) => {
             value={inputValues.searchQuery}
             onChange={handleChange}
             focusBorderColor="red.500"
-            bg={useColorModeValue("white", "gray.700")}
+            bg={inputBgColor}
             borderRadius="full"
             pl={10}
             pr={10}
             fontSize="lg"
-            _placeholder={{ color: useColorModeValue("gray.500", "gray.400") }}
+            _placeholder={{ color: placeholderColor }}
           />
           <InputRightElement>
             {inputValues.searchQuery && (
@@ -79,7 +85,7 @@ const Search = ({ userType }) => {
                 aria-label="Clear search"
                 variant="unstyled"
                 onClick={handleClear}
-                color={useColorModeValue("gray.500", "gray.300")}
+                color={clearIconColor}
               />
             )}
           </InputRightElement>
