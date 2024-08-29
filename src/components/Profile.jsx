@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -24,8 +24,14 @@ import {
 } from '@chakra-ui/react';
 import { FaUser, FaCalendar, FaIdCard, FaPhone, FaEdit, FaSignOutAlt } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import { AuthContext } from '@/services/AuthProvider';
 
 const Profile = ({ user }) => {
+  const {logout} = useContext(AuthContext);
+  // const {username, email} = user;
+  // console.log(username);
+  
+  
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [editableUser, setEditableUser] = useState(user);
   const router = useRouter();
@@ -63,8 +69,8 @@ const Profile = ({ user }) => {
       <Flex direction="column" alignItems="center" mb={6}>
         <Avatar
           size="2xl"
-          name={editableUser.name}
-          src={editableUser.avatarUrl}
+          name={editableUser?.username}
+          src={editableUser?.profilePic}
           mb={4}
           boxShadow="lg"
           border="4px solid"
@@ -72,16 +78,16 @@ const Profile = ({ user }) => {
           _hover={{ transform: "scale(1.05)", boxShadow: "lg" }}
         />
         <Heading color="white" mb={2}>
-          {editableUser.name}
+          {editableUser?.username}
         </Heading>
         <Text fontSize="lg" color="gray.300" mb={4}>
-          @{editableUser.username}
+          @{editableUser?.email}
         </Text>
       </Flex>
       <Stack spacing={4} w="full" maxW="md" mx="auto">
-        <ProfileDetail icon={FaCalendar} label="Date of Birth" value={editableUser.dob} />
-        <ProfileDetail icon={FaIdCard} label="CNIC Number" value={editableUser.cnic} />
-        <ProfileDetail icon={FaPhone} label="Contact Number" value={editableUser.contactNumber} />
+        <ProfileDetail icon={FaCalendar} label="Date of Birth" value={editableUser?.dob} />
+        <ProfileDetail icon={FaIdCard} label="CNIC Number" value={editableUser?.cnic} />
+        <ProfileDetail icon={FaPhone} label="Contact Number" value={editableUser?.contactNumber} />
       </Stack>
       <HStack spacing={4} mt={8} justify="center">
         <Button
@@ -99,7 +105,7 @@ const Profile = ({ user }) => {
           colorScheme="blue"
           variant="outline"
           borderRadius="full"
-          onClick={() => router.push('/logout')}
+          onClick={logout}
           _hover={{ bg: "blue.700", color: "white" }}
           leftIcon={<FaSignOutAlt />}
         >
@@ -118,7 +124,7 @@ const Profile = ({ user }) => {
                 <FormLabel>Name</FormLabel>
                 <Input
                   name="name"
-                  value={editableUser.name}
+                  value={editableUser?.username}
                   onChange={handleInputChange}
                 />
               </FormControl>
@@ -126,7 +132,7 @@ const Profile = ({ user }) => {
                 <FormLabel>Username</FormLabel>
                 <Input
                   name="username"
-                  value={editableUser.username}
+                  value={editableUser?.username}
                   onChange={handleInputChange}
                 />
               </FormControl>
@@ -135,7 +141,7 @@ const Profile = ({ user }) => {
                 <Input
                   type="date"
                   name="dob"
-                  value={editableUser.dob}
+                  value={editableUser?.dob}
                   onChange={handleInputChange}
                 />
               </FormControl>
@@ -143,7 +149,7 @@ const Profile = ({ user }) => {
                 <FormLabel>CNIC Number</FormLabel>
                 <Input
                   name="cnic"
-                  value={editableUser.cnic}
+                  value={editableUser?.cnic}
                   onChange={handleInputChange}
                 />
               </FormControl>
@@ -151,7 +157,7 @@ const Profile = ({ user }) => {
                 <FormLabel>Contact Number</FormLabel>
                 <Input
                   name="contactNumber"
-                  value={editableUser.contactNumber}
+                  value={editableUser?.contactNumber}
                   onChange={handleInputChange}
                 />
               </FormControl>

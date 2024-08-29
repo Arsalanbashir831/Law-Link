@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useToast } from '@chakra-ui/react';
 import {
   Box,
   Flex,
@@ -22,11 +23,15 @@ import { MdEmail, MdPerson } from 'react-icons/md';
 import { FaLock } from 'react-icons/fa';
 import UploadButton from './UploadButton';
 import DocumentUploadModal from './DocumentUploadModal';
+import { BASE_URL } from '@/Constants';
+import axios from 'axios';
 
 const Signup = ({ setIsLoginPage }) => {
+  const toast = useToast();
   const [formData, setFormData] = useState({
     email: '',
     userType: '',
+    username: '', 
     password: '',
     termsAccepted: false,
     documentUploaded: false,
@@ -50,17 +55,17 @@ const Signup = ({ setIsLoginPage }) => {
       setFormData({
         ...formData,
         documentUploaded: true,
-        uploadedDegree: e.target.files[0],
+        uploadedDegree: e.target.files[0], 
       });
     }
   };
-
+  
   const handleProfilePicUpload = (e) => {
     if (e.target.files.length > 0) {
       setFormData({
         ...formData,
         profilePicUploaded: true,
-        uploadedProfilePic: e.target.files[0],
+        uploadedProfilePic: e.target.files[0], 
       });
     }
   };
@@ -81,9 +86,53 @@ const Signup = ({ setIsLoginPage }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const { email, password, userType, username, uploadedDegree, uploadedProfilePic } = formData;
     console.log(formData);
+    
+    const dataToSend = new FormData();
+    dataToSend.append('email', email);
+    dataToSend.append('password', password);
+    dataToSend.append('type', userType);
+    dataToSend.append('username', username); 
+
+    if (userType === 'lawyer') {
+      dataToSend.append('degreePic', uploadedDegree);
+      dataToSend.append('profilePic', uploadedProfilePic);
+    } else {
+      dataToSend.append('degreePic', '');
+      dataToSend.append('profilePic', '');
+    }
+
+    try {
+      const res = await axios.post(`${BASE_URL}api/v1/users/signup`, dataToSend, {
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      console.log(res);
+      if (res.status === 201) {
+        toast({
+          title: "Account created.",
+          description: "Your account has been successfully created.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setIsLoginPage(true);
+      }
+    } catch (error) {
+      console.error("Error registering:", error.response?.data || error.message);
+      toast({
+        title: "Registration failed.",
+        description: "There was an error creating your account. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -115,6 +164,7 @@ const Signup = ({ setIsLoginPage }) => {
                 />
               </InputGroup>
             </FormControl>
+
             <FormControl id="userType" isRequired>
               <FormLabel>User Type</FormLabel>
               <InputGroup>
@@ -133,12 +183,28 @@ const Signup = ({ setIsLoginPage }) => {
                 </Select>
               </InputGroup>
             </FormControl>
+
+            <FormControl id="username" isRequired>
+              <FormLabel>Username</FormLabel>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={MdPerson} color="red.500" />
+                </InputLeftElement>
+                <Input
+                  type="text"
+                  placeholder="Enter your username"
+                  focusBorderColor="red.500"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </InputGroup>
+            </FormControl>
+
             {formData.userType === 'lawyer' && (
               <Flex justifyContent="space-between" alignItems="center">
                 <FormLabel>Upload Documents</FormLabel>
                 <UploadButton onClick={onOpen} hasFile={formData.documentUploaded || formData.profilePicUploaded} />
                 <DocumentUploadModal
-                
                   isOpen={isOpen}
                   onClose={onClose}
                   handleFileUpload={handleFileUpload}
@@ -150,6 +216,7 @@ const Signup = ({ setIsLoginPage }) => {
                 />
               </Flex>
             )}
+
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
@@ -165,6 +232,7 @@ const Signup = ({ setIsLoginPage }) => {
                 />
               </InputGroup>
             </FormControl>
+
             <Checkbox
               id="termsAccepted"
               colorScheme="red"
@@ -175,6 +243,7 @@ const Signup = ({ setIsLoginPage }) => {
                 I agree to the Terms and Conditions
               </Text>
             </Checkbox>
+
             <Button
               mt={4}
               colorScheme="red"

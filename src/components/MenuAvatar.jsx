@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Avatar,
   Menu,
@@ -12,16 +12,20 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { AuthContext } from '@/services/AuthProvider';
 
 const MenuAvatar = ({ username = 'Muhammad', avatarUrl }) => {
   const router = useRouter();
+  const {user} = useContext(AuthContext);
+  console.log(user);
 
+  
   return (
     <Menu>
       <MenuButton
         as={Avatar}
         size="md"
-        name={username}
+        name={user?.username}
         src={avatarUrl}
         cursor="pointer"
         _hover={{ bg: useColorModeValue('gray.100', 'gray.700') }}
@@ -35,7 +39,7 @@ const MenuAvatar = ({ username = 'Muhammad', avatarUrl }) => {
       >
         <Box px={4} py={2} textAlign="center">
           <Text fontWeight="bold" fontSize="md" color={useColorModeValue('gray.700', 'gray.200')}>
-            {username}
+            {user?.username}
           </Text>
         </Box>
         <MenuDivider />

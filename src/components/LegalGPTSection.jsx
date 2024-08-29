@@ -22,7 +22,7 @@ const LegalGPTSection = () => {
   const headingColor = useColorModeValue("#1A202C", "#1A202C");
   const highlightColor = useColorModeValue("#B08968", "#B08968");
   const statTextColor = useColorModeValue("gray.700", "white");
-  const buttonHoverBgColor = useColorModeValue("red.600", "#9d7e61");
+  const buttonHoverBgColor = useColorModeValue("red.700", "#9d7e61");
 
   const { ref, inView } = useInView({
     triggerOnce: true, 
@@ -37,7 +37,7 @@ const LegalGPTSection = () => {
       mx="auto"
       boxShadow="lg"
       ref={ref}
-      mb={4}
+      
     >
       <Flex
         direction={{ base: "column", md: "row" }}
@@ -61,7 +61,7 @@ const LegalGPTSection = () => {
 
           <HStack spacing={8} mt={6} justify="center">
             <VStack align="center" spacing={0}>
-              <Icon as={FaHeart} color={highlightColor} boxSize={5} />
+              <Icon as={FaHeart} color={"red.600"} boxSize={5} />
               <Text fontWeight="bold" fontSize="lg" color={statTextColor}>
                 {inView && (
                   <CountUp start={0} end={2700} duration={2.5} separator="," />
@@ -75,7 +75,7 @@ const LegalGPTSection = () => {
               </Text>
             </VStack>
             <VStack align="center" spacing={0}>
-              <Icon as={FaStar} color={highlightColor} boxSize={5} />
+              <Icon as={FaStar} color={"red.600"} boxSize={5} />
               <Text fontWeight="bold" fontSize="lg" color={statTextColor}>
                 {inView && <CountUp start={0} end={84} duration={2.5} suffix="%" />}
               </Text>
@@ -108,7 +108,7 @@ const LegalGPTSection = () => {
             guidance.
           </Text>
           <Button
-            bg={highlightColor}
+            bg={"red.600"}
             color="white"
             size="md"
             _hover={{ bg: buttonHoverBgColor }}

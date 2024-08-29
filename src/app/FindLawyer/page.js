@@ -1,59 +1,48 @@
 "use client";
+
+import React, { useContext, useState } from "react";
+import { Flex, SimpleGrid, Box, Spinner } from "@chakra-ui/react";
 import LawyerCard from "@/components/client/LawyerCard";
 import NavbarGlobal from "@/components/NavbarGlobal";
 import Search from "@/components/Search";
-import { BASE_URL } from "@/Constants";
-import { Flex, Spinner } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { SimpleGrid, Box } from "@chakra-ui/react";
+import { useLawyerContext } from "@/services/LawyerPostProvider";
+
 
 const Page = () => {
-  const [lawyerData, setLawyerData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { lawyers, loading } = useLawyerContext();  
+  console.log(lawyers);
+  
+  const [filteredPosts, setFilteredPosts] = useState(null);
 
   const clientNavData = [
     { id: 1, label: "Find Lawyer", value: "/FindLawyer" },
     { id: 2, label: "Legal GPT", value: "/LegalGpt" },
     { id: 3, label: "Chats", value: "/Chats" },
-    { id: 4, label: "Orders", value: "/Orders" },
+    { id: 4, label: "Bookings", value: "/Bookings" },
   ];
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        setLoading(true);
-        const token = localStorage.getItem("userToken");
-        const response = await fetch(`${BASE_URL}/api/v1/lawyer/posts`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`, // Pass the token in the Authorization header
-            "Content-Type": "application/json", // Set the Content-Type header
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          console.log(data);
-          setLawyerData(data);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPost();
-  }, []);
-  console.log(lawyerData);
 
   return (
     <>
-      <NavbarGlobal navData={clientNavData} username="Arsalan Bashir" avatarUrl="path-to-avatar.jpg" isLanding={false} />
-      <Search  userType={'client'}/>
+      <NavbarGlobal
+        navData={clientNavData}
+        username="Arsalan Bashir"
+        avatarUrl="path-to-avatar.jpg"
+        isLanding={false}
+      />
+      <Search userType={"client"} setFilteredPosts={setFilteredPosts} />{" "}
+  
       <Box p={4}>
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-          {lawyerData.map((data, index) => (
-            <LawyerCard key={index} lawyer={data} />
-          ))}
-        </SimpleGrid>
+        {loading ? (
+          <Flex justify="center" align="center" minHeight="50vh">
+            <Spinner size="xl" color="red.500" />
+          </Flex>
+        ) : (
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+            {(filteredPosts && filteredPosts?.length > 0 ? filteredPosts : lawyers)?.map((data, index) => (
+              <LawyerCard key={index} lawyer={data} />
+            ))}
+          </SimpleGrid>
+        )}
       </Box>
     </>
   );

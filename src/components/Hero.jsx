@@ -11,8 +11,8 @@ import {
   SlideFade,
   ScaleFade,
 } from "@chakra-ui/react";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
-import { FaAngleRight, FaChevronLeft } from "react-icons/fa6";
+import { FaChevronLeft } from "react-icons/fa6";
+import { FaAngleRight } from "react-icons/fa6";
 
 const images = [
   {
@@ -34,12 +34,17 @@ const images = [
     id: 4,
     src: "https://images.unsplash.com/photo-1436450412740-6b988f486c6b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Image 4",
-  }
+  },
 ];
 
 const Hero = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const pxValue = useBreakpointValue({ base: 4, md: 8 });
+  const plValue = useBreakpointValue({ base: 4, md: 16 });
+  const headingFontSize = useBreakpointValue({ base: "2xl", md: "4xl" });
+  const descriptionFontSize = useBreakpointValue({ base: "md", md: "md" });
 
   const handleNext = () => {
     setIsTransitioning(true);
@@ -135,43 +140,24 @@ const Hero = () => {
                 p={4}
                 ml={"100px"}
                 bg="rgba(0, 0, 0, 0.5)"
-                px={paddingX}
+                px={pxValue}
                 textAlign="left"
-                pl={paddingLeft}
+                pl={plValue}
               >
-                <Text
-                  fontSize={headingFontSize}
-                  fontWeight="500"
-                  color="white"
-                  mb={4}
-                >
+                <Text fontSize={headingFontSize} fontWeight="500" color="white" mb={4}>
                   {text.heading}
                 </Text>
-                <Text
-                  fontSize={descriptionFontSize}
-                  color="white"
-                  mb={6}
-                >
+                <Text fontSize={descriptionFontSize} color="white" mb={6}>
                   {text.description}
                 </Text>
                 <Stack direction="row" spacing={4}>
                   <ScaleFade in={true} initialScale={0.8}>
-                    <Button
-                      bg="#9D152D"
-                      color="white"
-                      _hover={{ bg: "red.700" }}
-                      size="md"
-                    >
+                    <Button bg="#9D152D" color="white" _hover={{ bg: "red.700" }} size="md">
                       HIRE NOW
                     </Button>
                   </ScaleFade>
                   <ScaleFade in={true} initialScale={0.8}>
-                    <Button
-                      bg="black"
-                      color="white"
-                      _hover={{ bg: "gray.800" }}
-                      size="md"
-                    >
+                    <Button bg="black" color="white" _hover={{ bg: "gray.800" }} size="md">
                       LEARN MORE
                     </Button>
                   </ScaleFade>

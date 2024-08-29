@@ -13,17 +13,45 @@ import {
   FormLabel,
   useDisclosure,
   Text,
+  useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { OTPModal } from './OTPModal';
+import { BASE_URL } from '@/Constants';
+
 export const ForgotPasswordModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [email, setEmail] = useState('');
   const [isOTPModalOpen, setIsOTPModalOpen] = useState(false);
+  const toast = useToast();
 
-  const handleEmailSubmit = () => {
-    // Handle email submission logic here
-    console.log('Email submitted:', email);
-    setIsOTPModalOpen(true);
+  const handleEmailSubmit = async () => {
+    try {
+      const res = await axios.post(`${BASE_URL}api/v1/users/forgetPassword`, {
+        email,
+      });
+
+      if (res.status === 200) {
+        toast({
+          title: "OTP Sent",
+          description: "Check your email for the OTP.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setIsOTPModalOpen(true); 
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an issue sending the OTP. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }finally{
+      onClose()
+    }
   };
 
   return (
@@ -60,7 +88,13 @@ export const ForgotPasswordModal = () => {
         </ModalContent>
       </Modal>
 
-      {isOTPModalOpen && <OTPModal isOpen={isOTPModalOpen} onClose={() => setIsOTPModalOpen(false)} />}
+      {isOTPModalOpen && (
+        <OTPModal
+          isOpen={isOTPModalOpen}
+          onClose={() => setIsOTPModalOpen(false)}
+          email={email} 
+        />
+      )}
     </>
   );
 };

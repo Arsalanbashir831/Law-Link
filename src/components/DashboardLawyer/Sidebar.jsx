@@ -3,10 +3,11 @@ import { useState } from "react";
 import { GoLaw } from "react-icons/go";
 import { FaUser, FaPen, FaComments, FaCalendarCheck, FaSignOutAlt } from "react-icons/fa";
 import NavigationItem from "./NavigationItem";
+import { useRouter } from "next/navigation";
 
 const Sidebar = ({ onSelect }) => {
   const [activeTab, setActiveTab] = useState("Personal Data");
-
+const router = useRouter()
   const handleSelect = (tab) => {
     setActiveTab(tab);
     onSelect(tab);
@@ -15,6 +16,10 @@ const Sidebar = ({ onSelect }) => {
   const handleLogout = () => {
     // Handle logout logic here
     // console.log("Logout clicked");
+
+    localStorage.removeItem('token')
+    router.push('/auth')
+
   };
 
 

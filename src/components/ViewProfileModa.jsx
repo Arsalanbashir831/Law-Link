@@ -17,7 +17,6 @@ import {
   Icon,
   Divider,
   useColorModeValue,
-  Flex,
 } from '@chakra-ui/react';
 import { FaUserTie, FaGavel, FaBriefcase } from 'react-icons/fa';
 
@@ -28,15 +27,15 @@ const ViewProfileModal = ({ isOpen, onClose, lawyer }) => {
       <ModalContent>
         <ModalHeader bg={useColorModeValue('red.600', 'gray.700')} borderTopRadius="md">
           <HStack spacing={4}>
-            <Avatar size="lg" src={lawyer.image} name={lawyer.name} />
+            <Avatar size="lg" src={lawyer.user?.profile_pic} name={lawyer.user?.username} />
             <VStack align="start" spacing={0}>
               <Text fontWeight="bold" fontSize="2xl" color={useColorModeValue('white', 'white')}>
-                {lawyer.name}
+                {lawyer.user?.username}
               </Text>
               <HStack spacing={1} alignItems="center">
                 <Icon as={FaUserTie} color="white" />
                 <Text fontSize="md" color={useColorModeValue('white', 'white')}>
-                  {lawyer.specialization}
+                  {lawyer?.post_title}
                 </Text>
               </HStack>
             </VStack>
@@ -50,7 +49,7 @@ const ViewProfileModal = ({ isOpen, onClose, lawyer }) => {
                 Services:
               </Text>
               <HStack spacing={2} wrap="wrap">
-                {lawyer.lawType.map((service, index) => (
+                {lawyer.lawType?.map((service, index) => (
                   <Badge key={index} colorScheme="red" borderRadius="full" px={3} py={1}>
                     {service}
                   </Badge>
@@ -66,7 +65,7 @@ const ViewProfileModal = ({ isOpen, onClose, lawyer }) => {
                 </Text>
               </HStack>
               <Text color={useColorModeValue('gray.600', 'gray.400')}>
-                {lawyer.description}
+                {lawyer?.post_description}
               </Text>
             </Box>
             <Divider borderColor={useColorModeValue('gray.300', 'gray.600')} />
@@ -78,7 +77,7 @@ const ViewProfileModal = ({ isOpen, onClose, lawyer }) => {
                 </Text>
               </HStack>
               <Text color={useColorModeValue('gray.600', 'gray.400')}>
-                Over 10 years of experience in {lawyer.specialization}.
+                Over 10 years of experience in {lawyer?.post_title}.
               </Text>
             </Box>
           </VStack>

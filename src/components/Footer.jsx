@@ -47,7 +47,7 @@ const Footer = () => {
             _hover={{ color: hoverTextColor, transform: 'scale(1.05)' }}
           >
             <GoLaw size="32px" color="red.600" />
-            <Text fontWeight="bold" fontSize="2xl" color="red.600">
+            <Text fontWeight="bold" fontSize="2xl" color="white">
               LawLink.pk
             </Text>
           </HStack>
@@ -69,7 +69,8 @@ const Footer = () => {
           w={["100%", "48%", "25%"]}
           mb={[8, 8, 0]}
         >
-          <Heading as="h4" size="md" mb={4} color="#9D152D" fontWeight={"500"}>
+          {/* color="#9D152D"  */}
+          <Heading as="h4" size="md" mb={4} color={"white"} fontWeight={"500"}>
             LAW SERVICES 
           </Heading>
           <Link href="#" fontSize="sm" _hover={{ color: "white" }} color="#9d9d9d">
@@ -95,7 +96,7 @@ const Footer = () => {
           w={["100%", "48%", "25%"]}
           mb={[8, 8, 0]}
         >
-          <Heading as="h4" size="md" mb={4} fontWeight={"500"} color={"#9D152D"}>
+          <Heading as="h4" size="md" mb={4} fontWeight={"500"} color={"white"}>
             CONTACT INFO
           </Heading>
           <Text fontSize="sm" color="#9d9d9d">
@@ -111,7 +112,7 @@ const Footer = () => {
 
 
         <VStack align="flex-start" spacing={4} w={["100%", "50%", "25%"]}>
-          <Heading as="h4" size="md" mb={4} color={"#9D152D"} fontWeight={"500"}>
+          <Heading as="h4" size="md" mb={4} color={"white"} fontWeight={"500"}>
             OUR LOCATION
           </Heading>
           <Box w="100%" h="200px">

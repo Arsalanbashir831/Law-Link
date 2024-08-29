@@ -12,22 +12,23 @@ import {
 
 const faqs = [
   {
-    question: "How can I schedule an appointment with my doctor?",
-    answer: "You can schedule an appointment by logging into our portal and selecting the available time slots. Alternatively, you can contact our clinic directly via phone or email."
+    question: "How can I schedule a consultation with a lawyer?",
+    answer: "You can schedule a consultation by logging into our portal and selecting an available time slot with your preferred lawyer. Alternatively, you can contact our office directly via phone or email to arrange an appointment."
   },
   {
-    question: "Can I reschedule or cancel my appointment?",
-    answer: "Yes, you can reschedule or cancel your appointment through our portal or by contacting the clinic directly. Please do so at least 24 hours before your scheduled time."
+    question: "Can I reschedule or cancel my consultation?",
+    answer: "Yes, you can reschedule or cancel your consultation through our client portal or by contacting our office directly. Please inform us at least 24 hours before your scheduled time to avoid any cancellation fees."
   },
   {
-    question: "Is it possible to schedule virtual or telemedicine appointments?",
-    answer: "Yes, we offer virtual and telemedicine appointments for your convenience. You can select this option when scheduling your appointment online."
+    question: "Do you offer virtual consultations or tele-legal services?",
+    answer: "Yes, we offer virtual consultations and tele-legal services for your convenience. You can select this option when booking your consultation online, allowing you to connect with our lawyers from anywhere."
   },
   {
-    question: "How can I contact the clinic for further assistance or questions about my appointment?",
-    answer: "You can contact our clinic through the contact page on our website, or by calling our customer support team directly."
+    question: "How can I contact the firm for further assistance or questions regarding my case?",
+    answer: "You can contact our firm through the contact page on our website, or by calling our office directly. Our team is available to assist you with any questions or concerns about your case or consultation."
   }
 ];
+
 
 const Faq = () => {
   return (

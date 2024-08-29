@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+"use client";
+
+import React, { useState, useContext } from "react";
 import {
   Box,
   Input,
@@ -10,48 +11,87 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  useColorModeValue
-} from '@chakra-ui/react';
-import { FiFilter, FiSearch, FiX } from 'react-icons/fi';
-import { LawyerTypeState, SearchState } from '@/atoms/SearchState';
-import FiltersModal from './FiltersModal'; 
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { FiFilter, FiSearch, FiX } from "react-icons/fi";
+import { AuthContext } from "@/services/AuthProvider";
+import { BASE_URL } from "@/Constants";
+import FiltersModal from "./FiltersModal";
 
-const Search = ({ userType }) => {
-  const [searchQuery, setSearchQuery] = useRecoilState(SearchState);
-  const [lawyerType, setLawyerType] = useRecoilState(LawyerTypeState);
+const Search = ({ userType, setFilteredPosts }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const { token } = useContext(AuthContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [inputValues, setInputValues] = useState({
-    searchQuery,
-    lawyerType,
+    searchQuery: "",
   });
 
-  const searchIconColor = useColorModeValue("gray.500", "gray.300");
-  const inputBgColor = useColorModeValue("white", "gray.700");
+  // Move useColorModeValue hook calls to the top level
+  const bg = useColorModeValue("gray.50", "gray.800");
+  const inputBg = useColorModeValue("white", "gray.700");
+  const iconColor = useColorModeValue("gray.500", "gray.300");
   const placeholderColor = useColorModeValue("gray.500", "gray.400");
-  const clearIconColor = useColorModeValue("gray.500", "gray.300");
-  const boxBgColor = useColorModeValue("gray.50", "gray.800");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSearch = () => {
-    setSearchQuery(inputValues.searchQuery);
-    setLawyerType(inputValues.lawyerType);
-    console.log(`Searching for ${inputValues.searchQuery} with lawyer type ${inputValues.lawyerType}`);
+  const handleSearch = async () => {
+    const payload = {
+      prompt: inputValues.searchQuery,
+    };
+
+    try {
+      const response = await fetch(`${BASE_URL}api/v1/lawyer/aiSearchPost`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      console.log("Search results:", data);
+      setFilteredPosts(data.posts); // Update filtered posts in Page component
+    } catch (error) {
+      console.error("Error during search:", error);
+    }
+  };
+
+  const handleApplyFilters = async (filters) => {
+    const payload = {
+      lawType: filters.services,
+    };
+
+    try {
+      const response = await fetch(`${BASE_URL}api/v1/lawyer/aiSearchPost`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      console.log("Filter results:", data);
+      setFilteredPosts(data.posts); 
+    } catch (error) {
+      console.error("Error during filter:", error);
+    }
   };
 
   const handleClear = () => {
+    setFilteredPosts(null); 
     setInputValues({
-      searchQuery: '',
-      lawyerType: '',
+      searchQuery: "",
     });
   };
 
   return (
-    <Box p={6} boxShadow="lg" bg={boxBgColor} borderRadius="lg" mb={6}>
+    <Box p={6} boxShadow="lg" bg={bg} borderRadius="lg" mb={6}>
       <HStack spacing={4} width="full">
         <InputGroup>
           <InputLeftElement pointerEvents="none">
@@ -61,17 +101,17 @@ const Search = ({ userType }) => {
               aria-label="Search icon"
               variant="unstyled"
               fontSize="lg"
-              color={searchIconColor}
+              color={iconColor}
               pointerEvents="none"
             />
           </InputLeftElement>
           <Input
             name="searchQuery"
-            placeholder={`Search for ${userType === 'lawyer' ? 'lawyers' : 'clients'}, services...`}
+            placeholder={`Search for ${userType === "lawyer" ? "lawyers" : "clients"}, services...`}
             value={inputValues.searchQuery}
             onChange={handleChange}
             focusBorderColor="red.500"
-            bg={inputBgColor}
+            bg={inputBg}
             borderRadius="full"
             pl={10}
             pr={10}
@@ -85,7 +125,7 @@ const Search = ({ userType }) => {
                 aria-label="Clear search"
                 variant="unstyled"
                 onClick={handleClear}
-                color={clearIconColor}
+                color={iconColor}
               />
             )}
           </InputRightElement>
@@ -99,18 +139,17 @@ const Search = ({ userType }) => {
           borderRadius="full"
           fontSize="lg"
         />
-        <Button
-          colorScheme="red"
-          onClick={handleSearch}
-          borderRadius="full"
-          px={8}
-          fontSize="lg"
-        >
+        <Button colorScheme="red" onClick={handleSearch} borderRadius="full" px={8} fontSize="lg">
           Search
         </Button>
       </HStack>
 
-      <FiltersModal isOpen={isOpen} onClose={onClose} userType={userType} />
+      <FiltersModal
+        isOpen={isOpen}
+        onClose={onClose}
+        userType={userType}
+        applyFilters={handleApplyFilters} 
+      />
     </Box>
   );
 };
