@@ -43,8 +43,7 @@ const Hero = () => {
 
   const pxValue = useBreakpointValue({ base: 4, md: 8 });
   const plValue = useBreakpointValue({ base: 4, md: 16 });
-  const headingFontSize = useBreakpointValue({ base: "2xl", md: "4xl" });
-  const descriptionFontSize = useBreakpointValue({ base: "md", md: "md" });
+
 
   const handleNext = () => {
     setIsTransitioning(true);
