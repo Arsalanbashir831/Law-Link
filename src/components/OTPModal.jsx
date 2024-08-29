@@ -15,6 +15,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { ResetPasswordModal } from './ResetPasswordModal';
+import { BASE_URL } from '@/Constants';
 
 export const OTPModal = ({ isOpen, onClose, email }) => {
   const [otp, setOtp] = useState(new Array(6).fill(''));
@@ -34,12 +35,30 @@ export const OTPModal = ({ isOpen, onClose, email }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const otpValue = otp.join('');
     console.log('OTP submitted:', otpValue);
-
-    // Assume OTP verification is successful
+try {
+  const response = await fetch(`${BASE_URL}api/v1/users/verifyOtp`,{
+    method:'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: email,
+      otp: otpValue,
+    }),
+  })
+  console.log(response.status);
+  
+  if (response.status===200) {
     setIsResetPasswordModalOpen(true);
+  }
+} catch (error) {
+  console.log(error);
+  
+}
+ 
   };
 
   return (

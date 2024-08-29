@@ -74,7 +74,12 @@ const Login = ({ setIsLoginPage }) => {
           duration: 5000,
           isClosable: true,
         });
-        navigate.push('/FindLawyer');
+        if (user.type==='client') {
+          navigate.push('/FindLawyer');
+        }else{
+          navigate.push('/dashboard');
+        }
+       
       }
     } catch (error) {
       toast({

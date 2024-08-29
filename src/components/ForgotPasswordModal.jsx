@@ -49,6 +49,8 @@ export const ForgotPasswordModal = () => {
         duration: 5000,
         isClosable: true,
       });
+    }finally{
+      onClose()
     }
   };
 

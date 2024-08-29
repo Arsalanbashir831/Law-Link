@@ -35,7 +35,6 @@ export const ResetPasswordModal = ({ isOpen, onClose, email, otp }) => {
     try {
       const res = await axios.post(`${BASE_URL}api/v1/users/resetPassword`, {
         email,
-        otp,
         newPassword,
       });
 
@@ -46,7 +45,7 @@ export const ResetPasswordModal = ({ isOpen, onClose, email, otp }) => {
           duration: 5000,
           isClosable: true,
         });
-        onClose();
+        
       }
     } catch (error) {
       toast({
@@ -56,6 +55,8 @@ export const ResetPasswordModal = ({ isOpen, onClose, email, otp }) => {
         duration: 5000,
         isClosable: true,
       });
+    }finally{
+      onClose();
     }
   };
 
