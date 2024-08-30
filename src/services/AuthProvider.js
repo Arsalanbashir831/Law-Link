@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
       
     }
   }, []);
-  //to call when user navigates without to token these routes
+ 
   useEffect(() => {
     const protectedRoutes = [
       '/FindLawyer',
@@ -41,9 +41,9 @@ export const AuthProvider = ({ children }) => {
       }
     } else if (user) {
       
-      if (user.type === 'lawyer' && pathname !== '/dashboard') {
+      if (user?.type === 'lawyer' && pathname !== '/dashboard') {
         router.push('/dashboard'); 
-      } else if (user.type === 'client' && pathname === '/dashboard') {
+      } else if (user?.type === 'client' && pathname === '/dashboard') {
         router.push('/FindLawyer'); 
       }
     }

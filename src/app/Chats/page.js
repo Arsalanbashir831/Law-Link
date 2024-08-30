@@ -8,14 +8,14 @@ import React from 'react'
 
 
 const Page = () => {
-  const {selectedLawyer} = useChatContext(); 
+  const {selectedLawyer , setSelectedLawyer} = useChatContext(); 
   return (
     <>
       <ClientNav />
       <Flex>
-        <ChatSidebar />
+        <ChatSidebar selectedLawyer={selectedLawyer} setSelectedLawyer={setSelectedLawyer} />
         <Box flex="1" height="calc(100vh - 64px)"> 
-          <ChatBox selectedLawyer={selectedLawyer} />
+          <ChatBox selectedLawyer={selectedLawyer}  />
         </Box>
       </Flex>
     </>

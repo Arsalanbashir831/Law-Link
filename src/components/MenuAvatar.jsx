@@ -50,10 +50,10 @@ const MenuAvatar = ({ username = 'Muhammad', avatarUrl }) => {
           Profile
         </MenuItem>
         <MenuItem
-          onClick={() => router.push('/settings')}
+          onClick={() => router.push(user?.type==='client'?"/FindLawyer":"/dashboard")}
           _hover={{ bg: useColorModeValue('red.50', 'gray.700'), color: 'red.600' }}
         >
-          Settings
+         {user?.type ==='client'?"Hire Laywer":"Dashboard"}
         </MenuItem>
         <MenuItem
           onClick={() => router.push('/logout')}

@@ -1,22 +1,46 @@
 'use client'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, HStack, Text, Avatar, Icon, VStack } from '@chakra-ui/react';
 import { useRecoilState } from 'recoil';
 import { selectedUserState } from '@/atoms/SelectedUserState';
 import { FaCheckCircle } from 'react-icons/fa';
+import { BASE_URL } from '@/Constants';
 
-const users = [
-  { id: 1, name: 'John Doe', avatarUrl: 'https://bit.ly/dan-abramov' },
-  { id: 2, name: 'Jane Smith', avatarUrl: 'https://bit.ly/code-beast' },
-  { id: 3, name: 'Alice Johnson', avatarUrl: 'https://bit.ly/prosper-baba' },
-  { id: 4, name: 'Robert Brown', avatarUrl: 'https://bit.ly/ryan-florence' },
-  { id: 5, name: 'Emily White', avatarUrl: 'https://bit.ly/sage-adebayo' },
-  { id: 6, name: 'Michael Green', avatarUrl: 'https://bit.ly/kent-c-dodds' },
-];
+
+
+// const users = [
+//   { id: 1, name: 'John Doe', avatarUrl: 'https://bit.ly/dan-abramov' },
+//   { id: 2, name: 'Jane Smith', avatarUrl: 'https://bit.ly/code-beast' },
+//   { id: 3, name: 'Alice Johnson', avatarUrl: 'https://bit.ly/prosper-baba' },
+//   { id: 4, name: 'Robert Brown', avatarUrl: 'https://bit.ly/ryan-florence' },
+//   { id: 5, name: 'Emily White', avatarUrl: 'https://bit.ly/sage-adebayo' },
+//   { id: 6, name: 'Michael Green', avatarUrl: 'https://bit.ly/kent-c-dodds' },
+// ];
 
 const TopbarChat = () => {
   const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
-
+const [users, setUsers] = useState([])
+  useEffect(()=>{
+    const fetchChatUsers = async()=>{
+      const token = localStorage.getItem('token')
+      try {
+        const response = await fetch(`${BASE_URL}api/v1/chats/getChats`,{
+          headers:{
+            "Content-Type":'application/json',
+            Authorization:`Bearer ${token}`
+          }
+        })
+        const data = await response.json()
+        if (response.status===200) {
+          setUsers(data.users)
+        }
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    fetchChatUsers()
+  },[])
   const handleUserSelect = (user) => {
     setSelectedUser(user);
   };
@@ -50,26 +74,26 @@ const TopbarChat = () => {
         Chat Users
       </Text>
       <HStack spacing={4} align="center">
-        {users.map((user) => (
+        {users?.map((user) => (
           <Box
-            key={user.id}
-            p={selectedUser?.id === user.id ? 3 : 2}
-            bg={selectedUser?.id === user.id ? 'red.50' : 'white'}
+            key={user._id}
+            p={selectedUser?._id === user._id ? 3 : 2}
+            bg={selectedUser?._id === user._id ? 'red.50' : 'white'}
             borderRadius="full"
-            boxShadow={selectedUser?.id === user.id ? 'lg' : 'md'}
-            _hover={{ bg: 'gray.100', cursor: 'pointer', transform: selectedUser?.id !== user.id ? 'scale(1.05)' : undefined }}
+            boxShadow={selectedUser?._id === user._id ? 'lg' : 'md'}
+            _hover={{ bg: 'gray.100', cursor: 'pointer', transform: selectedUser?._id !== user._id ? 'scale(1.05)' : undefined }}
             alignItems="center"
             onClick={() => handleUserSelect(user)}
             transition="all 0.2s ease-in-out"
-            minW={selectedUser?.id === user.id ? '150px' : '60px'}
-            maxW={selectedUser?.id === user.id ? '150px' : '60px'}
+            minW={selectedUser?._id === user._id ? '150px' : '60px'}
+            maxW={selectedUser?._id === user._id ? '150px' : '60px'}
           >
             <HStack spacing={2}>
-              <Avatar src={user.avatarUrl} name={user.name} size={selectedUser?.id === user.id ? 'md' : 'sm'} />
-              {selectedUser?.id === user.id && (
+              <Avatar src={user.profilePic} name={user.username} size={selectedUser?._id === user._id ? 'md' : 'sm'} />
+              {selectedUser?._id === user._id && (
                 <>
                   <Text align={'center'} fontSize="sm" fontWeight="bold" color="red.600">
-                    {user.name}
+                    {user.username}
                   </Text>
                   <Icon as={FaCheckCircle} color="red.600" boxSize={4} />
                 </>

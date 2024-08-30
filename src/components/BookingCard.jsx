@@ -15,15 +15,17 @@ import {
   IconButton,
   Divider,
   useDisclosure,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FaDollarSign, FaMapMarkerAlt, FaInfoCircle, FaBookmark, FaStar } from 'react-icons/fa';
-import ReviewModal from './ReviewModal'; 
+import ReviewModal from './ReviewModal';
 
 const BookingCard = ({ booking, buttonType = 'Details' }) => {
   const bgColor = useColorModeValue('orange.50', 'gray.700');
   const textColor = useColorModeValue('black', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
+console.log("is rated",booking.isRatedBooking);
+
   const handleButtonClick = () => {
     if (buttonType === 'Review') {
       onOpen();
@@ -71,13 +73,12 @@ const BookingCard = ({ booking, buttonType = 'Details' }) => {
                 {booking?.description || 'Law Firm Name'}
               </Text>
             </VStack>
-            
           </HStack>
 
           <Divider />
 
           <HStack spacing={2} w="full" wrap="wrap">
-            {booking?.tags.map((tag, index) => (
+            {booking?.services?.map((tag, index) => (
               <Badge key={index} colorScheme="gray" borderRadius="md" px={2} py={1}>
                 {tag}
               </Badge>
@@ -98,16 +99,18 @@ const BookingCard = ({ booking, buttonType = 'Details' }) => {
             </Text>
           </Flex>
 
-          <Button
-            colorScheme="red"
-            size="sm"
-            rightIcon={buttonType === 'Details' ? <FaInfoCircle /> : <FaStar />}
-            alignSelf="flex-end"
-            mt={4}
-            onClick={handleButtonClick}
-          >
-            <Text color={"white"}>{buttonType}</Text>
-          </Button>
+          <Flex align="center" w="full" mt={4}>
+            <Tooltip label={booking.isRatedBooking ? 'Review already added' : ''} placement="top">
+              <Button
+                onClick={handleButtonClick}
+                isDisabled={booking.isRatedBooking}
+                colorScheme={booking.isRatedBooking ? 'gray' : 'red'}
+                leftIcon={<FaStar />}
+              >
+                {booking.isRatedBooking ? 'Review Added' : 'Add Review'}
+              </Button>
+            </Tooltip>
+          </Flex>
         </VStack>
       </Box>
       <ReviewModal isOpen={isOpen} onClose={onClose} lawyerId={booking.lawyerId} />

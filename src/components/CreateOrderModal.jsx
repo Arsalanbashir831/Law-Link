@@ -29,16 +29,16 @@ import {
 import { BASE_URL } from "@/Constants";
 import { AuthContext } from "@/services/AuthProvider";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
-const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => {
-  console.log(selectedLawyer?.user?._id);
 
+const CreateOrderModal = ({ isOpen, onClose, selectedLawyer }) => {
   const { token } = useContext(AuthContext);
-  console.log(token);
   const toast = useToast();
+  const router = useRouter()
   const [formData, setFormData] = useState({
     lawyerName: "",
-    description: "",
+    location: "",
     amount: "",
     bookingDate: "",
     bookingTime: "",
@@ -59,7 +59,6 @@ const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => 
   };
 
   const handleServiceChange = (service) => {
-  
     setFormData((prevState) => {
       if (prevState.services.includes(service)) {
         return {
@@ -73,7 +72,7 @@ const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => 
   };
 
   const handleSubmit = async () => {
-    if (!formData.lawyerName || !formData.description || !formData.amount || !formData.bookingDate || !formData.bookingTime || formData.services.length === 0) {
+    if ( !formData.location || !formData.amount || !formData.bookingDate || !formData.bookingTime || formData.services.length === 0) {
       toast({
         title: "Please fill in all fields and select at least one service.",
         status: "warning",
@@ -86,12 +85,13 @@ const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => 
     const bookingData = {
       lawyerId: selectedLawyer?.user?._id,
       contractPrice: parseFloat(formData.amount),
-      dateOfAppointment: formData.bookingDate, 
+      dateOfAppointment: formData.bookingDate,
+      timeOfAppointment: formData.bookingTime,
+      location: formData.location,
+      services: formData.services,
     };
 
     try {
-      console.log('Sending booking data:', bookingData); 
-
       const res = await axios.post(
         `${BASE_URL}api/v1/bookings/addBookings`,
         bookingData,
@@ -103,8 +103,6 @@ const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => 
         }
       );
 
-      // console.log('API :', res); 
-
       if (res.status === 200 || res.status === 201) {
         toast({
           title: "Booking created successfully.",
@@ -112,8 +110,8 @@ const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => 
           duration: 3000,
           isClosable: true,
         });
-        onAddBooking({ ...formData, tags: formData.services });
         onClose();
+        router.push('/Bookings')
       } else {
         toast({
           title: "Error creating booking.",
@@ -124,7 +122,7 @@ const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => 
         });
       }
     } catch (error) {
-      console.error('Error :', error.response?.data || error.message); 
+      console.error('Error :', error.response?.data || error.message);
 
       toast({
         title: "Error creating booking.",
@@ -144,31 +142,16 @@ const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => 
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={4}>
-            <FormControl id="lawyerName" isRequired>
-              <FormLabel>
-                <Icon as={FaUser} mr={2} />
-                Lawyer Name
-              </FormLabel>
-              <Input
-                placeholder="Enter lawyer name"
-                name="lawyerName"
-                value={formData.lawyerName}
-                onChange={handleInputChange}
-                focusBorderColor="red.500"
-                bg={useColorModeValue("white", "gray.700")}
-                borderRadius="md"
-              />
-            </FormControl>
 
-            <FormControl id="description" isRequired>
+            <FormControl id="location" isRequired>
               <FormLabel>
                 <Icon as={FaFileAlt} mr={2} />
-                Description
+                Location
               </FormLabel>
               <Input
-                placeholder="Enter description"
-                name="description"
-                value={formData.description}
+                placeholder="Enter Location"
+                name="location"
+                value={formData.location}
                 onChange={handleInputChange}
                 focusBorderColor="red.500"
                 bg={useColorModeValue("white", "gray.700")}
@@ -226,7 +209,6 @@ const CreateOrderModal = ({ isOpen, onClose, selectedLawyer, onAddBooking }) => 
                 />
               </FormControl>
             </HStack>
-
 
             <FormControl id="services" isRequired>
               <FormLabel>Services</FormLabel>

@@ -82,8 +82,9 @@ const OrderPage = () => {
                   description: booking.lawyer.email,
                   bookingDate: booking.dateOfAppointment,
                   amount: booking.contractPrice,
-                  location: "San Francisco, CA",
-                  tags: ["Consultation", "Court Representation"], 
+                  location: booking.location,
+                  services: booking.services, 
+                  isRatedBooking:booking.isRatedBooking
                 }}
                 buttonType="Review"
               />

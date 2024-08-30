@@ -84,13 +84,9 @@ const Profile = ({ user }) => {
           @{editableUser?.email}
         </Text>
       </Flex>
-      <Stack spacing={4} w="full" maxW="md" mx="auto">
-        <ProfileDetail icon={FaCalendar} label="Date of Birth" value={editableUser?.dob} />
-        <ProfileDetail icon={FaIdCard} label="CNIC Number" value={editableUser?.cnic} />
-        <ProfileDetail icon={FaPhone} label="Contact Number" value={editableUser?.contactNumber} />
-      </Stack>
+      
       <HStack spacing={4} mt={8} justify="center">
-        <Button
+        {/* <Button
           size="md"
           colorScheme="red"
           borderRadius="full"
@@ -99,7 +95,7 @@ const Profile = ({ user }) => {
           leftIcon={<FaEdit />}
         >
           Edit Profile
-        </Button>
+        </Button> */}
         <Button
           size="md"
           colorScheme="blue"

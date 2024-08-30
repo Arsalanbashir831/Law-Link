@@ -1,25 +1,51 @@
 'use client'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, VStack, Text, Avatar, HStack, Icon } from '@chakra-ui/react';
-import { useRecoilState } from 'recoil';
-import { selectedUserState } from '@/atoms/SelectedUserState';
 import { FaCheckCircle } from 'react-icons/fa';
+import { BASE_URL } from '@/Constants';
 
-const users = [
-  { id: 1, name: 'John Doe', avatarUrl: 'https://bit.ly/dan-abramov' },
-  { id: 2, name: 'Jane Smith', avatarUrl: 'https://bit.ly/code-beast' },
-  { id: 3, name: 'Alice Johnson', avatarUrl: 'https://bit.ly/prosper-baba' },
-  { id: 4, name: 'Robert Brown', avatarUrl: 'https://bit.ly/ryan-florence' },
-  { id: 5, name: 'Emily White', avatarUrl: 'https://bit.ly/sage-adebayo' },
-  { id: 6, name: 'Michael Green', avatarUrl: 'https://bit.ly/kent-c-dodds' },
-];
 
-const ChatSidebar = () => {
-  const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
+const ChatSidebar = ({selectedLawyer , setSelectedLawyer}) => {
+ 
+  const [chatUsers, setChatUsers] = useState([]);
 
   const handleUserSelect = (user) => {
-    setSelectedUser(user);
+    setSelectedLawyer({
+      user:{
+        _id:user._id, 
+        profilePic:user.profilePic,
+        email:user.email,
+        username:user.username
+      }
+    });
   };
+
+  useEffect(() => {
+    const fetchChatUsers = async () => {
+      try {
+        const token = localStorage.getItem("token"); 
+        const response = await fetch(`${BASE_URL}api/v1/chats/getChats`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`, 
+            "Content-Type": "application/json", 
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch chat users");
+        }
+
+        const data = await response.json();
+        console.log("Fetched chat users:", data);
+        setChatUsers(data.users); // Assuming the response has a `users` array
+      } catch (error) {
+        console.error("Error fetching chat users:", error);
+      }
+    };
+
+    fetchChatUsers();
+  }, []);
 
   return (
     <Box
@@ -51,28 +77,28 @@ const ChatSidebar = () => {
         Chat Users
       </Text>
       <VStack spacing={4} align="stretch">
-        {users.map((user) => (
+        {chatUsers.map((user) => (
           <HStack
-            key={user.id}
+            key={user?._id}
             p={3}
-            bg={selectedUser?.id === user.id ? 'red.50' : 'white'}
+            bg={selectedLawyer?.user?._id === user._id ? 'red.50' : 'white'}
             borderRadius="lg"
-            boxShadow={selectedUser?.id === user.id ? 'lg' : 'md'}
+            boxShadow={selectedLawyer?.user?._id === user._id ? 'lg' : 'md'}
             _hover={{ bg: 'gray.100', cursor: 'pointer', transform: 'scale(1.02)' }}
             alignItems="center"
             onClick={() => handleUserSelect(user)}
             transition="all 0.2s ease-in-out"
           >
-            <Avatar src={user.avatarUrl} name={user.name} size="md" />
+            <Avatar src={user.profilePic} name={user.username} size="md" />
             <VStack align="start" spacing={0} flex="1">
-              <Text fontWeight="bold" color={selectedUser?.id === user.id ? 'red.600' : 'gray.800'}>
-                {user.name}
+              <Text fontWeight="bold" color={selectedLawyer?.user?._id === user._id ? 'red.600' : 'gray.800'}>
+                {user.username}
               </Text>
               <Text fontSize="sm" color="gray.500">
-                {selectedUser?.id === user.id ? 'Active now' : 'Last seen recently'}
+                {selectedLawyer?.user?._id === user._id ? 'Active now' : 'Last seen recently'}
               </Text>
             </VStack>
-            {selectedUser?.id === user.id && (
+            {selectedLawyer?.user?._id === user._id && (
               <Icon as={FaCheckCircle} color="red.600" boxSize={5} />
             )}
           </HStack>

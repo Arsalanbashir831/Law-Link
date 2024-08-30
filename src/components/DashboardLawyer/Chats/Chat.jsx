@@ -1,30 +1,87 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useContext, useState,useEffect } from 'react';
 import { Box, VStack, HStack, Text, Input, IconButton, Flex, Avatar, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { FaPaperPlane, FaPlus } from 'react-icons/fa';
 
 import CreateOrderModal from '@/components/CreateOrderModal';
 import TopbarChat from './ChatBar';
+import { io } from "socket.io-client";
+import { AuthContext } from '@/services/AuthProvider';
+import { BASE_URL } from '@/Constants';
+import { selectedUserState } from '@/atoms/SelectedUserState';
+import { useRecoilValue } from 'recoil';
+
 
 export const ChatBoxContent = () => {
-  const [messages, setMessages] = useState([
-    { sender: 'John Doe', text: 'Hi there! How can I help you?', avatar: 'https://bit.ly/dan-abramov' },
-    { sender: 'You', text: 'I need assistance with my order.', avatar: 'https://bit.ly/code-beast' },
-  ]);
+  const { user } = useContext(AuthContext);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [chatId, setChatId] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const selectedUser = useRecoilValue(selectedUserState);
+
+// console.log("Selected User",selectedUser);
+
+
+  useEffect(() => {
+    if (user && selectedUser) {
+      const socket = io(BASE_URL);
+
+      // Join the chat
+      socket.emit("join_chat", {
+        senderId: user.userId,
+        receiverId: selectedUser?._id,
+      });
+
+      // Listen for chat ID
+      socket.on("chat_id", (chatId) => {
+        console.log("Received chat_id:", chatId);
+        setChatId(chatId);
+      });
+
+      // Listen for chat history
+      socket.on("chat_history", (chatHistory) => {
+        const formattedMessages = chatHistory.map((message) => ({
+          userId: message.senderDetails._id,
+          sender: message.senderDetails.username,
+          text: message.content,
+          avatar: message.senderDetails.profilePic,
+        }));
+        setMessages(formattedMessages);
+      });
+
+      // Listen for new messages
+      socket.on("receive_message", (message) => {
+        const newMessage = {
+          userId: message.senderDetails._id,
+          sender: message.senderDetails.username,
+          text: message.content,
+          avatar: message.senderDetails.profilePic,
+        };
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      });
+
+      // Cleanup on unmount
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [user, selectedUser]);
+
+
 
   const handleSendMessage = () => {
     if (input.trim() === '') return;
 
-    const newMessage = { sender: 'You', text: input, avatar: 'https://bit.ly/prosper-baba' };
-    setMessages([...messages, newMessage]);
-
+   
+    const socket = io(BASE_URL);
+    socket.emit("send_message", {
+      chatId,
+      senderId: user.userId,
+      content: input,
+    });
     setInput('');
-    setTimeout(() => {
-      const response = { sender: 'John Doe', text: `I'm here to help you with ${input}`, avatar: 'https://bit.ly/dan-abramov' };
-      setMessages((prevMessages) => [...prevMessages, response]);
-    }, 1000);
+   
   };
 
   const scrollbarTrackColor = useColorModeValue('gray.200', 'gray.600');
@@ -75,18 +132,22 @@ export const ChatBoxContent = () => {
         {messages.map((message, index) => (
           <HStack
             key={index}
-            alignSelf={message.sender === 'You' ? 'flex-end' : 'flex-start'}
-            bg={message.sender === 'You' ? messageBgColorYou : messageBgColorOther}
-            color={message.sender === 'You' ? messageTextColorYou : messageTextColorOther}
+            alignSelf={message.userId != selectedUser._id ? "flex-end" : "flex-start"}
+            bg={message.userId != selectedUser._id ? messageBgColorYou : messageBgColorOther}
+            color={message.userId != selectedUser._id ? messageTextColorYou : messageTextColorOther}
             borderRadius="lg"
             p={4}
             maxWidth="75%"
             spacing={4}
             boxShadow="sm"
           >
-            {message.sender !== 'You' && <Avatar size="sm" src={message.avatar} />}
+            {message.userId === selectedUser._id && (
+              <Avatar size="sm" src={message.profilePic} name={message.sender} />
+            )}
             <Text fontSize="md">{message.text}</Text>
-            {message.sender === 'You' && <Avatar size="sm" src={message.avatar} />}
+            {message.userId != selectedUser._id && (
+              <Avatar size="sm" src={user.profilePic} name={user.username} />
+            )}
           </HStack>
         ))}
       </VStack>
@@ -110,13 +171,7 @@ export const ChatBoxContent = () => {
             onClick={handleSendMessage}
             borderRadius="full"
           />
-          <IconButton
-            colorScheme="blue"
-            aria-label="Create order"
-            icon={<FaPlus />}
-            onClick={onOpen}
-            borderRadius="full"
-          />
+        
         </HStack>
       </Box>
 

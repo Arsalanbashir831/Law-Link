@@ -19,12 +19,12 @@ const Sidebar = ({ selectedOption, setSelectedOption }) => {
           selected={selectedOption === "profile"}
           onClick={() => setSelectedOption("profile")}
         />
-        <SidebarItem
+        {/* <SidebarItem
           label="Change Password"
           icon={FaKey}
           selected={selectedOption === "password"}
           onClick={() => setSelectedOption("password")}
-        />
+        /> */}
       </Stack>
     </Box>
   );

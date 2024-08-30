@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -23,6 +23,7 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import ServicePostCard from "./ServicePostCard"; // Ensure this path is correct
+import { BASE_URL } from "@/Constants";
 
 const CreatePost = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,30 +31,30 @@ const CreatePost = () => {
   const [description, setDescription] = useState("");
   const [service, setService] = useState("");
   const [services, setServices] = useState([]);
-  const [posts, setPosts] = useState([
-    {
-      title: "Corporate Law",
-      description: "Experienced corporate lawyer with over 10 years of practice.",
-      services: ["Contract Drafting", "Business Formation", "Mergers & Acquisitions"],
-    },
-    {
-      title: "Family Law",
-      description: "Specialized in handling family law cases with a compassionate approach.",
-      services: ["Divorce", "Child Custody", "Alimony"],
-    },
-    {
-      title: "Criminal Law",
-      description: "Defending clients in serious criminal charges with a strong legal strategy.",
-      services: ["Drug Offenses", "White Collar Crimes", "Fraud"],
-    },
-    {
-      title: "Intellectual Property Law",
-      description: "Protecting your intellectual property rights with extensive legal expertise.",
-      services: ["Trademark Registration", "Patent Filing", "Copyright Protection"],
-    },
-  ]); 
-
+  const [posts, setPosts] = useState([]);
   const [currentEditIndex, setCurrentEditIndex] = useState(null);
+
+  useEffect(() => {
+    const fetchUserPosts = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(`${BASE_URL}api/v1/lawyer/userPost`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+          setPosts(data);
+        }
+      } catch (error) {
+        setPosts([]);
+      }
+    };
+
+    fetchUserPosts();
+  }, []);
 
   const handleAddService = () => {
     if (service) {
@@ -66,39 +67,69 @@ const CreatePost = () => {
     setServices(services.filter((s) => s !== serviceToRemove));
   };
 
-  const handleSavePost = () => {
-    const newPost = { title, description, services };
+  const handleSavePost = async () => {
+    const token = localStorage.getItem("token");
+    const newPost = { post_title: title, post_description: description, lawType: services };
 
-    if (currentEditIndex !== null) {
-      // Editing an existing post
-      const updatedPosts = posts.map((post, index) =>
-        index === currentEditIndex ? newPost : post
-      );
-      setPosts(updatedPosts);
-    } else {
-      // Adding a new post
-      setPosts([...posts, newPost]);
+    try {
+      const response = await fetch(`${BASE_URL}api/v1/lawyer/posts${currentEditIndex!=null?`/${currentEditIndex}`:""}`, {
+        method: currentEditIndex !== null ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newPost),
+      });
+
+      if (response.ok) {
+        const savedPost = await response.json();
+        if (currentEditIndex !== null) {
+          const updatedPosts = posts.map((post, index) =>
+            index === currentEditIndex ? savedPost : post
+          );
+          setPosts(updatedPosts);
+        } else {
+          setPosts([...posts, savedPost]);
+        }
+        // Clear the form
+        setTitle("");
+        setDescription("");
+        setServices([]);
+        setCurrentEditIndex(null);
+        onClose();
+      }
+    } catch (error) {
+      console.error("Failed to save post:", error);
     }
-
-    // Clear the form
-    setTitle("");
-    setDescription("");
-    setServices([]);
-    setCurrentEditIndex(null);
-    onClose();
   };
 
-  const handleEditPost = (index) => {
-    const post = posts[index];
-    setTitle(post.title);
-    setDescription(post.description);
-    setServices(post.services);
-    setCurrentEditIndex(index);
+  const handleEditPost = (post) => {
+  
+    setTitle(post.post_title);
+    setDescription(post.post_description);
+    setServices(post.lawType);
+    setCurrentEditIndex(post._id);
     onOpen();
   };
 
-  const handleDeletePost = (index) => {
-    setPosts(posts.filter((_, i) => i !== index));
+  const handleDeletePost = async (index) => {
+    const token = localStorage.getItem("token");
+    const postId = index;
+
+    try {
+      const response = await fetch(`${BASE_URL}api/v1/lawyer/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setPosts(posts.filter((_, i) => i !== index));
+      }
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+    }
   };
 
   return (
@@ -113,7 +144,9 @@ const CreatePost = () => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{currentEditIndex !== null ? "Edit Service Post" : "Create a New Service Post"}</ModalHeader>
+          <ModalHeader>
+            {currentEditIndex !== null ? "Edit Service Post" : "Create a New Service Post"}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={4}>
@@ -157,9 +190,7 @@ const CreatePost = () => {
                       colorScheme="red"
                     >
                       <TagLabel>{service}</TagLabel>
-                      <TagCloseButton
-                        onClick={() => handleRemoveService(service)}
-                      />
+                      <TagCloseButton onClick={() => handleRemoveService(service)} />
                     </Tag>
                   ))}
                 </HStack>
@@ -181,16 +212,16 @@ const CreatePost = () => {
       <Heading size="md" mt={5} mb={5}>
         Posts
       </Heading>
-      
+
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
         {posts.map((post, index) => (
           <ServicePostCard
-            key={index}
-            title={post.title}
-            description={post.description}
-            services={post.services}
-            onEdit={() => handleEditPost(index)}
-            onDelete={() => handleDeletePost(index)}
+            key={post._id}
+            title={post.post_title}
+            description={post.post_description}
+            services={post.lawType}
+            onEdit={() => handleEditPost(post)}
+            onDelete={() => handleDeletePost(post._id)}
           />
         ))}
       </SimpleGrid>

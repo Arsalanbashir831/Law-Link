@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Box,
   Image,
@@ -29,8 +29,6 @@ const LawyerCard = ({ lawyer }) => {
   const handleContactClick = (path) => {
     setSelectedLawyer(lawyer);
     router.push(path);
-    console.log("throwing you to chat box");
-    
   };
   return (
     <>
