@@ -8,12 +8,12 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    // Load token and user from local storage initially
+   
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
@@ -73,6 +73,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
       {!loading && children} 
+      {/* added loadfing condition to stop the rendering of the children component if loading is true */}
     </AuthContext.Provider>
   );
 };

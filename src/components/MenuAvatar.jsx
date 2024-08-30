@@ -16,10 +16,12 @@ import { AuthContext } from '@/services/AuthProvider';
 
 const MenuAvatar = ({ username = 'Muhammad', avatarUrl }) => {
   const router = useRouter();
-  const {user} = useContext(AuthContext);
+  const {user, logout} = useContext(AuthContext);
   console.log(user);
 
-  
+  const handleLogout = () => {
+    logout();
+  }
   return (
     <Menu>
       <MenuButton
@@ -56,7 +58,7 @@ const MenuAvatar = ({ username = 'Muhammad', avatarUrl }) => {
          {user?.type ==='client'?"Hire Laywer":"Dashboard"}
         </MenuItem>
         <MenuItem
-          onClick={() => router.push('/logout')}
+          onClick={() => handleLogout()}
           _hover={{ bg: useColorModeValue('red.50', 'gray.700'), color: 'red.600' }}
         >
           Logout

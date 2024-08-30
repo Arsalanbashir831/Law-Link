@@ -27,7 +27,6 @@ const Page = () => {
     { id: 4, label: "Bookings", value: "/Bookings" },
   ];
 
-  // Adjust grid columns based on screen size
   const gridColumns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 3 });
 
   return (
@@ -39,15 +38,12 @@ const Page = () => {
         isLanding={false}
       />
       <Box px={6} py={4} bg="gray.50" minHeight="80vh">
-        {/* Search Heading */}
         <VStack spacing={4} align="start" mb={4}>
           <Heading size="lg" color="red.600">
             Search Your Legal Advisor through AI
           </Heading>
         </VStack>
-
-        {/* Search Box */}
-        <Box p={2} mb={4}>
+        <Box p={2} mb={2}>
           <Search userType={"client"} setFilteredPosts={setFilteredPosts} />
         </Box>
 
@@ -57,7 +53,6 @@ const Page = () => {
           </Flex>
         ) : (
           <>
-            {/* Subheading and Description */}
             <VStack spacing={2} align="start" mb={4}>
               <Heading size="lg" color="red.600">
                 Find Your Ideal Lawyer
@@ -67,7 +62,6 @@ const Page = () => {
               </Text>
             </VStack>
 
-            {/* Lawyer Cards Grid */}
             <SimpleGrid columns={gridColumns} spacing={4}>
               {(filteredPosts && filteredPosts.length > 0
                 ? filteredPosts
