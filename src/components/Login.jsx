@@ -20,9 +20,11 @@ import axios from "axios";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { ForgotPasswordModal } from "./ForgotPasswordModal";
-import { BASE_URL } from "@/Constants";
+
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/services/AuthProvider";
+import { BASE_URL } from "@/Constants";
+
 
 
 const Login = ({ setIsLoginPage }) => {
@@ -64,22 +66,21 @@ const Login = ({ setIsLoginPage }) => {
         }
       );
 
-      if(res.status === 200){
+      if(res.status === 200 ){
         const { user, token } = res.data;
         login(user, token);
-        
+        if (user.type==='client') {
+          navigate.push('/FindLawyer');
+        }else{
+          navigate.push('/dashboard');
+        }
         toast({
           title: "Login Successful",
           status: "success",
           duration: 5000,
           isClosable: true,
         });
-        if (user.type==='client') {
-          navigate.push('/FindLawyer');
-        }else{
-          navigate.push('/dashboard');
-        }
-       
+        
       }
     } catch (error) {
       toast({
@@ -88,6 +89,7 @@ const Login = ({ setIsLoginPage }) => {
         duration: 5000,
         isClosable: true,
       });
+      console.log(error);
     }
   };
 

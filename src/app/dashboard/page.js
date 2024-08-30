@@ -22,7 +22,7 @@ const DashboardPage = () => {
       case "Bookings":
         return <Bookings />;
         case "Logout":
-          return <AuthPage></AuthPage>
+          return <AuthPage/>
       default:
         return <PersonalData />;
     }

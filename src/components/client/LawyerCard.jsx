@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Image,
@@ -11,121 +11,138 @@ import {
   useDisclosure,
   Badge,
   useColorModeValue,
+  Divider,
+  Collapse,
+  IconButton,
 } from "@chakra-ui/react";
-import { FaUserTie, FaGavel, FaPhone } from "react-icons/fa";
-import ViewProfileModal from "../ViewProfileModa";
+import { FaUserTie, FaGavel, FaPhone, FaEllipsisH } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useChatContext } from "@/services/ChatProvider";
-
-
+import ViewProfileModal from "../ViewProfileModa";
 
 const LawyerCard = ({ lawyer }) => {
-
-  console.log(lawyer);
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {setSelectedLawyer} = useChatContext();
+  const { setSelectedLawyer } = useChatContext();
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   const handleContactClick = (path) => {
     setSelectedLawyer(lawyer);
     router.push(path);
   };
+
+  const handleToggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
   return (
     <>
       <Box
         borderWidth="1px"
-        borderRadius="2xl"
+        borderRadius="20px"
         overflow="hidden"
-        boxShadow="2xl"
-        bg={useColorModeValue("white", "gray.900")}
-        p={8}
-        m={5}
-        _hover={{
-          boxShadow: "xl",
-          transform: "translateY(-8px)",
-          transition: "0.3s",
-        }}
-        transition="transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out"
-        bgGradient="linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(66,26,26,1) 35%);"
+        boxShadow="lg"
+        bg={useColorModeValue("white", "gray.800")}
+        p={6}
+        mb={6}
+        width="100%"
+        maxW="480px"
+        mx="auto"
+        transition="all 0.3s"
+        _hover={{ boxShadow: "2xl", transform: "translateY(-5px)" }}
+        bgGradient="linear(to-r, white, gray.50)"
+        borderColor="gray.200"
       >
-        <Flex alignItems="start">
-          <Box pos="relative">
-            <Image
-              borderRadius="full"
-              boxSize="130px"
-              src={lawyer.user?.profile_pic} 
-              alt={lawyer.user?.username} 
-              objectFit="cover"
-              border="4px solid"
-              borderColor="red.600"
-              mr={8}
-              transition="0.3s ease-in-out"
-              _hover={{ transform: "scale(1.05)", boxShadow: "lg" }}
-            />
-          </Box>
-          <VStack align="start" spacing={4} flex={1}>
-            <HStack justifyContent="space-between" width="full">
-              <Text
-                fontWeight="extrabold"
-                fontSize="3xl"
-                color="white"
-              >
-                {lawyer.user?.username}
-              </Text>
-            </HStack>
-            <HStack spacing={3} alignItems="center">
-              <Icon as={FaUserTie} color="red.600" boxSize={6} />
-              <Text fontSize="lg" color="white">
+        {/* Lawyer Header */}
+        <VStack align="start" spacing={1} mb={3}>
+          <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="bold" color="black">
+            {lawyer.user?.username}
+          </Text>
+        </VStack>
+
+        <Flex align="center" mb={4} wrap="wrap">
+          <Image
+            borderRadius="full"
+            boxSize={{ base: "60px", md: "80px" }}
+            src={lawyer.user?.profile_pic || "https://bit.ly/dan-abramov"}
+            alt={lawyer.user?.username}
+            objectFit="cover"
+            border="3px solid"
+            borderColor="red.600"
+            mr={4}
+            _hover={{ transform: "scale(1.05)", transition: "all 0.3s ease" }}
+          />
+          <VStack mt={2} align="start" spacing={1}>
+            <HStack>
+              {/* <Icon as={FaUserTie} color="red.600" boxSize={5} /> */}
+              <Text fontSize="lg" fontWeight={"bold"} color="gray.700">
                 {lawyer?.post_title}
               </Text>
             </HStack>
-            <HStack spacing={3} wrap="wrap">
-              {lawyer.lawType.map((service, index) => (
-                <Badge
-                  key={index}
-                  colorScheme="red"
-                  borderRadius="full"
-                  px={4}
-                  py={2}
-                  textTransform="uppercase"
-                >
-                  {service}
-                </Badge>
-              ))}
-            </HStack>
-            <HStack spacing={3} alignItems="center">
-              <Icon as={FaGavel} color="gray.300" boxSize={5} />
-              <Text fontSize="md" color="gray.300">
-                {lawyer?.post_description}
-              </Text>
-            </HStack>
-            <HStack spacing={3} width="full" justifyContent="space-between" mt={4}>
-              <Button
-                size="md"
-                colorScheme="red"
-                borderRadius="full"
-                onClick={onOpen}
-                _hover={{ bg: "red.700" }}
-                leftIcon={<Icon as={FaUserTie} />}
-              >
-                View Profile
-              </Button>
-              <Button
-                size="md"
-                colorScheme="blue"
-                borderRadius="full"
-                _hover={{ bg: "blue.700" }}
-                leftIcon={<Icon as={FaPhone} />}
-                onClick={() => handleContactClick('/Chats')}
-              
-              >
-                Contact Lawyer
-              </Button>
-            </HStack>
           </VStack>
         </Flex>
-      </Box>
+        <Box mb={4}>
+          <Collapse startingHeight={45} in={showFullDescription}>
+            <Text fontSize="sm" color="gray.700">
+              {lawyer?.post_description}
+            </Text>
+          </Collapse>
+          {lawyer?.post_description?.length > 100 && (
+            <IconButton
+              size="md"
+              variant="ghost"
+              colorScheme="red"
+              icon={<FaEllipsisH />}
+              aria-label="Toggle Description"
+              onClick={handleToggleDescription}
+              _hover={{ bg: "red.100" }}
+            />
+          )}
+        </Box>
 
+        <HStack spacing={2} mb={4} wrap="wrap">
+          {lawyer.lawType.map((service, index) => (
+            <Badge
+              key={index}
+              size="md"
+              variant="subtle"
+              colorScheme="red"
+              borderRadius="full"
+              px={3}
+              py={1}
+              textTransform="uppercase"
+              _hover={{ bg: "red.600", color: "white" }}
+            >
+              {service}
+            </Badge>
+          ))}
+        </HStack>
+
+        <Divider borderColor="gray.300" mb={4} />
+
+        <Flex justifyContent="space-between" wrap="wrap">
+          <Button
+            size="sm"
+            colorScheme="red"
+            borderRadius="full"
+            onClick={onOpen}
+            _hover={{ bg: "red.700" }}
+            leftIcon={<Icon as={FaUserTie} />}
+          >
+            View Profile
+          </Button>
+          <Button
+            size="sm"
+            colorScheme="green"
+            borderRadius="full"
+            _hover={{ bg: "green.700" }}
+            leftIcon={<Icon as={FaPhone} />}
+            onClick={() => handleContactClick("/Chats")}
+          >
+            Contact Lawyer
+          </Button>
+        </Flex>
+      </Box>
       <ViewProfileModal isOpen={isOpen} onClose={onClose} lawyer={lawyer} />
     </>
   );

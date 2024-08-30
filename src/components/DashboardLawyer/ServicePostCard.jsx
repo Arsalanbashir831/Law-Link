@@ -1,89 +1,139 @@
+import React, { useState } from "react";
 import {
-    Box,
-    Text,
-    HStack,
-    Tag,
-    Button,
-    Icon,
-    VStack,
-    Divider,
-  } from "@chakra-ui/react";
-  import { FaUserTie, FaGavel, FaEdit, FaTrashAlt } from "react-icons/fa";
-  
-  const ServicePostCard = ({ title, description, services, onEdit, onDelete }) => {
-    return (
-      <Box
-        bg="red.800"
-        p={6}
-        borderRadius="lg"
-        boxShadow="md"
-        color="white"
-        maxW="lg"
-      >
-        {/* Header Section */}
-        <HStack spacing={2} mb={4} alignItems="center">
-          <Icon as={FaUserTie} boxSize={6} color="red.300" />
-          <Text fontSize="xl" fontWeight="bold">
-            {title}
-          </Text>
+  Box,
+  Text,
+  HStack,
+  Tag,
+  Button,
+  VStack,
+  Divider,
+  Flex,
+  IconButton,
+  Collapse,
+} from "@chakra-ui/react";
+import { FaDollarSign, FaEdit, FaTrashAlt, FaEllipsisH } from "react-icons/fa";
+import { BsFillBriefcaseFill } from "react-icons/bs";
+
+const ServicePostCard = ({
+  title,
+  description,
+  services,
+  price,
+  experienceLevel,
+  postedTime,
+  onEdit,
+  onDelete,
+}) => {
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const handleToggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
+  return (
+    <Box
+      bg="white"
+      p={6}
+      boxShadow="lg"
+      border="1px solid gray.100"
+      width={{ base: "100%", sm: "90%", md: "80%", lg: "100%" }}
+      mx="auto"
+      mb={6}
+      transition="all 0.3s"
+      _hover={{ boxShadow: "2xl", transform: "translateY(-5px)" }}
+      borderRadius={30}
+      color="black"
+    >
+
+      <VStack align="start" spacing={1} mb={3}>
+        <Text fontSize="xl" fontWeight="bold" color="black">
+          {title}
+        </Text>
+        <Text fontSize="sm" color="gray.500">
+          Fixed-price - Posted {postedTime}
+        </Text>
+      </VStack>
+
+
+      <Flex mb={4} justifyContent="space-between" alignItems="center">
+        <HStack spacing={4}>
+          <HStack>
+            <FaDollarSign color="black" />
+            <Text fontSize="sm" color="black">
+              {price}
+            </Text>
+          </HStack>
+          <HStack>
+            <BsFillBriefcaseFill color="black" />
+            <Text fontSize="sm" color="black">
+              {experienceLevel}
+            </Text>
+          </HStack>
         </HStack>
-  
-        <Divider borderColor="red.700" mb={4} />
-  
-        {/* Services Tags */}
-        <HStack spacing={2} mb={4} wrap="wrap">
-          {services.map((service, index) => (
-            <Tag
-              key={index}
-              size="md"
-              variant="subtle"
-              bg="red.100"
-              color="black"
-              borderRadius="full"
-              px={3}
-              py={1}
-            >
-              {service}
-            </Tag>
-          ))}
-        </HStack>
-  
-        {/* Description */}
-        <HStack mb={4} alignItems="start">
-          <Icon as={FaGavel} color="red.300" />
-          <Text fontSize="md" lineHeight="1.5">
+      </Flex>
+      <Box mb={4}>
+        <Collapse startingHeight={45} in={showFullDescription}>
+          <Text fontSize="sm" color="gray.700">
             {description}
           </Text>
-        </HStack>
-  
-        <Divider borderColor="red.700" mb={4} />
-  
-        {/* Action Buttons */}
-        <HStack justifyContent="flex-end" spacing={3}>
-          <Button
-            leftIcon={<FaEdit />}
-            colorScheme="red"
-            variant="outline"
-            size="sm"
-            onClick={onEdit}
-            _hover={{ bg: "red.700", color: "white" }}
-          >
-            Edit
-          </Button>
-          <Button
-            leftIcon={<FaTrashAlt />}
-            colorScheme="blue"
-            variant="solid"
-            size="sm"
-            onClick={onDelete}
-            _hover={{ bg: "blue.600" }}
-          >
-            Delete
-          </Button>
-        </HStack>
+        </Collapse>
+        <IconButton
+          size="md"
+          variant="ghost"
+          colorScheme="red"
+          icon={<FaEllipsisH />}
+          aria-label="Toggle Description"
+          onClick={handleToggleDescription}
+          display={description.length > 100 ? "inline-flex" : "none"}
+        />
       </Box>
-    );
-  };
-  
-  export default ServicePostCard;
-  
+
+      <HStack spacing={2} mb={4} wrap="wrap">
+        {services.map((service, index) => (
+          <Tag
+            key={index}
+            size="md"
+            variant="solid"
+            colorScheme="red"
+            borderRadius="full"
+            px={3}
+            py={1}
+          >
+            {service}
+          </Tag>
+        ))}
+      </HStack>
+
+      <Divider borderColor="gray.300" mb={4} />
+
+      <HStack justifyContent="flex-end" spacing={3}>
+        <Button
+          leftIcon={<FaEdit />}
+          colorScheme="green"
+          variant="solid"
+          size="sm"
+          width="100px"
+          alignSelf="center"
+          fontWeight="medium"
+          onClick={onEdit}
+          _hover={{ bg: "green.600", color: "white" }}
+        >
+          Edit
+        </Button>
+        <Button
+          leftIcon={<FaTrashAlt />}
+          colorScheme="red"
+          variant="solid"
+          size="sm"
+          onClick={onDelete}
+          width="100px"
+          _hover={{ bg: "red.600" }}
+        >
+          Delete
+        </Button>
+      </HStack>
+    </Box>
+  );
+};
+
+export default ServicePostCard;

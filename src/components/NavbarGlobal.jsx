@@ -106,7 +106,7 @@ const NavbarGlobal = ({
                 variant="outline"
                 colorScheme="red.600"
                 _hover={{ bg: 'red', color: 'white' }}
-                onClick={() => handleAuthNavigation('/login')}
+                onClick={() => handleAuthNavigation('/auth')}
               >
                 Login
               </Button>
@@ -116,7 +116,7 @@ const NavbarGlobal = ({
                 color={'white'}
                 variant="solid"
                 _hover={{ bg: 'red', color: 'white' }}
-                onClick={() => handleAuthNavigation('/signup')}
+                onClick={() => handleAuthNavigation('/auth')}
               >
                 Sign Up
               </Button>
@@ -161,7 +161,7 @@ const NavbarGlobal = ({
                   colorScheme="brown"
                   _hover={{ bg: "gray.300" }}
                   width="full"
-                  onClick={() => handleButtonClick("/login")}
+                  onClick={() => handleButtonClick("/auth")}
                 >
                   Login
                 </Button>
@@ -171,7 +171,7 @@ const NavbarGlobal = ({
                   variant="solid"
                   _hover={{ bg: "gray.300" }}
                   width="full"
-                  onClick={() => handleButtonClick("/signup")}
+                  onClick={() => handleButtonClick("/auth")}
                 >
                   Sign Up
                 </Button>

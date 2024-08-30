@@ -1,27 +1,31 @@
 import { Box, VStack, HStack, Text, Divider, Icon } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { GoLaw } from "react-icons/go";
-import { FaUser, FaPen, FaComments, FaCalendarCheck, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaUser,
+  FaPen,
+  FaComments,
+  FaCalendarCheck,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import NavigationItem from "./NavigationItem";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/services/AuthProvider";
 
 const Sidebar = ({ onSelect }) => {
   const [activeTab, setActiveTab] = useState("Personal Data");
-const router = useRouter()
+  const router = useRouter();
   const handleSelect = (tab) => {
     setActiveTab(tab);
     onSelect(tab);
   };
+  const { logout } = useContext(AuthContext);
 
   const handleLogout = () => {
-    // Handle logout logic here
-    // console.log("Logout clicked");
-
-    localStorage.removeItem('token')
-    router.push('/auth')
-
+    // localStorage.removeItem('token')
+    // router.push('/auth')
+    logout();
   };
-
 
   return (
     <Box
@@ -38,8 +42,8 @@ const router = useRouter()
         spacing={3}
         cursor="pointer"
         transition="all 0.2s"
-        _hover={{ color: "brand.200", transform: 'scale(1.05)' }}
-        mb={6} 
+        _hover={{ color: "brand.200", transform: "scale(1.05)" }}
+        mb={6}
         justify="center"
       >
         <Icon as={GoLaw} boxSize="32px" color="black" />

@@ -1,17 +1,14 @@
 "use client";
 
-import React, { useContext, useState } from "react";
-import { Flex, SimpleGrid, Box, Spinner } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Flex, SimpleGrid, Box, Spinner, VStack, Heading, Text } from "@chakra-ui/react";
 import LawyerCard from "@/components/client/LawyerCard";
 import NavbarGlobal from "@/components/NavbarGlobal";
 import Search from "@/components/Search";
 import { useLawyerContext } from "@/services/LawyerPostProvider";
 
-
 const Page = () => {
-  const { lawyers, loading } = useLawyerContext();  
-  console.log(lawyers);
-  
+  const { lawyers, loading } = useLawyerContext();
   const [filteredPosts, setFilteredPosts] = useState(null);
 
   const clientNavData = [
@@ -29,19 +26,37 @@ const Page = () => {
         avatarUrl="path-to-avatar.jpg"
         isLanding={false}
       />
-      <Search userType={"client"} setFilteredPosts={setFilteredPosts} />{" "}
-  
-      <Box p={4}>
+
+
+      <Box p={4} mt={4}>
+        <Search userType={"client"} setFilteredPosts={setFilteredPosts} />
+      </Box>
+
+      <Box px={6} py={4} bg="gray.50" minHeight="80vh">
         {loading ? (
           <Flex justify="center" align="center" minHeight="50vh">
             <Spinner size="xl" color="red.500" />
           </Flex>
         ) : (
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-            {(filteredPosts && filteredPosts?.length > 0 ? filteredPosts : lawyers)?.map((data, index) => (
-              <LawyerCard key={index} lawyer={data} />
-            ))}
-          </SimpleGrid>
+          <>
+
+            <VStack spacing={4} align="start" mb={6}>
+              <Heading size="lg" color="red.700">
+                Find Your Ideal Lawyer
+              </Heading>
+              <Text fontSize="md" color="gray.600">
+                Browse through our list of top-rated lawyers and find the right one for your needs.
+              </Text>
+            </VStack>
+
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 2, lg: 2 }} spacing={6}>
+              {(filteredPosts && filteredPosts.length > 0 ? filteredPosts : lawyers)?.map(
+                (data, index) => (
+                  <LawyerCard key={index} lawyer={data} />
+                )
+              )}
+            </SimpleGrid>
+          </>
         )}
       </Box>
     </>
