@@ -53,25 +53,36 @@ const LawyerCard = ({ lawyer }) => {
         bgGradient="linear(to-r, white, gray.50)"
         borderColor="gray.200"
       >
-        {/* Lawyer Header */}
-        <VStack align="start" spacing={1} mb={3}>
-          <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="bold" color="black">
-            {lawyer.user?.username}
-          </Text>
-        </VStack>
 
+        <VStack align="start" spacing={1} mb={3}>
+          <HStack
+            display={"flex"}
+            justifyContent={"space-between"}
+            width="100%"
+            spacing={4} 
+          >
+            <Text
+              fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="bold"
+              color="black"
+              flex={1} 
+            >
+              {lawyer.user?.username}
+            </Text>
+            <Image
+              borderRadius="full"
+              boxSize={{ base: "60px", md: "80px" }}
+              src={lawyer.user?.profile_pic || "https://bit.ly/dan-abramov"}
+              alt={lawyer.user?.username}
+              objectFit="cover"
+              border="1px solid"
+              // borderColor="red.600"
+              ml={4} 
+              _hover={{ transform: "scale(1.05)", transition: "all 0.3s ease" }}
+            />
+          </HStack>
+        </VStack>
         <Flex align="center" mb={4} wrap="wrap">
-          <Image
-            borderRadius="full"
-            boxSize={{ base: "60px", md: "80px" }}
-            src={lawyer.user?.profile_pic || "https://bit.ly/dan-abramov"}
-            alt={lawyer.user?.username}
-            objectFit="cover"
-            border="3px solid"
-            borderColor="red.600"
-            mr={4}
-            _hover={{ transform: "scale(1.05)", transition: "all 0.3s ease" }}
-          />
           <VStack mt={2} align="start" spacing={1}>
             <HStack>
               {/* <Icon as={FaUserTie} color="red.600" boxSize={5} /> */}
