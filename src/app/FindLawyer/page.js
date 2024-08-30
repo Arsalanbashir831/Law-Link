@@ -9,6 +9,7 @@ import {
   VStack,
   Heading,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import LawyerCard from "@/components/client/LawyerCard";
 import NavbarGlobal from "@/components/NavbarGlobal";
@@ -26,6 +27,9 @@ const Page = () => {
     { id: 4, label: "Bookings", value: "/Bookings" },
   ];
 
+  // Adjust grid columns based on screen size
+  const gridColumns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 3 });
+
   return (
     <>
       <NavbarGlobal
@@ -34,14 +38,16 @@ const Page = () => {
         avatarUrl="path-to-avatar.jpg"
         isLanding={false}
       />
-      <Box px={6} py={3} bg="gray.50" minHeight="80vh">
-        <VStack spacing={4} align="start" mb={2}>
+      <Box px={6} py={4} bg="gray.50" minHeight="80vh">
+        {/* Search Heading */}
+        <VStack spacing={4} align="start" mb={4}>
           <Heading size="lg" color="red.600">
             Search Your Legal Advisor through AI
           </Heading>
         </VStack>
 
-        <Box p={1} mt={1}>
+        {/* Search Box */}
+        <Box p={2} mb={4}>
           <Search userType={"client"} setFilteredPosts={setFilteredPosts} />
         </Box>
 
@@ -51,17 +57,18 @@ const Page = () => {
           </Flex>
         ) : (
           <>
-            <VStack spacing={4} align="start" mb={6}>
+            {/* Subheading and Description */}
+            <VStack spacing={2} align="start" mb={4}>
               <Heading size="lg" color="red.600">
                 Find Your Ideal Lawyer
               </Heading>
               <Text fontSize="md" color="gray.600">
-                Browse through our list of top-rated lawyers and find the right
-                one for your needs.
+                Browse through our list of top-rated lawyers and find the right one for your needs.
               </Text>
             </VStack>
 
-            <SimpleGrid columns={{ base: 1, sm: 2, md: 2, lg: 2 }} spacing={2}>
+            {/* Lawyer Cards Grid */}
+            <SimpleGrid columns={gridColumns} spacing={4}>
               {(filteredPosts && filteredPosts.length > 0
                 ? filteredPosts
                 : lawyers

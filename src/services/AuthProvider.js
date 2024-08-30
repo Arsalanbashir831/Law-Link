@@ -8,21 +8,26 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // New loading state
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
+    // Load token and user from local storage initially
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
+
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
-      console.log(user);
-      console.log(token);
     }
+    setLoading(false); 
   }, []);
 
   useEffect(() => {
+    
+    if (loading) return;
+
     const protectedRoutes = [
       "/FindLawyer",
       "/LegalGpt",
@@ -43,15 +48,12 @@ export const AuthProvider = ({ children }) => {
         router.push("/FindLawyer");
       }
     }
-  }, [token, user, pathname, router]);
-
+  }, [token, user, pathname, router, loading]); 
   const login = (userData, userToken) => {
     localStorage.setItem("token", userToken);
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
     setToken(userToken);
-    console.log(userData.username);
-    console.log(userData);
 
     if (userData.type === "lawyer") {
       router.push("/dashboard");
@@ -70,7 +72,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
-      {children}
+      {!loading && children} 
     </AuthContext.Provider>
   );
 };
