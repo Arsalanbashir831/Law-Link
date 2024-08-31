@@ -14,8 +14,9 @@ import {
   Divider,
   Collapse,
   IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
-import { FaUserTie, FaGavel, FaPhone, FaEllipsisH } from "react-icons/fa";
+import { FaUserTie, FaGavel, FaPhone, FaEllipsisH, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useChatContext } from "@/services/ChatProvider";
 import ViewProfileModal from "../ViewProfileModa";
@@ -53,20 +54,9 @@ const LawyerCard = ({ lawyer }) => {
         bgGradient="linear(to-r, white, gray.50)"
         borderColor="gray.200"
       >
-
         <VStack align="start" spacing={1} mb={3}>
-          <HStack
-            display={"flex"}
-            justifyContent={"space-between"}
-            width="100%"
-            spacing={4} 
-          >
-            <Text
-              fontSize={{ base: "lg", md: "xl" }}
-              fontWeight="bold"
-              color="black"
-              flex={1} 
-            >
+          <HStack display={"flex"} justifyContent={"space-between"} width="100%" spacing={4}>
+            <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="bold" color="black" flex={1}>
               {lawyer.user?.username}
             </Text>
             <Image
@@ -76,22 +66,22 @@ const LawyerCard = ({ lawyer }) => {
               alt={lawyer.user?.username}
               objectFit="cover"
               border="1px solid"
-              // borderColor="red.600"
-              ml={4} 
+              ml={4}
               _hover={{ transform: "scale(1.05)", transition: "all 0.3s ease" }}
             />
           </HStack>
         </VStack>
+
         <Flex align="center" mb={4} wrap="wrap">
           <VStack mt={2} align="start" spacing={1}>
             <HStack>
-              {/* <Icon as={FaUserTie} color="red.600" boxSize={5} /> */}
-              <Text fontSize="lg" fontWeight={"bold"} color="gray.700">
+              <Text fontSize="lg" fontWeight={"bold"} color="red.700">
                 {lawyer?.post_title}
               </Text>
             </HStack>
           </VStack>
         </Flex>
+
         <Box mb={4}>
           <Collapse startingHeight={45} in={showFullDescription}>
             <Text fontSize="sm" color="gray.700">
@@ -128,6 +118,23 @@ const LawyerCard = ({ lawyer }) => {
             </Badge>
           ))}
         </HStack>
+        <Flex alignItems="center" mb={4}>
+          <HStack spacing={1}>
+            <Tooltip label={`${lawyer?.user?.avgRating} / 5`} aria-label="Average Rating">
+              <HStack>
+                {Array.from({ length: Math.floor(lawyer?.user?.avgRating) }).map((stars, i) => (
+                  <Icon key={i} as={FaStar} color="yellow.400" boxSize={4} />
+                ))}
+                {lawyer?.user?.avgRating % 1 !== 0 && (
+                  <Icon as={FaStarHalfAlt} color="yellow.400" boxSize={4} />
+                )}
+              </HStack>
+            </Tooltip>
+            <Text fontSize="sm" color="gray.600">
+              ({lawyer?.user?.ratingCount} {lawyer?.user?.ratingCount > 1 ? "ratings" : "rating"})
+            </Text>
+          </HStack>
+        </Flex>
 
         <Divider borderColor="gray.300" mb={4} />
 

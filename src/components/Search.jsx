@@ -12,6 +12,7 @@ import {
   InputLeftElement,
   InputRightElement,
   useColorModeValue,
+  filter,
 } from "@chakra-ui/react";
 import { FiFilter, FiSearch, FiX } from "react-icons/fi";
 import { AuthContext } from "@/services/AuthProvider";
@@ -26,7 +27,6 @@ const Search = ({ userType, setFilteredPosts }) => {
     searchQuery: "",
   });
 
-  // Move useColorModeValue hook calls to the top level
   const bg = useColorModeValue("gray.50", "gray.800");
   const inputBg = useColorModeValue("white", "gray.700");
   const iconColor = useColorModeValue("gray.500", "gray.300");
@@ -54,7 +54,9 @@ const Search = ({ userType, setFilteredPosts }) => {
 
       const data = await response.json();
       console.log("Search results:", data);
-      setFilteredPosts(data.posts); // Update filtered posts in Page component
+      setFilteredPosts(data.posts);
+      console.log(filteredPosts);
+      
     } catch (error) {
       console.error("Error during search:", error);
     }
@@ -62,9 +64,9 @@ const Search = ({ userType, setFilteredPosts }) => {
 
   const handleApplyFilters = async (filters) => {
     const payload = {
-      lawType: filters.services,
+      lawType: filters.lawyerType ? [filters.lawyerType.toLowerCase()] : [],
     };
-
+    console.log(payload)
     try {
       const response = await fetch(`${BASE_URL}api/v1/lawyer/aiSearchPost`, {
         method: "POST",
@@ -77,14 +79,15 @@ const Search = ({ userType, setFilteredPosts }) => {
 
       const data = await response.json();
       console.log("Filter results:", data);
-      setFilteredPosts(data.posts); 
+      setFilteredPosts(data.posts);
+      console.log(filteredPosts);
     } catch (error) {
       console.error("Error during filter:", error);
     }
   };
 
   const handleClear = () => {
-    setFilteredPosts(null); 
+    setFilteredPosts(null);
     setInputValues({
       searchQuery: "",
     });
@@ -139,8 +142,23 @@ const Search = ({ userType, setFilteredPosts }) => {
           borderRadius="full"
           fontSize="lg"
         />
-        <Button colorScheme="red" onClick={handleSearch} borderRadius="full" px={8} fontSize="lg">
+        <Button
+          colorScheme="red"
+          onClick={handleSearch}
+          borderRadius="full"
+          px={8}
+          fontSize="lg"
+        >
           Search
+        </Button>
+        <Button
+          colorScheme="gray"
+          onClick={handleClear}
+          borderRadius="full"
+          px={6}
+          fontSize="lg"
+        >
+          Show All
         </Button>
       </HStack>
 
@@ -148,7 +166,7 @@ const Search = ({ userType, setFilteredPosts }) => {
         isOpen={isOpen}
         onClose={onClose}
         userType={userType}
-        applyFilters={handleApplyFilters} 
+        applyFilters={handleApplyFilters}
       />
     </Box>
   );
