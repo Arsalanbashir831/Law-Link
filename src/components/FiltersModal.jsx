@@ -104,7 +104,7 @@ const FiltersModal = ({ isOpen, onClose, userType, applyFilters }) => {
                     borderRadius="md"
                   >
                     <option value="All">All</option>
-                    <option value="Criminal">Criminal</option>
+                    <option value="crime">Criminal</option>
                     <option value="Corporate">Corporate</option>
                     <option value="Family">Family</option>
                     <option value="Immigration">Immigration</option>
