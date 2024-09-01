@@ -68,7 +68,7 @@ const LegalGpt = () => {
     setMessages((prevMessages) => [...prevMessages, loadingMessage]);
 
     try {
-      const response = await fetch(`${BASE_URL}/api/v1/users/legalGPT`, {
+      const response = await fetch(`${BASE_URL}api/v1/users/legalGPT`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
