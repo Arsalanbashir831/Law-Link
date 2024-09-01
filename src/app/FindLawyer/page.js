@@ -29,11 +29,14 @@ const Page = () => {
 
   const gridColumns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 3 });
 
+
+  const isNoResults =
+    filteredPosts !== null && filteredPosts?.length === 0;
+
   return (
     <>
       <NavbarGlobal
         navData={clientNavData}
-        username="Arsalan Bashir"
         avatarUrl="path-to-avatar.jpg"
         isLanding={false}
       />
@@ -54,22 +57,32 @@ const Page = () => {
         ) : (
           <>
             <VStack spacing={2} align="start" mb={4}>
-              <Heading size="lg" color="red.600">
+              <Heading size="md" color="red.600">
                 Find Your Ideal Lawyer
               </Heading>
-              <Text fontSize="md" color="gray.600">
+              <Text fontSize="sm" color="gray.600">
                 Browse through our list of top-rated lawyers and find the right one for your needs.
               </Text>
             </VStack>
 
-            <SimpleGrid columns={gridColumns} spacing={4}>
-              {(filteredPosts && filteredPosts.length > 0
-                ? filteredPosts
-                : lawyers
-              )?.map((data, index) => (
-                <LawyerCard key={index} lawyer={data} />
-              ))}
-            </SimpleGrid>
+            {isNoResults ? (
+            
+              <Flex justify="center" align="center" minHeight="40vh">
+                <Text fontSize="lg" color="gray.500">
+                  No results found. Please adjust your search criteria or try a different query.
+                </Text>
+              </Flex>
+            ) : (
+            
+              <SimpleGrid columns={gridColumns} spacing={4}>
+                {(filteredPosts && filteredPosts.length > 0
+                  ? filteredPosts
+                  : lawyers
+                )?.map((data, index) => (
+                  <LawyerCard key={index} lawyer={data} />
+                ))}
+              </SimpleGrid>
+            )}
           </>
         )}
       </Box>
