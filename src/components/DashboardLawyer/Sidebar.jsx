@@ -7,6 +7,7 @@ import {
   FaComments,
   FaCalendarCheck,
   FaSignOutAlt,
+  FaUserAstronaut,
 } from "react-icons/fa";
 import NavigationItem from "./NavigationItem";
 import { useRouter } from "next/navigation";
@@ -60,7 +61,7 @@ const Sidebar = ({ onSelect }) => {
           isActive={activeTab === "Personal Data"}
           onClick={() => handleSelect("Personal Data")}
         >
-          Personal Data
+          Stats
         </NavigationItem>
         <NavigationItem
           icon={FaPen}
@@ -82,6 +83,13 @@ const Sidebar = ({ onSelect }) => {
           onClick={() => handleSelect("Bookings")}
         >
           Bookings
+        </NavigationItem>
+        <NavigationItem
+          icon={FaUserAstronaut}
+          isActive={activeTab === "Collaboration"}
+          onClick={() => handleSelect("Collaboration")}
+        >
+          Collaboration
         </NavigationItem>
         <NavigationItem
           icon={FaSignOutAlt}

@@ -11,14 +11,14 @@ import {
   Icon,
   useColorModeValue,
   Spinner,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import { FaPaperPlane, FaBalanceScale } from "react-icons/fa";
 import { BASE_URL } from "@/Constants";
 
-
 const formatText = (text) => {
   const lines = text.split("\n").map((line, index) => {
-   
     if (line.startsWith("## ")) {
       const heading = line.replace("## ", "");
       return (
@@ -28,12 +28,10 @@ const formatText = (text) => {
       );
     }
 
-    
     const boldLine = line.replace(/\*\*(.*?)\*\*/g, (match, p1) => {
       return `<strong>${p1}</strong>`;
     });
 
-    
     return (
       <Text
         as="p"
@@ -55,13 +53,20 @@ const LegalGpt = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const popularPrompts = [
+    "What are my rights as a tenant?",
+    "Can I break my lease early?",
+    "What should I know about employment contracts?",
+    "How to file a trademark?",
+    "What are the steps for filing a lawsuit?",
+  ];
+
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
 
     const newMessage = { sender: "user", text: input };
     setMessages([...messages, newMessage]);
     setInput("");
-
 
     setLoading(true);
     const loadingMessage = { sender: "ai", text: "loading" };
@@ -81,16 +86,14 @@ const LegalGpt = () => {
       if (response.ok) {
         console.log(data);
 
-        // Remove the loading message
         setMessages((prevMessages) => prevMessages.slice(0, -1));
 
-        // Add the AI's response
         const aiResponse = { sender: "ai", text: ` ${data.response}` };
         setMessages((prevMessages) => [...prevMessages, aiResponse]);
       }
     } catch (error) {
       console.log(error);
-      // Remove the loading message
+
       setMessages((prevMessages) => prevMessages.slice(0, -1));
     } finally {
       setLoading(false);
@@ -103,7 +106,10 @@ const LegalGpt = () => {
     }
   };
 
-  // Move useColorModeValue hook calls to top level
+  const handlePromptClick = (prompt) => {
+    setInput(prompt);
+  };
+
   const bgColor = useColorModeValue("gray.900", "gray.900");
   const iconColor = useColorModeValue("whiteAlpha.300", "whiteAlpha.100");
   const messageContainerBgColor = useColorModeValue("gray.800", "gray.800");
@@ -197,6 +203,21 @@ const LegalGpt = () => {
       </VStack>
 
       <Box mt={4} width="full" zIndex={1}>
+        <Wrap mb={4} spacing={2}>
+          {popularPrompts.map((prompt, index) => (
+            <WrapItem key={index}>
+              <Button
+                size="sm"
+                colorScheme="red"
+                variant="outline"
+                onClick={() => handlePromptClick(prompt)}
+              >
+                {prompt}
+              </Button>
+            </WrapItem>
+          ))}
+        </Wrap>
+
         <HStack>
           <Input
             flex={1}

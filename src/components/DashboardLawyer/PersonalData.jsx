@@ -31,6 +31,15 @@ import AchievementCard from "./AchievementCard";
 import SatisfiedClients from "./AvatarsClients";
 import { AuthContext } from "@/services/AuthProvider";
 import Header from "./Header";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const Counter = ({ end, duration }) => {
   const [count, setCount] = useState(0);
@@ -97,6 +106,16 @@ const PersonalData = () => {
     { src: "https://bit.ly/ryan-florence", name: "Client 4" },
   ];
 
+  // Sample data for the chart
+  const chartData = [
+    { month: "Jan", casesCompleted: 10, casesWon: 8 },
+    { month: "Feb", casesCompleted: 12, casesWon: 9 },
+    { month: "Mar", casesCompleted: 8, casesWon: 6 },
+    { month: "Apr", casesCompleted: 15, casesWon: 12 },
+    { month: "May", casesCompleted: 20, casesWon: 18 },
+    { month: "Jun", casesCompleted: 18, casesWon: 16 },
+  ];
+
   return (
     <>
       <Header title="Personal Data" />
@@ -116,7 +135,7 @@ const PersonalData = () => {
           direction={{ base: "column", md: "row" }}
           gap={6}
         >
-        
+          {/* Degree Gallery */}
           <VStack
             align="center"
             spacing={3}
@@ -180,6 +199,8 @@ const PersonalData = () => {
               onClick={() => scrollGallery("right")}
             />
           </VStack>
+
+          {/* Lawyer Info */}
           <VStack
             align="center"
             spacing={4}
@@ -217,84 +238,29 @@ const PersonalData = () => {
                 </Badge>
               ))}
             </Grid>
-            <HStack spacing={6} pt={4}>
-              <Tooltip label="Email" placement="top">
-                <HStack>
-                  <Icon as={FaEnvelope} color="red.600" />
-                  <Text fontSize="sm" color="gray.600">
-                    {lawyerDetails.contact.email}
-                  </Text>
-                </HStack>
-              </Tooltip>
-              <Tooltip label="Phone" placement="top">
-                <HStack>
-                  <Icon as={FaPhone} color="red.600" />
-                  <Text fontSize="sm" color="gray.600">
-                    {lawyerDetails.contact.phone}
-                  </Text>
-                </HStack>
-              </Tooltip>
-            </HStack>
           </VStack>
         </Flex>
 
         <Divider my={8} borderColor="gray.300" />
 
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8} mb={8}>
-          <Box textAlign="center">
-            <Tooltip label="" placement="top">
-              <Icon as={FaBriefcase} boxSize={10} color="red.600" mb={2} />
-            </Tooltip>
-            <Heading size="md" color="red.700" mb={1}>
-              Cases Completed
-            </Heading>
-            <Counter end={50} duration={2} />
-          </Box>
-          <Box textAlign="center">
-            <Tooltip label="" placement="top">
-              <Icon as={FaGavel} boxSize={10} color="red.600" mb={2} />
-            </Tooltip>
-            <Heading size="md" color="red.700" mb={1}>
-              Cases Won
-            </Heading>
-            <Counter end={45} duration={2} />
-          </Box>
-          <Box textAlign="center">
-            <Tooltip label="" placement="top">
-              <Icon as={FaUsers} boxSize={10} color="red.600" mb={2} />
-            </Tooltip>
-            <Heading size="md" color="red.700" mb={1}>
-              Satisfied Clients
-            </Heading>
-            <SatisfiedClients clients={clients} extraCount={11} />
-          </Box>
-        </SimpleGrid>
+        {/* Statistical Bar Chart */}
+        <Box w="full" h="400px" mt={8}>
+          <Heading size="md" color="red.700" mb={4} textAlign="center">
+            Cases Completed and Cases Won (Monthly)
+          </Heading>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <RechartsTooltip />
+              <Bar dataKey="casesCompleted" fill="#8884d8" name="Cases Completed" />
+              <Bar dataKey="casesWon" fill="#82ca9d" name="Cases Won" />
+            </BarChart>
+          </ResponsiveContainer>
+        </Box>
 
         <Divider my={8} borderColor="gray.300" />
-
-        <Box textAlign="center" mb={8}>
-          <Button
-            colorScheme="red"
-            onClick={() => setIsModalOpen(true)}
-            size="lg"
-            boxShadow="md"
-            _hover={{ bg: "red.700" }}
-          >
-            Add Career Achievement
-          </Button>
-        </Box>
-        <VStack spacing={6}>
-          {achievements.map((achievement, index) => (
-            <AchievementCard key={index} achievement={achievement} />
-          ))}
-        </VStack>
-        {isModalOpen && (
-          <AchievementModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onAddAchievement={handleAddAchievement}
-          />
-        )}
       </Box>
     </>
   );
