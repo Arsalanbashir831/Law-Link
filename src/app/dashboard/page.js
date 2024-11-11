@@ -10,6 +10,7 @@ import Sidebar from "@/components/DashboardLawyer/Sidebar";
 import Bookings from "@/components/DashboardLawyer/Bookings";
 import AuthPage from "../auth/page";
 import CollaborationLawyer from "@/components/DashboardLawyer/CollaborationLawyer";
+import ClientPostPage from "@/components/DashboardLawyer/ClientPostPage";
 
 const DashboardPage = () => {
   const [selectedTab, setSelectedTab] = useState("Personal Data");
@@ -24,6 +25,8 @@ const DashboardPage = () => {
         return <Bookings />;
       case "Collaboration":
         return <CollaborationLawyer />;
+      case "Clients":
+        return <ClientPostPage />;
         case "Logout":
           return <AuthPage/>
       default:

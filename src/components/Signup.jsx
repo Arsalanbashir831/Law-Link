@@ -25,6 +25,8 @@ import UploadButton from './UploadButton';
 import DocumentUploadModal from './DocumentUploadModal';
 import { BASE_URL } from '@/Constants';
 import axios from 'axios';
+import { OTPModal } from './OTPModal';
+
 
 const Signup = ({ setIsLoginPage }) => {
   const toast = useToast();
@@ -33,14 +35,16 @@ const Signup = ({ setIsLoginPage }) => {
     userType: '',
     username: '', 
     password: '',
+    lawyerType: '', 
     termsAccepted: false,
     documentUploaded: false,
     profilePicUploaded: false,
     uploadedDegree: null,
     uploadedProfilePic: null,
   });
-
+  
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -89,9 +93,8 @@ const Signup = ({ setIsLoginPage }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { email, password, userType, username, uploadedDegree, uploadedProfilePic } = formData;
-    console.log(formData);
-    
+    const { email, password, userType, username, lawyerType, uploadedDegree, uploadedProfilePic } = formData;
+
     const dataToSend = new FormData();
     dataToSend.append('email', email);
     dataToSend.append('password', password);
@@ -99,11 +102,9 @@ const Signup = ({ setIsLoginPage }) => {
     dataToSend.append('username', username); 
 
     if (userType === 'lawyer') {
+      dataToSend.append('lawyerType', lawyerType); 
       dataToSend.append('degreePic', uploadedDegree);
       dataToSend.append('profilePic', uploadedProfilePic);
-    } else {
-      dataToSend.append('degreePic', '');
-      dataToSend.append('profilePic', '');
     }
 
     try {
@@ -112,22 +113,22 @@ const Signup = ({ setIsLoginPage }) => {
           'Accept': 'application/json',
         },
       });
-      console.log(res);
+      
       if (res.status === 201) {
         toast({
           title: "Account created.",
-          description: "Your account has been successfully created.",
+          description: "Please check your email for the OTP to verify your account.",
           status: "success",
           duration: 5000,
           isClosable: true,
         });
-        setIsLoginPage(true);
+        setIsOtpModalOpen(true); // Open OTP modal instead of redirecting
       }
     } catch (error) {
       console.error("Error registering:", error.response?.data || error.message);
       toast({
         title: "Registration failed.",
-        description: "There was an error creating your account. Please try again.",
+        description: error.response?.data.error || "There was an error creating your account. Please try again.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -167,22 +168,49 @@ const Signup = ({ setIsLoginPage }) => {
 
             <FormControl id="userType" isRequired>
               <FormLabel>User Type</FormLabel>
-              <InputGroup>
-                <InputLeftElement pointerEvents="none">
-                  <Icon as={MdPerson} color="red.500" />
-                </InputLeftElement>
-                <Select
-                  placeholder="Select user type"
-                  focusBorderColor="red.500"
-                  value={formData.userType}
-                  onChange={handleChange}
-                  pl="2.5rem" 
-                >
-                  <option value="lawyer">Lawyer</option>
-                  <option value="client">Client</option>
-                </Select>
-              </InputGroup>
+              <Select
+                placeholder="Select user type"
+                focusBorderColor="red.500"
+                value={formData.userType}
+                onChange={handleChange}
+                id="userType"
+              >
+                <option value="lawyer">Lawyer</option>
+                <option value="client">Client</option>
+              </Select>
             </FormControl>
+
+            {formData.userType === 'lawyer' && (
+              <>
+                <FormControl id="lawyerType" isRequired>
+                  <FormLabel>Lawyer Type</FormLabel>
+                  <Select
+                    placeholder="Select lawyer type"
+                    focusBorderColor="red.500"
+                    value={formData.lawyerType}
+                    onChange={handleChange}
+                    id="lawyerType"
+                  >
+                    <option value="session court">Session Court</option>
+                    <option value="high court">High Court</option>
+                  </Select>
+                </FormControl>
+                <Flex justifyContent="space-between" alignItems="center">
+                  <FormLabel>Upload Documents</FormLabel>
+                  <UploadButton onClick={onOpen} hasFile={formData.documentUploaded || formData.profilePicUploaded} />
+                  <DocumentUploadModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    handleFileUpload={handleFileUpload}
+                    handleProfilePicUpload={handleProfilePicUpload}
+                    uploadedDegree={formData.uploadedDegree}
+                    uploadedProfilePic={formData.uploadedProfilePic}
+                    handleDeleteDegree={handleDeleteDegree}
+                    handleDeleteProfilePic={handleDeleteProfilePic}
+                  />
+                </Flex>
+              </>
+            )}
 
             <FormControl id="username" isRequired>
               <FormLabel>Username</FormLabel>
@@ -196,26 +224,10 @@ const Signup = ({ setIsLoginPage }) => {
                   focusBorderColor="red.500"
                   value={formData.username}
                   onChange={handleChange}
+                  id="username"
                 />
               </InputGroup>
             </FormControl>
-
-            {formData.userType === 'lawyer' && (
-              <Flex justifyContent="space-between" alignItems="center">
-                <FormLabel>Upload Documents</FormLabel>
-                <UploadButton onClick={onOpen} hasFile={formData.documentUploaded || formData.profilePicUploaded} />
-                <DocumentUploadModal
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  handleFileUpload={handleFileUpload}
-                  handleProfilePicUpload={handleProfilePicUpload}
-                  uploadedDegree={formData.uploadedDegree}
-                  uploadedProfilePic={formData.uploadedProfilePic}
-                  handleDeleteDegree={handleDeleteDegree}
-                  handleDeleteProfilePic={handleDeleteProfilePic}
-                />
-              </Flex>
-            )}
 
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
@@ -229,6 +241,7 @@ const Signup = ({ setIsLoginPage }) => {
                   focusBorderColor="red.500"
                   value={formData.password}
                   onChange={handleChange}
+                  id="password"
                 />
               </InputGroup>
             </FormControl>
@@ -252,11 +265,22 @@ const Signup = ({ setIsLoginPage }) => {
               _hover={{ bg: 'red.700' }}
               size="lg"
               type="submit"
+              isDisabled={!formData.termsAccepted}
             >
               Sign Up
             </Button>
           </Stack>
         </form>
+        
+        {/* OTP Modal Integration */}
+        {isOtpModalOpen && (
+          <OTPModal
+            isOpen={isOtpModalOpen}
+            onClose={() => setIsOtpModalOpen(false)}
+            email={formData.email} // Pass email to OTPModal
+          />
+        )}
+        
         <HStack mt={4} justify="center">
           <Text color="gray.600">Already have an account?</Text>
           <Link onClick={() => setIsLoginPage(true)} color="red.500">

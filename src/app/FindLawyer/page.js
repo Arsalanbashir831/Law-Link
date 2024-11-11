@@ -25,6 +25,7 @@ const Page = () => {
     { id: 2, label: "Legal GPT", value: "/LegalGpt" },
     { id: 3, label: "Chats", value: "/Chats" },
     { id: 4, label: "Bookings", value: "/Bookings" },
+    { id: 5, label: 'Posts', value: 'client_posting' },
   ];
 
   const gridColumns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 3 });

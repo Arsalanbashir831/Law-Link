@@ -17,7 +17,7 @@ export const LawyerProvider = ({ children }) => {
       if (!token) return;
       setLoading(true);
       try {
-        const response = await fetch(`${BASE_URL}api/v1/lawyer/posts`, {
+        const response = await fetch(`${BASE_URL}api/v1/lawyer/posts/lawyer`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

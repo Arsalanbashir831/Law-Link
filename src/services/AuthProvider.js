@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout ,setUser }}>
       {!loading && children} 
       {/* added loadfing condition to stop the rendering of the children component if loading is true */}
     </AuthContext.Provider>

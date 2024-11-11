@@ -17,7 +17,7 @@ import {
 import { ResetPasswordModal } from './ResetPasswordModal';
 import { BASE_URL } from '@/Constants';
 
-export const OTPModal = ({ isOpen, onClose, email }) => {
+export const OTPModal = ({ isOpen, onClose, email ,isResetPass =false}) => {
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const inputRefs = useRef([]);
   const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
@@ -51,8 +51,17 @@ try {
   })
   console.log(response.status);
   
-  if (response.status===200) {
+  if (response.status===200 && isResetPass) {
     setIsResetPasswordModalOpen(true);
+  }else if(response.status===200){
+    toast({
+      title: 'Verification is success',
+      description: 'You can now login',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+    window.location.reload();
   }
 } catch (error) {
   console.log(error);

@@ -9,7 +9,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import ClientNav from "@/components/ClientNav";
+
 import BookingCard from "@/components/BookingCard";
 import axios from "axios";
 import { BASE_URL } from "@/Constants";
@@ -23,6 +23,7 @@ const OrderPage = () => {
     { id: 2, label: 'Legal GPT', value: 'LegalGpt' },
     { id: 3, label: 'Chats', value: 'Chats' },
     { id: 4, label: 'Bookings', value: 'Bookings' },
+    { id: 5, label: 'Posts', value: 'client_posting' },
   ];
 
 

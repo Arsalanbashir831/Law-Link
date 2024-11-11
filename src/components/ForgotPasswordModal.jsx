@@ -89,7 +89,7 @@ export const ForgotPasswordModal = () => {
       </Modal>
 
       {isOTPModalOpen && (
-        <OTPModal
+        <OTPModal isResetPass={true}
           isOpen={isOTPModalOpen}
           onClose={() => setIsOTPModalOpen(false)}
           email={email} 

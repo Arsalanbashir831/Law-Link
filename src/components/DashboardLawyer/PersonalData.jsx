@@ -1,77 +1,64 @@
+import React, { useState, useContext, useRef, useEffect } from "react";
 import {
   Box,
   Heading,
-  Image,
   Avatar,
   Text,
-  HStack,
   VStack,
   Button,
-  SimpleGrid,
-  Flex,
-  Divider,
-  Icon,
-  Tooltip,
+  Input,
+  FormControl,
+  FormLabel,
   IconButton,
-  Grid,
-  Badge,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  useToast,
+  Divider,
 } from "@chakra-ui/react";
-import { useState, useEffect, useContext, useRef } from "react";
-import {
-  FaBriefcase,
-  FaGavel,
-  FaUsers,
-  FaChevronLeft,
-  FaChevronRight,
-  FaEnvelope,
-  FaPhone,
-} from "react-icons/fa";
-import AchievementModal from "./AchievementModal";
-import AchievementCard from "./AchievementCard";
-import SatisfiedClients from "./AvatarsClients";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
 import { AuthContext } from "@/services/AuthProvider";
-import Header from "./Header";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip as RechartsTooltip,
-  ResponsiveContainer,
-} from "recharts";
-
-const Counter = ({ end, duration }) => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    const increment = end / ((duration * 1000) / 10);
-    const interval = setInterval(() => {
-      setCount((prev) => (prev + increment >= end ? end : prev + increment));
-    }, 10);
-
-    return () => clearInterval(interval);
-  }, [end, duration]);
-
-  return (
-    <Text fontSize="3xl" fontWeight="bold" color="red.600">
-      {Math.round(count)}
-    </Text>
-  );
-};
+import { BASE_URL } from "@/Constants";
 
 const PersonalData = () => {
-  const [achievements, setAchievements] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user } = useContext(AuthContext);
-
-  const degreeImages = [
-    "https://plus.unsplash.com/premium_photo-1667239129251-ebcdf421eb3c?q=80&w=1528&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1470&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1470&auto=format&fit=crop",
-  ];
-
+  // const { user, setUser } = useContext(AuthContext);
+  const [newUsername, setNewUsername] = useState("");
+  const [newProfilePic, setNewProfilePic] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const galleryRef = useRef(null);
+  const toast = useToast();
+const [user , setUser] = useState(null)
+
+useEffect(()=>{
+  const fetchUser = async () => { 
+    try {
+      const response = await fetch(`${BASE_URL}api/v1/users/userProfile`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if(response.ok){
+        const data = await response.json();
+        setUser(data.user);
+        setNewUsername(data.user.username);
+      }
+    }
+ catch (error) {
+  console.log(error);
+  
+ }
+      
+  }
+  fetchUser();
+},[])
+  // console.log(user);
   const scrollGallery = (direction) => {
     if (galleryRef.current) {
       galleryRef.current.scrollBy({
@@ -81,32 +68,65 @@ const PersonalData = () => {
     }
   };
 
-  const handleAddAchievement = (achievement) => {
-    setAchievements([...achievements, achievement]);
+  const handleProfilePicChange = (e) => {
+    setNewProfilePic(e.target.files[0]);
   };
 
-  const lawyerDetails = {
-    specialties: [
-      "Corporate Law",
-      "Criminal Defense",
-      "Family Law",
-      "Contract Law",
-    ],
-    experience: "15+ years of legal practice",
-    contact: {
-      email: "lawyer@example.com",
-      phone: "+1 (555) 123-4567",
-    },
-  };
+ // Update user profile API call
+const updateUserProfile = async () => {
+  try {
+      // Check if there's a new profile picture file
+      let response;
+      if (newProfilePic) {
+          // If a profile picture is being uploaded, use FormData
+          const formData = new FormData();
+          formData.append("username", newUsername); // Adding username as a text field
+          formData.append("profilePic", newProfilePic); // Adding profilePic as a file
 
-  const clients = [
-    { src: "https://bit.ly/dan-abramov", name: "Client 1" },
-    { src: "https://bit.ly/code-beast", name: "Client 2" },
-    { src: "https://bit.ly/prosper-baba", name: "Client 3" },
-    { src: "https://bit.ly/ryan-florence", name: "Client 4" },
-  ];
+          response = await fetch(`${BASE_URL}api/v1/users/update-profile`, {
+              method: "POST",
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: formData, // FormData automatically sets the correct `Content-Type`
+          });
+      } else {
+          // If only username is being updated, use JSON payload
+          response = await fetch(`${BASE_URL}api/v1/users/update-profile`, {
+              method: "POST",
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ username: newUsername }), // Sending only the username in JSON
+          });
+      }
 
-  // Sample data for the chart
+      if (!response.ok) throw new Error("Failed to update profile");
+
+      const updatedUser = await response.json();
+      setUser(updatedUser.user); // Update user in AuthContext
+
+      toast({
+          title: "Profile updated",
+          description: "Your profile was updated successfully.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+      });
+      onClose(); // Close the modal after updating
+  } catch (error) {
+      toast({
+          title: "Error",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+      });
+  }
+};
+
+
   const chartData = [
     { month: "Jan", casesCompleted: 10, casesWon: 8 },
     { month: "Feb", casesCompleted: 12, casesWon: 9 },
@@ -118,149 +138,55 @@ const PersonalData = () => {
 
   return (
     <>
-      <Header title="Personal Data" />
-      <Box
-        p={6}
-        bg="white"
-        borderRadius="xl"
-        boxShadow="2xl"
-        maxW="6xl"
-        mx="auto"
-        mt={5}
-        mb={10}
-      >
-        <Flex
-          justify="space-between"
-          align="center"
-          direction={{ base: "column", md: "row" }}
-          gap={6}
-        >
-          {/* Degree Gallery */}
-          <VStack
-            align="center"
-            spacing={3}
-            position="relative"
-            width={{ base: "full", md: "40%" }}
-            borderRadius="lg"
-            overflow="hidden"
-            boxShadow="lg"
-          >
-            <Heading size="lg" mb={3} color="red.700">
-              Degrees
-            </Heading>
-            <Flex
-              ref={galleryRef}
-              overflowX="hidden"
-              w="full"
-              gap={4}
-              className="degree-gallery"
-              p={2}
-              position="relative"
-            >
-              {degreeImages.map((src, index) => (
-                <Image
-                  key={index}
-                  src={src}
-                  alt={`Degree ${index + 1}`}
-                  boxSize="200px"
-                  borderRadius="md"
-                  objectFit="cover"
-                  boxShadow="md"
-                  transition="all 0.3s"
-                />
-              ))}
-            </Flex>
-            <IconButton
-              icon={<FaChevronLeft />}
-              position="absolute"
-              top="50%"
-              left="-10px"
-              transform="translateY(-50%)"
-              aria-label="Scroll Left"
-              variant="solid"
-              bg="red.600"
-              color="white"
-              _hover={{ bg: "red.500" }}
-              boxShadow="md"
-              onClick={() => scrollGallery("left")}
-            />
-            <IconButton
-              icon={<FaChevronRight />}
-              position="absolute"
-              top="50%"
-              right="-10px"
-              transform="translateY(-50%)"
-              aria-label="Scroll Right"
-              variant="solid"
-              bg="red.600"
-              color="white"
-              _hover={{ bg: "red.500" }}
-              boxShadow="md"
-              onClick={() => scrollGallery("right")}
-            />
-          </VStack>
+      <Box p={6} bg="white" borderRadius="xl" boxShadow="2xl" maxW="6xl" mx="auto" mt={5} mb={10}>
+        <VStack align="center" spacing={4} textAlign="center" width="100%">
+          <Avatar size="2xl" src={user?.profilePic || "https://bit.ly/dan-abramov"} name={user?.username || "Lawyer's Name"} />
+          <Heading size="lg" color="gray.800">{user?.username || "Lawyer's Name"}</Heading>
+          <Text fontSize="md" color="gray.600">{user?.lawyerType || "Lawyer Type"}</Text>
+          <Button colorScheme="blue" mt={4} onClick={onOpen}>Edit Profile</Button>
+          
 
-          {/* Lawyer Info */}
-          <VStack
-            align="center"
-            spacing={4}
-            textAlign={{ base: "center", md: "left" }}
-            width={{ base: "full", md: "60%" }}
-          >
-            <Avatar
-              size="2xl"
-              src={user?.profilePic || "https://bit.ly/dan-abramov"}
-              name={user?.username || "Lawyer's Name"}
-              borderRadius="full"
-              boxShadow="lg"
-            />
-            <VStack align="center" spacing={0}>
-              <Heading size="lg" color="gray.800">
-                {user?.username || "Lawyer's Name"}
-              </Heading>
-              <Text fontSize="md" color="gray.600">
-                {user?.type || "Lawyer Type"}
-              </Text>
-              <Text fontSize="md" color="gray.500">
-                {lawyerDetails.experience}
-              </Text>
-            </VStack>
-            <Grid templateColumns="repeat(2, 1fr)" gap={4} w="full">
-              {lawyerDetails.specialties.map((specialty, index) => (
-                <Badge
-                  key={index}
-                  colorScheme="red"
-                  p={2}
-                  borderRadius="md"
-                  textAlign="center"
-                >
-                  {specialty}
-                </Badge>
-              ))}
-            </Grid>
-          </VStack>
-        </Flex>
+          <Divider my={8} borderColor="gray.300" />
 
-        <Divider my={8} borderColor="gray.300" />
+          {/* Statistical Bar Chart */}
+          <Box w="full" h="400px" mt={8}>
+            <Heading size="md" color="red.700" mb={4} textAlign="center">Cases Completed and Cases Won (Monthly)</Heading>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <RechartsTooltip />
+                <Bar dataKey="casesCompleted" fill="#8884d8" name="Cases Completed" />
+                <Bar dataKey="casesWon" fill="#82ca9d" name="Cases Won" />
+              </BarChart>
+            </ResponsiveContainer>
+          </Box>
+        </VStack>
 
-        {/* Statistical Bar Chart */}
-        <Box w="full" h="400px" mt={8}>
-          <Heading size="md" color="red.700" mb={4} textAlign="center">
-            Cases Completed and Cases Won (Monthly)
-          </Heading>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <RechartsTooltip />
-              <Bar dataKey="casesCompleted" fill="#8884d8" name="Cases Completed" />
-              <Bar dataKey="casesWon" fill="#82ca9d" name="Cases Won" />
-            </BarChart>
-          </ResponsiveContainer>
-        </Box>
+        {/* Edit Profile Modal */}
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Edit Profile</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl id="username" mb={4}>
+                <FormLabel>Username</FormLabel>
+                <Input placeholder="New username" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} />
+              </FormControl>
 
-        <Divider my={8} borderColor="gray.300" />
+              {/* <FormControl id="profilePic" mb={4}>
+                <FormLabel>Profile Picture</FormLabel>
+                <Input type="file" accept="image/*" onChange={handleProfilePicChange} />
+              </FormControl> */}
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={updateUserProfile}>Save Changes</Button>
+              <Button variant="ghost" onClick={onClose}>Cancel</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
     </>
   );

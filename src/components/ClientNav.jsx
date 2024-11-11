@@ -28,6 +28,8 @@ const ClientNav = ({ username = 'Arsalan Bashir', avatarUrl }) => {
     { id: 2, label: 'Legal GPT', value: 'LegalGpt' },
     { id: 3, label: 'Chats', value: 'Chats' },
     { id: 4, label: 'Bookings', value: 'Bookings' },
+    { id: 5, label: 'Posts', value: 'client_posting' },
+
   ];
   const bgColor = useColorModeValue('white', 'gray.800');
   const textColor = useColorModeValue('gray.600', 'gray.300');

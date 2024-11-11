@@ -92,6 +92,13 @@ const Sidebar = ({ onSelect }) => {
           Collaboration
         </NavigationItem>
         <NavigationItem
+          icon={FaUserAstronaut}
+          isActive={activeTab === "Clients"}
+          onClick={() => handleSelect("Clients")}
+        >
+          Clients Post
+        </NavigationItem>
+        <NavigationItem
           icon={FaSignOutAlt}
           isActive={activeTab === "Logout"}
           onClick={() => handleLogout()}
