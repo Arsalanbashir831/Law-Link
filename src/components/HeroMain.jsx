@@ -11,12 +11,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const HeroSection = () => {
  
   const bgColor = useColorModeValue("rgba(0, 0, 0, 0.7)", "rgba(0, 0, 0, 0.7)");
   const textColor = "white";
-
+const router = useRouter()
   return (
     <Box
       w="100%"
@@ -82,7 +83,7 @@ const HeroSection = () => {
               Law Services on your fingertips. Hire the best lawyers to solve your
               case with the utmost professionalism and care.
             </Text>
-            <Button
+            <Button onClick={()=>router.push('/auth')}
               colorScheme="red"
               bg="red.600"
               color="white"

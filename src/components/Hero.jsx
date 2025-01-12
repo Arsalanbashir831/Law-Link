@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { FaChevronLeft } from "react-icons/fa6";
 import { FaAngleRight } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 const images = [
   {
@@ -108,7 +109,7 @@ const Hero = () => {
   const paddingLeft = useBreakpointValue({ base: 4, md: 16 });
   const headingFontSize = useBreakpointValue({ base: "2xl", md: "4xl" });
   const descriptionFontSize = useBreakpointValue({ base: "md", md: "md" });
-
+const router = useRouter()
   return (
     <Box position="relative" width="100%" height="600px" overflow="hidden">
       {images.map((image, index) => (
@@ -151,12 +152,12 @@ const Hero = () => {
                 </Text>
                 <Stack direction="row" spacing={4}>
                   <ScaleFade in={true} initialScale={0.8}>
-                    <Button bg="#9D152D" color="white" _hover={{ bg: "red.700" }} size="md">
+                    <Button onClick={()=>router.push('/auth')}  bg="#9D152D" color="white" _hover={{ bg: "red.700" }} size="md">
                       HIRE NOW
                     </Button>
                   </ScaleFade>
                   <ScaleFade in={true} initialScale={0.8}>
-                    <Button bg="black" color="white" _hover={{ bg: "gray.800" }} size="md">
+                    <Button onClick={()=>router.push('/auth')} bg="black" color="white" _hover={{ bg: "gray.800" }} size="md">
                       LEARN MORE
                     </Button>
                   </ScaleFade>

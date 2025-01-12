@@ -9,7 +9,7 @@ const FootNote = () => {
         COPYRIGHT © 2022 LAW LINKS ALL RIGHTS RESERVED | PROUDLY
         DESIGNED BY{" "}
         <Link href="#" color="maroon">
-          DOTCODE
+          HATIM
         </Link>
       </Text>
     </Box>

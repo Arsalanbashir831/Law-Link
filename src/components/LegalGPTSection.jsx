@@ -15,6 +15,7 @@ import {
 import { FaHeart, FaStar } from "react-icons/fa";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
+import { useRouter } from "next/navigation";
 
 const LegalGPTSection = () => {
   const bgColor = useColorModeValue("white", "gray.800");
@@ -23,7 +24,7 @@ const LegalGPTSection = () => {
   const highlightColor = useColorModeValue("#B08968", "#B08968");
   const statTextColor = useColorModeValue("gray.700", "white");
   const buttonHoverBgColor = useColorModeValue("red.700", "#9d7e61");
-
+const router = useRouter()
   const { ref, inView } = useInView({
     triggerOnce: true, 
     threshold: 0.5,
@@ -107,7 +108,7 @@ const LegalGPTSection = () => {
             details and provides you with reliable and accurate legal
             guidance.
           </Text>
-          <Button
+          <Button onClick={()=>router.push('/auth')}
             bg={"red.600"}
             color="white"
             size="md"
